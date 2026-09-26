@@ -1,2 +1,2 @@
-"""DRAGNET: evidence-to-actor attribution pipeline (defensive, synthetic-data MVP)."""
-__version__ = "0.1.0"
+"""DRAGNET: evidence-to-actor attribution with ACH, false-flag reasoning and custody."""
+__version__ = "0.2.0"
