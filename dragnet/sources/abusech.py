@@ -9,9 +9,9 @@ import csv
 import io
 import json
 import zipfile
+from collections.abc import Iterator
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterator
 
 
 @dataclass(frozen=True)
@@ -60,5 +60,5 @@ def iter_bazaar(path: str | Path) -> Iterator[BazaarSample]:
         for r in rows:
             if len(r) < 14:
                 continue
-            na = lambda v: "" if v.strip() in ("n/a", "") else v.strip()  # noqa: E731
+            na = lambda v: "" if v.strip() in ("n/a", "") else v.strip()
             yield BazaarSample(r[0], r[1].lower(), na(r[6]), na(r[8]), na(r[11]).lower(), na(r[13]))

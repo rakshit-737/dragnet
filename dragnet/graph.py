@@ -59,7 +59,7 @@ class KnowledgeGraph:
 
     # --- construction --------------------------------------------------------
     @classmethod
-    def from_dict(cls, data: dict) -> "KnowledgeGraph":
+    def from_dict(cls, data: dict) -> KnowledgeGraph:
         camps = [
             Campaign(c["id"], c["name"], c["actor"],
                      [Signal(SignalKind(s["kind"]), str(s["value"])) for s in c["signals"]])
@@ -68,7 +68,7 @@ class KnowledgeGraph:
         return cls(camps, data.get("actors", {}), data.get("meta", {}))
 
     @classmethod
-    def load(cls, path: str | Path) -> "KnowledgeGraph":
+    def load(cls, path: str | Path) -> KnowledgeGraph:
         return cls.from_dict(json.loads(Path(path).read_text(encoding="utf-8")))
 
     def to_dict(self) -> dict:

@@ -18,8 +18,16 @@ from dataclasses import dataclass
 
 from .custody import CustodyLog, canonical_hash
 from .graph import KnowledgeGraph, ttp_expand
-from .models import (DEFAULT_WEIGHTS, FORGEABLE_KINDS, HARD_KINDS, Assessment,
-                     Confidence, HypothesisScore, Signal, SignalKind)
+from .models import (
+    DEFAULT_WEIGHTS,
+    FORGEABLE_KINDS,
+    HARD_KINDS,
+    Assessment,
+    Confidence,
+    HypothesisScore,
+    Signal,
+    SignalKind,
+)
 
 FALSE_FLAG = "FALSE_FLAG"
 UNKNOWN = "UNKNOWN"

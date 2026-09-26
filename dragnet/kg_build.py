@@ -11,7 +11,7 @@ Layers (each optional, each traceable to its source):
 from __future__ import annotations
 
 from collections import Counter, defaultdict
-from typing import Iterable
+from collections.abc import Iterable
 
 from .graph import KnowledgeGraph
 from .models import Campaign, Signal, SignalKind

@@ -22,8 +22,8 @@ import math
 import random
 import zlib
 from collections import Counter, defaultdict
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Callable
 
 from .ach import FALSE_FLAG, UNKNOWN, EngineConfig, assess, posterior
 from .graph import KnowledgeGraph, ttp_expand
@@ -104,7 +104,9 @@ def attack_campaign_cases(attack_eval: AttackData, attack_kg: AttackData,
 
 
 # -------------------------------------------------------------------------- methods
-def dragnet_method(cfg: EngineConfig = EngineConfig()) -> Callable[[list[Signal], KnowledgeGraph], Prediction]:
+def dragnet_method(cfg: EngineConfig | None = None) -> Callable[[list[Signal], KnowledgeGraph], Prediction]:
+    cfg = cfg or EngineConfig()
+
     def run(signals, kg):
         a = assess("bench", signals, kg, config=cfg)
         scores = {h.hypothesis: h.score for h in a.hypotheses
@@ -274,7 +276,7 @@ def summarise(method: str, rows: list[dict]) -> dict:
     named = [r for r in ink if r["named"]]
     confident = [r for r in rows if r["grade"] in ("HIGH", "MEDIUM")] if rows and rows[0]["grade"] \
         else [r for r in rows if r["named"]]
-    mean = lambda xs: sum(xs) / len(xs) if xs else float("nan")  # noqa: E731
+    mean = lambda xs: sum(xs) / len(xs) if xs else float("nan")
     grades = {}
     if rows and rows[0]["grade"] is not None:
         for g in ("HIGH", "MEDIUM", "LOW", "INSUFFICIENT"):
@@ -357,7 +359,7 @@ def evaluate_false_flag(method: str, cases: list[Case], kg: KnowledgeGraph) -> d
         decoy_conf += committed == decoy
         flagged += p.flags > 0
         withheld += p.grade in ("LOW", "INSUFFICIENT") if p.grade else False
-    f = lambda x: x / n if n else float("nan")  # noqa: E731
+    f = lambda x: x / n if n else float("nan")
     return {"method": method, "n": n, "decoy_top1": f(decoy_top), "confident_decoy": f(decoy_conf),
             "truth_top1": f(truth_top), "flagged": f(flagged), "withheld": f(withheld)}
 

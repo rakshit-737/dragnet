@@ -9,8 +9,14 @@ from dragnet import bench
 from dragnet.ach import EngineConfig, assess
 from dragnet.cases import addition_campaigns, load_real_cases
 from dragnet.graph import KnowledgeGraph, ttp_expand
-from dragnet.kg_build import (build_from_attack, enrich_bazaar, enrich_threatfox,
-                              family_actor_map, imphash_family_index, software_aliases)
+from dragnet.kg_build import (
+    build_from_attack,
+    enrich_bazaar,
+    enrich_threatfox,
+    family_actor_map,
+    imphash_family_index,
+    software_aliases,
+)
 from dragnet.models import Campaign, Confidence, Signal, SignalKind
 from dragnet.sources.abusech import BazaarSample, ThreatFoxIOC, iter_bazaar, iter_threatfox
 from dragnet.sources.aptnotes import load_aptnotes, report_counts
@@ -86,7 +92,7 @@ def test_abusech_parsers(tmp_path):
     bp = tmp_path / "b.csv.zip"
     with zipfile.ZipFile(bp, "w") as z:
         z.writestr("full.csv", csv_text)
-    s = list(iter_bazaar(bp))[0]
+    s = next(iter(iter_bazaar(bp)))
     assert s.sha256 == "aa" and s.imphash == "abcdef" and s.signature == "RedRAT"
 
 
@@ -131,7 +137,7 @@ def test_enrichment(attack, kg):
     assert fam[norm("RedRAT")] == {"Red Group"} and norm("Mimikatz") not in fam
     iocs = [ThreatFoxIOC("198.51.100.7:443", "ip:port", "win.redrat", "RedRAT", "2023", 90),
             ThreatFoxIOC("low.example", "domain", "win.redrat", "RedRAT", "2023", 10)]
-    kg2, hits = enrich_threatfox(kg, attack, iocs)
+    kg2, _hits = enrich_threatfox(kg, attack, iocs)
     assert kg2.actors_for(Signal(SignalKind.IP, "198.51.100.7")) == {"Red Group"}
     assert not kg2.actors_for(Signal(SignalKind.DOMAIN, "low.example"))
     samples = [BazaarSample("2022", "a", "exe", "RedRAT", "aaaa", ""),
@@ -140,7 +146,7 @@ def test_enrichment(attack, kg):
                BazaarSample("2022", "d", "exe", "Other2", "shared", ""),
                BazaarSample("2025", "e", "exe", "RedRAT", "late", "")]
     gi = imphash_family_index(samples)
-    kg3, hits = enrich_bazaar(kg, attack, samples, before="2024", global_index=gi)
+    kg3, _hits = enrich_bazaar(kg, attack, samples, before="2024", global_index=gi)
     assert kg3.actors_for(Signal(SignalKind.IMPHASH, "aaaa")) == {"Red Group"}
     assert not kg3.actors_for(Signal(SignalKind.IMPHASH, "shared"))   # collision-filtered
     assert not kg3.actors_for(Signal(SignalKind.IMPHASH, "late"))     # temporal split

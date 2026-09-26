@@ -31,7 +31,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
-from dragnet.paths import data_dir  # noqa: E402
+from dragnet.paths import data_dir
 
 ATTACK = "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/enterprise-attack"
 MISP_SHA = "e9e867fe5a5e94be813540af9e227ac84c8d60ad"
