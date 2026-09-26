@@ -24,6 +24,28 @@ Calibration metrics score the binary forecast 'the top-ranked actor is the culpr
 | ioc-correlation | 25 | 25 | 0.560 | 0.620 | 0.633 | 0.595 | 0.840 | 0.714 | 0.240 | 0.218 | 0.230 | 0.643 |
 | code-only | 25 | 25 | 0.540 | 0.560 | 0.560 | 0.550 | 0.600 | 0.933 | 0.040 | 0.171 | 0.204 | 0.623 |
 
+95% bootstrap CIs (A1, 2000 case resamples):
+
+| method | top-1 | selective acc. | confident-error rate | coverage |
+|---|---|---|---|---|
+| dragnet | 0.680 [0.480, 0.840] | 0.933 [0.786, 1.000] | 0.000 [0.000, 0.000] | 0.600 [0.400, 0.800] |
+| ttp-jaccard | 0.120 [0.000, 0.280] | 0.125 [0.000, 0.280] | 0.840 [0.680, 0.960] | 0.960 [0.880, 1.000] |
+| ttp-cosine | 0.080 [0.000, 0.200] | 0.083 [0.000, 0.208] | 0.880 [0.720, 1.000] | 0.960 [0.880, 1.000] |
+| ioc-correlation | 0.560 [0.381, 0.733] | 0.714 [0.522, 0.900] | 0.240 [0.080, 0.400] | 0.840 [0.680, 0.960] |
+| code-only | 0.540 [0.360, 0.720] | 0.933 [0.786, 1.000] | 0.040 [0.000, 0.120] | 0.600 [0.400, 0.760] |
+
+Paired bootstrap, top-1 difference DRAGNET minus method (same cases, 2000 resamples):
+
+| method | diff | 95% CI | P(diff <= 0) |
+|---|---|---|---|
+| ttp-jaccard | 0.560 | [0.360, 0.760] | 0.000 |
+| ttp-cosine | 0.600 | [0.400, 0.760] | 0.000 |
+| ioc-correlation | 0.120 | [0.019, 0.248] | 0.011 |
+| code-only | 0.140 | [0.020, 0.280] | 0.011 |
+| dragnet-no-spec | 0.080 | [0.000, 0.200] | 0.129 |
+| dragnet-no-ttpsim | 0.080 | [0.000, 0.200] | 0.120 |
+| dragnet-no-ff | 0.000 | [0.000, 0.000] | 1.000 |
+
 DRAGNET accuracy by stated confidence (A1):
 
 | grade | n | accuracy |
@@ -51,6 +73,16 @@ DRAGNET accuracy by stated confidence (A1):
 | ttp-cosine | 25 | 17 | 0.235 | 0.353 | 0.412 | 0.346 | 0.941 | 0.250 | 0.800 | 0.149 | 0.131 | 0.984 | 0.000 |
 | ioc-correlation | 25 | 17 | 0.405 | 0.491 | 0.507 | 0.457 | 0.765 | 0.462 | 0.400 | 0.110 | 0.150 | 0.883 | 0.625 |
 | code-only | 25 | 17 | 0.360 | 0.386 | 0.411 | 0.389 | 0.529 | 0.667 | 0.160 | 0.063 | 0.091 | 0.819 | 0.875 |
+
+95% bootstrap CIs (A2, 2000 case resamples):
+
+| method | top-1 | selective acc. | confident-error rate | coverage |
+|---|---|---|---|---|
+| dragnet | 0.412 [0.176, 0.647] | 0.778 [0.500, 1.000] | 0.000 [0.000, 0.000] | 0.529 [0.278, 0.765] |
+| ttp-jaccard | 0.235 [0.059, 0.444] | 0.250 [0.062, 0.474] | 0.800 [0.640, 0.920] | 0.941 [0.789, 1.000] |
+| ttp-cosine | 0.235 [0.056, 0.450] | 0.250 [0.059, 0.471] | 0.800 [0.640, 0.960] | 0.941 [0.789, 1.000] |
+| ioc-correlation | 0.405 [0.188, 0.631] | 0.462 [0.200, 0.733] | 0.400 [0.200, 0.600] | 0.765 [0.533, 0.944] |
+| code-only | 0.360 [0.133, 0.592] | 0.667 [0.333, 1.000] | 0.160 [0.040, 0.320] | 0.529 [0.294, 0.765] |
 
 ## C - curated real cases
 
@@ -97,6 +129,15 @@ False-flag indicators raised on clean A1 cases (false-alarm rate): 0.160
 | code-only | 25 | 0.000 | 0.000 | 0.560 | 0.000 | 0.000 |
 | dragnet-no-ff | 25 | 0.440 | 0.000 | 0.520 | 0.000 | 0.800 |
 
+Over 10 decoy seeds - confidently attributed to decoy, mean [min, max]:
+
+- dragnet: 0.000 [0.000, 0.000]
+- ttp-jaccard: 0.000 [0.000, 0.000]
+- ttp-cosine: 0.000 [0.000, 0.000]
+- ioc-correlation: 0.524 [0.440, 0.560]
+- code-only: 0.000 [0.000, 0.000]
+- dragnet-no-ff: 0.000 [0.000, 0.000]
+
 ### level2
 
 | method | n | decoy ranked #1 | confidently attributed to decoy | truth ranked #1 | flagged | withheld (<=LOW) |
@@ -107,6 +148,15 @@ False-flag indicators raised on clean A1 cases (false-alarm rate): 0.160
 | ioc-correlation | 25 | 0.760 | 0.760 | 0.200 | 0.000 | 0.000 |
 | code-only | 25 | 0.400 | 0.400 | 0.560 | 0.000 | 0.000 |
 | dragnet-no-ff | 25 | 0.760 | 0.400 | 0.240 | 0.000 | 0.600 |
+
+Over 10 decoy seeds - confidently attributed to decoy, mean [min, max]:
+
+- dragnet: 0.172 [0.120, 0.240]
+- ttp-jaccard: 0.000 [0.000, 0.000]
+- ttp-cosine: 0.000 [0.000, 0.000]
+- ioc-correlation: 0.804 [0.760, 0.840]
+- code-only: 0.460 [0.400, 0.520]
+- dragnet-no-ff: 0.400 [0.400, 0.400]
 
 ## E1 - ThreatFox IOC shelf-life (actor-specific families)
 
@@ -129,4 +179,4 @@ False-flag indicators raised on clean A1 cases (false-alarm rate): 0.160
 | 1-5 reports | 2 | 1.000 |
 | >5 reports | 13 | 0.846 |
 
-Runtime: 271.8 s
+Runtime: 445.3 s
