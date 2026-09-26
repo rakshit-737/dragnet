@@ -1,0 +1,34 @@
+{
+  "case_id": "wannacry_like",
+  "description": "Scenario 1: correct attribution - multi-signal overlap with one actor",
+  "synthetic": true,
+  "evidence": [
+    {
+      "id": "EV-F-001",
+      "kind": "forensic",
+      "content": {
+        "host": "WS-SIM-01",
+        "dns_queries": [
+          "killswitch-sim.example"
+        ],
+        "ttps": [
+          "T1486",
+          "T1210"
+        ],
+        "victimology": "healthcare"
+      }
+    },
+    {
+      "id": "EV-M-001",
+      "kind": "malware",
+      "content": {
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000001",
+        "imphash": "aa11aa11aa11aa11aa11aa11aa11aa11",
+        "code_reuse": [
+          "fn:rc4_variant_0x3f"
+        ],
+        "family": "WannaSim"
+      }
+    }
+  ]
+}
