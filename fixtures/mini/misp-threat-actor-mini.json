@@ -1,0 +1,30 @@
+{
+ "values": [
+  {
+   "value": "Red Group",
+   "meta": {
+    "synonyms": [
+     "G9001",
+     "Crimson"
+    ],
+    "country": "RU"
+   }
+  },
+  {
+   "value": "Blue Group",
+   "meta": {
+    "synonyms": [
+     "Azure Bear"
+    ],
+    "cfr-suspected-state-sponsor": "Korea (Democratic People's Republic of)"
+   }
+  },
+  {
+   "value": "Green Group",
+   "meta": {
+    "synonyms": [],
+    "country": "CN"
+   }
+  }
+ ]
+}

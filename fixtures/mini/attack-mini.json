@@ -1,0 +1,458 @@
+{
+ "type": "bundle",
+ "id": "bundle--mini",
+ "objects": [
+  {
+   "type": "x-mitre-collection",
+   "id": "x-mitre-collection--1",
+   "x_mitre_version": "0.1",
+   "modified": "2020-01-01T00:00:00Z"
+  },
+  {
+   "type": "intrusion-set",
+   "id": "intrusion-set--g1",
+   "name": "Red Group",
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "G9001"
+    }
+   ],
+   "aliases": [
+    "Red Group",
+    "Crimson"
+   ]
+  },
+  {
+   "type": "intrusion-set",
+   "id": "intrusion-set--g2",
+   "name": "Blue Group",
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "G9002"
+    }
+   ],
+   "aliases": [
+    "Blue Group",
+    "Azure Bear"
+   ]
+  },
+  {
+   "type": "intrusion-set",
+   "id": "intrusion-set--g3",
+   "name": "Green Group",
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "G9003"
+    }
+   ],
+   "aliases": [
+    "Green Group"
+   ]
+  },
+  {
+   "type": "intrusion-set",
+   "id": "intrusion-set--g4",
+   "name": "Old Group",
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "G9004"
+    }
+   ],
+   "revoked": true
+  },
+  {
+   "type": "attack-pattern",
+   "id": "attack-pattern--T1001",
+   "name": "tech T1001",
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "T1001"
+    }
+   ]
+  },
+  {
+   "type": "attack-pattern",
+   "id": "attack-pattern--T1002",
+   "name": "tech T1002",
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "T1002"
+    }
+   ]
+  },
+  {
+   "type": "attack-pattern",
+   "id": "attack-pattern--T1003",
+   "name": "tech T1003",
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "T1003"
+    }
+   ]
+  },
+  {
+   "type": "attack-pattern",
+   "id": "attack-pattern--T1004",
+   "name": "tech T1004",
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "T1004"
+    }
+   ]
+  },
+  {
+   "type": "attack-pattern",
+   "id": "attack-pattern--T1005",
+   "name": "tech T1005",
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "T1005"
+    }
+   ]
+  },
+  {
+   "type": "attack-pattern",
+   "id": "attack-pattern--T1006",
+   "name": "tech T1006",
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "T1006"
+    }
+   ]
+  },
+  {
+   "type": "attack-pattern",
+   "id": "attack-pattern--T1007",
+   "name": "tech T1007",
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "T1007"
+    }
+   ]
+  },
+  {
+   "type": "attack-pattern",
+   "id": "attack-pattern--T1008",
+   "name": "tech T1008",
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "T1008"
+    }
+   ]
+  },
+  {
+   "type": "attack-pattern",
+   "id": "attack-pattern--T1059",
+   "name": "tech T1059",
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "T1059"
+    }
+   ]
+  },
+  {
+   "type": "attack-pattern",
+   "id": "attack-pattern--T1059001",
+   "name": "PowerShell",
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "T1059.001"
+    }
+   ]
+  },
+  {
+   "type": "malware",
+   "id": "malware--s1",
+   "name": "RedRAT",
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "S9001"
+    }
+   ],
+   "x_mitre_aliases": [
+    "RedRAT",
+    "CrimsonRAT-X"
+   ]
+  },
+  {
+   "type": "malware",
+   "id": "malware--s2",
+   "name": "BlueWiper",
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "S9002"
+    }
+   ]
+  },
+  {
+   "type": "tool",
+   "id": "tool--s3",
+   "name": "Mimikatz",
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "S9003"
+    }
+   ]
+  },
+  {
+   "type": "malware",
+   "id": "malware--s4",
+   "name": "GreenLoader",
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "S9004"
+    }
+   ]
+  },
+  {
+   "type": "campaign",
+   "id": "campaign--c1",
+   "name": "Operation Red Dawn",
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "C9001"
+    }
+   ],
+   "created": "2023-05-01T00:00:00Z"
+  },
+  {
+   "type": "campaign",
+   "id": "campaign--c2",
+   "name": "Operation Blue Moon",
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "C9002"
+    }
+   ],
+   "created": "2019-05-01T00:00:00Z"
+  },
+  {
+   "type": "campaign",
+   "id": "campaign--c3",
+   "name": "Unattributed Op",
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "C9003"
+    }
+   ],
+   "created": "2023-05-01T00:00:00Z"
+  },
+  {
+   "type": "relationship",
+   "id": "relationship--1",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--g1",
+   "target_ref": "attack-pattern--T1001"
+  },
+  {
+   "type": "relationship",
+   "id": "relationship--2",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--g1",
+   "target_ref": "attack-pattern--T1002"
+  },
+  {
+   "type": "relationship",
+   "id": "relationship--3",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--g1",
+   "target_ref": "attack-pattern--T1003"
+  },
+  {
+   "type": "relationship",
+   "id": "relationship--4",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--g1",
+   "target_ref": "attack-pattern--T1059001"
+  },
+  {
+   "type": "relationship",
+   "id": "relationship--5",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--g2",
+   "target_ref": "attack-pattern--T1004"
+  },
+  {
+   "type": "relationship",
+   "id": "relationship--6",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--g2",
+   "target_ref": "attack-pattern--T1005"
+  },
+  {
+   "type": "relationship",
+   "id": "relationship--7",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--g2",
+   "target_ref": "attack-pattern--T1003"
+  },
+  {
+   "type": "relationship",
+   "id": "relationship--8",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--g3",
+   "target_ref": "attack-pattern--T1006"
+  },
+  {
+   "type": "relationship",
+   "id": "relationship--9",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--g3",
+   "target_ref": "attack-pattern--T1007"
+  },
+  {
+   "type": "relationship",
+   "id": "relationship--10",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--g3",
+   "target_ref": "attack-pattern--T1003"
+  },
+  {
+   "type": "relationship",
+   "id": "relationship--11",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--g3",
+   "target_ref": "attack-pattern--T1059"
+  },
+  {
+   "type": "relationship",
+   "id": "relationship--12",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--g1",
+   "target_ref": "malware--s1"
+  },
+  {
+   "type": "relationship",
+   "id": "relationship--13",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--g1",
+   "target_ref": "tool--s3"
+  },
+  {
+   "type": "relationship",
+   "id": "relationship--14",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--g2",
+   "target_ref": "malware--s2"
+  },
+  {
+   "type": "relationship",
+   "id": "relationship--15",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--g2",
+   "target_ref": "tool--s3"
+  },
+  {
+   "type": "relationship",
+   "id": "relationship--16",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--g3",
+   "target_ref": "malware--s4"
+  },
+  {
+   "type": "relationship",
+   "id": "relationship--17",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--g3",
+   "target_ref": "tool--s3"
+  },
+  {
+   "type": "relationship",
+   "id": "relationship--18",
+   "relationship_type": "uses",
+   "source_ref": "campaign--c1",
+   "target_ref": "attack-pattern--T1001"
+  },
+  {
+   "type": "relationship",
+   "id": "relationship--19",
+   "relationship_type": "uses",
+   "source_ref": "campaign--c1",
+   "target_ref": "attack-pattern--T1002"
+  },
+  {
+   "type": "relationship",
+   "id": "relationship--20",
+   "relationship_type": "uses",
+   "source_ref": "campaign--c1",
+   "target_ref": "attack-pattern--T1008"
+  },
+  {
+   "type": "relationship",
+   "id": "relationship--21",
+   "relationship_type": "uses",
+   "source_ref": "campaign--c1",
+   "target_ref": "malware--s1"
+  },
+  {
+   "type": "relationship",
+   "id": "relationship--22",
+   "relationship_type": "attributed-to",
+   "source_ref": "campaign--c1",
+   "target_ref": "intrusion-set--g1"
+  },
+  {
+   "type": "relationship",
+   "id": "relationship--23",
+   "relationship_type": "uses",
+   "source_ref": "campaign--c2",
+   "target_ref": "attack-pattern--T1004"
+  },
+  {
+   "type": "relationship",
+   "id": "relationship--24",
+   "relationship_type": "uses",
+   "source_ref": "campaign--c2",
+   "target_ref": "attack-pattern--T1005"
+  },
+  {
+   "type": "relationship",
+   "id": "relationship--25",
+   "relationship_type": "uses",
+   "source_ref": "campaign--c2",
+   "target_ref": "malware--s2"
+  },
+  {
+   "type": "relationship",
+   "id": "relationship--26",
+   "relationship_type": "attributed-to",
+   "source_ref": "campaign--c2",
+   "target_ref": "intrusion-set--g2"
+  },
+  {
+   "type": "relationship",
+   "id": "relationship--27",
+   "relationship_type": "uses",
+   "source_ref": "campaign--c3",
+   "target_ref": "attack-pattern--T1003"
+  },
+  {
+   "type": "relationship",
+   "id": "relationship--28",
+   "relationship_type": "uses",
+   "source_ref": "malware--s1",
+   "target_ref": "attack-pattern--T1008"
+  }
+ ]
+}
