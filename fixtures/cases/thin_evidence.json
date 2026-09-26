@@ -1,0 +1,19 @@
+{
+  "case_id": "thin_evidence",
+  "description": "Scenario 5: uncertainty honesty - one common TTP only",
+  "synthetic": true,
+  "evidence": [
+    {
+      "id": "EV-F-004",
+      "kind": "forensic",
+      "content": {
+        "ttps": [
+          "T1003"
+        ],
+        "network_connections": [
+          "192.0.2.200"
+        ]
+      }
+    }
+  ]
+}
