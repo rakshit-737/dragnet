@@ -1,0 +1,28 @@
+{
+  "case_id": "multi_signal_boost",
+  "description": "Scenario 3: shared infra + imphash + TTPs combine beyond any single signal",
+  "synthetic": true,
+  "evidence": [
+    {
+      "id": "EV-F-003",
+      "kind": "forensic",
+      "content": {
+        "network_connections": [
+          "198.51.100.23"
+        ],
+        "ttps": [
+          "T1485",
+          "T1570"
+        ]
+      }
+    },
+    {
+      "id": "EV-M-003",
+      "kind": "malware",
+      "content": {
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000003",
+        "imphash": "bb22bb22bb22bb22bb22bb22bb22bb22"
+      }
+    }
+  ]
+}
