@@ -4877,12 +4877,12 @@
   ],
   "collision-filtered": {
    "n_test": 13379,
-   "dragnet_coverage": 0.04522012108528291,
-   "dragnet_selective_acc": 0.996694214876033,
-   "dragnet_medium_plus": 0.03759623290230959,
-   "dragnet_medium_plus_acc": 0.9980119284294234,
-   "lookup_coverage": 0.049032065176769564,
-   "lookup_selective_acc": 0.8948170731707317,
+   "dragnet_coverage": 0.07683683384408402,
+   "dragnet_selective_acc": 0.9173151750972762,
+   "dragnet_medium_plus": 0.0630839375140145,
+   "dragnet_medium_plus_acc": 0.9976303317535545,
+   "lookup_coverage": 0.08072352193736453,
+   "lookup_selective_acc": 0.8583333333333333,
    "families_indexed": 81
   },
   "unfiltered": {
@@ -4895,7 +4895,7 @@
    "lookup_selective_acc": 0.12891080233079336,
    "families_indexed": 90
   },
-  "seconds": 270.3
+  "seconds": 185.7
  },
- "runtime_seconds": 345.6
+ "runtime_seconds": 271.8
 }

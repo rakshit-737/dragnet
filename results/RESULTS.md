@@ -118,7 +118,7 @@ False-flag indicators raised on clean A1 cases (false-alarm rate): 0.160
 
 | variant | test n | DRAGNET coverage | DRAGNET selective acc. | DRAGNET MEDIUM+ share | MEDIUM+ acc. | lookup coverage | lookup selective acc. |
 |---|---|---|---|---|---|---|---|
-| collision-filtered | 13379 | 0.045 | 0.997 | 0.038 | 0.998 | 0.049 | 0.895 |
+| collision-filtered | 13379 | 0.077 | 0.917 | 0.063 | 0.998 | 0.081 | 0.858 |
 | unfiltered | 13379 | 0.113 | 0.864 | 0.091 | 0.911 | 0.834 | 0.129 |
 
 ## F - accuracy vs public reporting depth (APTnotes)
@@ -129,4 +129,4 @@ False-flag indicators raised on clean A1 cases (false-alarm rate): 0.160
 | 1-5 reports | 2 | 1.000 |
 | >5 reports | 13 | 0.846 |
 
-Runtime: 345.6 s
+Runtime: 271.8 s

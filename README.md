@@ -157,8 +157,9 @@ cases. False-alarm cost: indicators fire on 16% of *clean* campaigns (grade capp
 - **Imphash genetics (MalwareBazaar, 493,634 labelled samples; train < 2024-01-01, test after; 13,379
   test samples of ATT&CK-attributed families).** A naive imphash lookup covers 83% of test samples but
   is right only **13%** of the time (shared packer/.NET stub imphashes). With DRAGNET's collision filter
-  (drop imphashes seen in > 2 families) plus specificity, coverage falls to 4.5% but accuracy is
-  **99.7%** - genetics is a precise but rare anchor.
+  (drop imphashes seen in > 2 families *in the training period*) plus specificity, coverage falls to
+  7.7% and accuracy rises to **91.7%**; the 6.3% of samples DRAGNET grades MEDIUM or higher are
+  **99.8%** correct - genetics is a precise but rare anchor.
 
 ### F - does accuracy track public reporting depth?
 

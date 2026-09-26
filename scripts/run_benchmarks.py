@@ -100,7 +100,9 @@ def bazaar_benchmark(attack, malpedia, path: Path, cutoff: str) -> dict:
     t0 = time.time()
     fam = family_actor_map(attack, 3, malpedia)
     rows = [s for s in iter_bazaar(path) if s.imphash and s.signature]
-    gidx = imphash_family_index(rows)
+    # collision index from the training period only: using post-cutoff samples would leak
+    # future knowledge of which imphashes turn out to be shared across families
+    gidx = imphash_family_index([s for s in rows if s.first_seen < cutoff])
     apt = [s for s in rows if norm(s.signature) in fam]
     train = [s for s in apt if s.first_seen < cutoff]
     test = [s for s in apt if s.first_seen >= cutoff]
