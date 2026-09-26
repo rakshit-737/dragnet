@@ -112,21 +112,24 @@ def bazaar_benchmark(attack, malpedia, path: Path, cutoff: str) -> dict:
         kg, hits = enrich_bazaar(kg0, attack, train, global_index=gi, malpedia=malpedia)
         n = cov = ok = conf = conf_ok = 0
         base_cov = base_ok = 0
+        cache: dict[str, tuple] = {}     # samples sharing an imphash get the same verdict
         for s in test:
             truth = fam[norm(s.signature)]
-            sigs = [Signal(SignalKind.IMPHASH, s.imphash, s.sha256)]
-            a = assess(s.sha256, sigs, kg)
+            if s.imphash not in cache:
+                sigs = [Signal(SignalKind.IMPHASH, s.imphash, s.sha256)]
+                a = assess(s.sha256, sigs, kg)
+                cache[s.imphash] = (a.leading, a.confidence.value, METHODS["code-only"](sigs, kg).named)
+            leading, grade, base_named = cache[s.imphash]
             n += 1
-            if a.leading:
+            if leading:
                 cov += 1
-                ok += a.leading in truth
-            if a.confidence.value in ("HIGH", "MEDIUM"):
+                ok += leading in truth
+            if grade in ("HIGH", "MEDIUM"):
                 conf += 1
-                conf_ok += a.leading in truth
-            bp = METHODS["code-only"](sigs, kg)
-            if bp.named:
+                conf_ok += leading in truth
+            if base_named:
                 base_cov += 1
-                base_ok += bp.named in truth
+                base_ok += base_named in truth
         f = lambda a, b: a / b if b else float("nan")
         res[variant] = {"n_test": n, "dragnet_coverage": f(cov, n), "dragnet_selective_acc": f(ok, cov),
                         "dragnet_medium_plus": f(conf, n), "dragnet_medium_plus_acc": f(conf_ok, conf),
