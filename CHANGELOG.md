@@ -5,6 +5,25 @@ and the project uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-09-26
+
+### Added
+- STIX 2.1 export of assessments (`assess --format stix`, `POST /assess?format=stix`): campaign,
+  intrusion-set, `attributed-to` relationship with graded confidence, ACH note, ATT&CK attack-patterns.
+- Ed25519-signed custody chain (optional `[sign]` extra): `dragnet keygen`, `assess --sign-key`,
+  `dragnet verify` (exit 1 on any tampering, truncation or wrong signer).
+- REVENANT / VITRINE adapters: `dragnet import` turns their JSON exports into a case file.
+- Benchmark uncertainty: 95% bootstrap CIs (A1, A2), paired bootstrap of top-1 differences vs every
+  baseline and ablation, false-flag stress test repeated over 10 decoy seeds.
+- MkDocs Material documentation site on GitHub Pages with static demo reports and STIX bundles.
+- Dockerfile (slim, non-root), docker-compose for the API, tag-triggered release workflow
+  (GHCR image, wheel and sdist).
+
+### Changed
+- Fixtures path resolves from `$DRAGNET_FIXTURES`, the source checkout, or `./fixtures` (installed wheel).
+- README: CIs and significance reported; ablation gains stated as not significant at n = 25; single-seed
+  L2 false-flag figure (0.24) now shown next to its 10-seed mean (0.17 [0.12, 0.24]).
+
 ### Fixed
 - E2 imphash benchmark: the collision filter was built from all MalwareBazaar samples, including the
   test period, leaking future knowledge of shared imphashes. It now uses training-period samples only;

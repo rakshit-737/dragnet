@@ -2,6 +2,7 @@
 
 [![ci](https://github.com/rakshit-737/dragnet/actions/workflows/ci.yml/badge.svg)](https://github.com/rakshit-737/dragnet/actions/workflows/ci.yml)
 ![python](https://img.shields.io/badge/python-3.10%E2%80%933.14-blue)
+[![docs](https://github.com/rakshit-737/dragnet/actions/workflows/docs.yml/badge.svg)](https://rakshit-737.github.io/dragnet/)
 [![license](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 ![runtime deps](https://img.shields.io/badge/runtime%20deps-stdlib%20only-lightgrey)
 
@@ -15,6 +16,8 @@ MISP galaxy, abuse.ch, APTnotes) and on documented cases including the Olympic D
 > campaigns and **never commits at MEDIUM+ to a wrong actor**; the MISP-style indicator-correlation
 > baseline gets 56% and commits to a wrong actor in 24% of cases. With a planted Rich header and
 > decoy-language strings, DRAGNET flags every case and confidently names the decoy in **0%** (baseline 52%).
+
+**Docs site:** <https://rakshit-737.github.io/dragnet/> (architecture, benchmarks, CLI/API reference, demo reports).
 
 ## Contents
 
@@ -110,6 +113,13 @@ Malpedia/Intezer-style single-signal matcher). Ties are scored in expectation.
 *Coverage* = share of cases where the method names an actor; *confident-error rate* = share of all cases
 where it commits (MEDIUM+ for DRAGNET, always for baselines) to the wrong actor.
 
+**Uncertainty (n = 25 is small).** 95% percentile-bootstrap CIs over cases: DRAGNET top-1 0.68
+[0.48, 0.84], ioc-correlation 0.56 [0.38, 0.73], code-only 0.54 [0.36, 0.72]. A *paired* bootstrap on
+the same cases puts DRAGNET's top-1 advantage at +0.12 [0.02, 0.25] over ioc-correlation and +0.14
+[0.02, 0.28] over code-only (P(diff <= 0) = 0.01 each) and +0.56 / +0.60 over the TTP-only baselines;
+the ablations (no specificity, no TTP-profile term) are +0.08 [0.00, 0.20], i.e. *not* significant at
+this n. DRAGNET's 0 confident errors in 25 cases bound the true rate below ~12% (rule of three), not at 0.
+
 ![A1 methods](docs/figures/a1_methods.png)
 
 DRAGNET's stated grades are well ordered: **MEDIUM 5/5 correct, LOW 9/10 correct, INSUFFICIENT - the
@@ -139,10 +149,10 @@ this repo for multi-signal fusion.
 
 | method | L1: Rich header + language planted - confidently names decoy | L2: + stolen exclusive decoy family - confidently names decoy |
 |---|---|---|
-| **dragnet** | **0.00** (flagged 100%) | **0.24** (flagged 76%) |
+| **dragnet** | **0.00** (flagged 100%) | **0.24** (flagged 76%); 0.17 mean over 10 decoy seeds [0.12, 0.24] |
 | dragnet without false-flag rules | 0.00 | 0.40 |
-| ioc-correlation | 0.52 | 0.76 |
-| code-only | 0.00 | 0.40 |
+| ioc-correlation | 0.52 (10-seed mean 0.52) | 0.76 (10-seed mean 0.80) |
+| code-only | 0.00 | 0.40 (10-seed mean 0.46) |
 
 ![false-flag stress test](docs/figures/false_flag.png)
 
@@ -214,7 +224,7 @@ Metadata only - no sample is ever downloaded. Details, licences and citations: [
 ```bash
 git clone https://github.com/rakshit-737/dragnet && cd dragnet
 python -m pip install -e ".[dev]"              # runtime is stdlib-only
-python -m pytest -q                            # 53 tests; real-data tests skip without downloads
+python -m pytest -q                            # 66 tests; real-data tests skip without downloads
 python -m dragnet demo                         # five synthetic spec scenarios
 python -m dragnet assess fixtures/cases/olympic_destroyer_like.json
 ```
@@ -228,6 +238,17 @@ python -m dragnet case-study olympic_destroyer_2018 --format md
 python -m dragnet assess my_case.json --kg "$DRAGNET_DATA/kg-attack-19.2.json" --format json
 python -m dragnet export-cypher --kg "$DRAGNET_DATA/kg-attack-19.2.json" -o dragnet.cypher   # Neo4j
 pip install -e ".[api]" && python -m dragnet serve --kg "$DRAGNET_DATA/kg-attack-19.2.json" # POST /assess
+```
+
+Interoperability and custody:
+
+```bash
+python -m dragnet assess case.json --format stix -o bundle.json          # STIX 2.1 bundle
+pip install -e ".[sign]" && python -m dragnet keygen analyst               # analyst.key / analyst.pub
+python -m dragnet assess case.json --sign-key analyst.key -o report.json   # Ed25519 over the custody head
+python -m dragnet verify report.json --pub analyst.pub                     # exit 1 on tampering
+python -m dragnet import incident-7 --revenant rev.json --vitrine tri.json -o case.json
+docker run --rm -v "$PWD:/w" ghcr.io/rakshit-737/dragnet assess /w/case.json
 ```
 
 A case file is `{"case_id": ..., "evidence": [{"id", "kind": "forensic"|"malware", "content": {...}}]}`;
@@ -268,8 +289,15 @@ rewritten by `download_data.py --record`, so a fresh download does not silently 
   include some commodity malware ATT&CK attributes to a few groups (e.g. AgentTesla).
 - **Raw scores are under-confident**; use the grade. No HIGH verdicts occur on ATT&CK-only evidence
   (it has no infrastructure signals).
-- Stage-5 extras from the spec (signed custody, STIX 2.1 report export, live REVENANT/VITRINE integration)
-  are not implemented.
+- REVENANT / VITRINE integration is file-based (`dragnet import` reads their JSON exports); there is no
+  live service coupling, and VITRINE triage output carries no imphash unless the analyst adds it.
+- Signed custody proves integrity and, with a pinned public key, signer identity; key management
+  (HSM, rotation, revocation) is out of scope.
+- **Fuzzy genetics (TLSH/ssdeep) not done:** MalwareBazaar publishes TLSH, but a like-for-like benchmark
+  needs a distance index over ~500k samples plus family-collision handling; left as future work rather
+  than reported half-measured.
+- **Learned calibration not done:** with 25 + 7 labelled cases a fitted calibrator would overfit; the
+  raw score stays under-confident and the discrete grade is the output to use.
 
 ## Roadmap
 
@@ -278,9 +306,11 @@ rewritten by `download_data.py --record`, so a fresh download does not silently 
 - [x] Multi-signal vs single-signal research question, false-flag stress test, ablations
 - [x] Neo4j export, FastAPI service
 - [ ] Fuzzy genetics (TLSH/ssdeep distance) instead of exact imphash
-- [ ] Signed (Ed25519) custody log and STIX 2.1 report export
+- [x] Signed (Ed25519) custody log (`keygen`, `assess --sign-key`, `verify`) and STIX 2.1 report export (`--format stix`)
+- [x] REVENANT / VITRINE adapters (`dragnet import --revenant ... --vitrine ...`)
+- [x] Bootstrap CIs, paired significance and multi-seed false-flag stress test
+- [x] Docs site (GitHub Pages), Docker image and tagged releases
 - [ ] Learned monotone calibration of the ACH score on a larger curated case set
-- [ ] REVENANT / VITRINE adapters for direct artifact and sample-feature ingestion
 
 ## Safety and ethics
 
