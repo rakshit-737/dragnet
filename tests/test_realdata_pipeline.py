@@ -1,5 +1,4 @@
 """Tests for the real-data pipeline, run on tiny committed fixtures (no downloads)."""
-import io
 import json
 import zipfile
 from pathlib import Path
@@ -260,4 +259,3 @@ def test_json_io_roundtrip_of_bazaar_csv_header_only(tmp_path):
     p = tmp_path / "x.csv"
     p.write_text("# only comments\n")
     assert list(iter_bazaar(p)) == []
-    assert io  # keep import used
