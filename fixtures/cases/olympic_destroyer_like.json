@@ -1,0 +1,30 @@
+{
+  "case_id": "olympic_destroyer_like",
+  "description": "Scenario 2: false-flag resistance - forged Rich header points one way, infra another",
+  "synthetic": true,
+  "evidence": [
+    {
+      "id": "EV-F-002",
+      "kind": "forensic",
+      "content": {
+        "host": "SRV-SIM-07",
+        "network_connections": [
+          "198.51.100.23"
+        ],
+        "ttps": [
+          "T1485",
+          "T1003"
+        ]
+      }
+    },
+    {
+      "id": "EV-M-002",
+      "kind": "malware",
+      "content": {
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000002",
+        "rich_header": "rh:9f8e7d6c",
+        "family": "UnknownWiper"
+      }
+    }
+  ]
+}
