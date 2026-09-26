@@ -1,0 +1,13 @@
+{
+ "summary": {"events": 5, "edges": 3, "stories": 1},
+ "stories": [{"id": "S1", "root": "e1", "grade": "HIGH", "techniques": ["T1210", "T1486"], "tactics": ["impact"]}],
+ "events": [
+  {"id": "e1", "time": "2017-05-12T07:44:00", "type": "network", "actor": "process:4:System", "action": "accepted", "object": "ip:10.0.0.5:445", "techniques": ["T1210"]},
+  {"id": "e2", "time": "2017-05-12T07:44:05", "type": "process", "actor": "process:1200:mssecsvc.exe", "action": "spawned", "object": "process:1310:tasksche.exe", "techniques": []},
+  {"id": "e3", "time": "2017-05-12T07:44:07", "type": "dns", "actor": "process:1200:mssecsvc.exe", "action": "resolved", "object": "dns:iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea.com", "techniques": []},
+  {"id": "e4", "time": "2017-05-12T07:44:09", "type": "network", "actor": "process:1310:tasksche.exe", "action": "connected", "object": "ip:203.0.113.7:9001", "techniques": ["T1090.003"]},
+  {"id": "e5", "time": "2017-05-12T07:45:00", "type": "process", "actor": "process:1310:tasksche.exe", "action": "spawned", "object": "process:1400:cmd.exe", "techniques": ["T1486"]}
+ ],
+ "indicators": [{"indicator": "timestomp", "detail": "tasksche.exe $SI earlier than $FN", "event_ids": ["e2"], "severity": "medium"}],
+ "artefacts": []
+}

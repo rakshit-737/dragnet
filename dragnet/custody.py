@@ -41,3 +41,61 @@ class CustodyLog:
                 return False
             prev = e["entry_hash"]
         return True
+
+
+# ---------------------------------------------------------------- Ed25519 signing
+# Optional: needs the ``cryptography`` package (``pip install dragnet[sign]``). The signature
+# covers the head of the hash chain, so it commits to every entry before it.
+
+def _crypto():
+    try:
+        from cryptography.hazmat.primitives import serialization
+        from cryptography.hazmat.primitives.asymmetric.ed25519 import (
+            Ed25519PrivateKey,
+            Ed25519PublicKey,
+        )
+    except ImportError as e:  # pragma: no cover - exercised only without the extra
+        raise RuntimeError("signing needs the optional 'cryptography' package: pip install dragnet[sign]") from e
+    return serialization, Ed25519PrivateKey, Ed25519PublicKey
+
+
+def generate_keypair() -> tuple[bytes, bytes]:
+    """Return (private PEM, public PEM)."""
+    ser, Priv, _ = _crypto()
+    k = Priv.generate()
+    priv = k.private_bytes(ser.Encoding.PEM, ser.PrivateFormat.PKCS8, ser.NoEncryption())
+    pub = k.public_key().public_bytes(ser.Encoding.PEM, ser.PublicFormat.SubjectPublicKeyInfo)
+    return priv, pub
+
+
+def sign_entries(entries: list[dict], private_pem: bytes) -> dict:
+    ser, _, _ = _crypto()
+    key = ser.load_pem_private_key(private_pem, password=None)
+    head = entries[-1]["entry_hash"] if entries else CustodyLog.GENESIS
+    msg = f"dragnet-custody-v1:{len(entries)}:{head}".encode()
+    pub = key.public_key().public_bytes(ser.Encoding.Raw, ser.PublicFormat.Raw)
+    return {"alg": "Ed25519", "entries": len(entries), "head": head,
+            "public_key": pub.hex(), "signature": key.sign(msg).hex()}
+
+
+def verify_signed(entries: list[dict], sig: dict, public_pem: bytes | None = None) -> bool:
+    """True iff the chain is intact and the signature over its head is valid.
+
+    Pass ``public_pem`` to pin the expected signer; otherwise the embedded key is used
+    (which only proves integrity, not identity)."""
+    from cryptography.exceptions import InvalidSignature
+    ser, _, Pub = _crypto()
+    log = CustodyLog()
+    log.entries = list(entries)
+    if not log.verify() or sig.get("entries") != len(entries):
+        return False
+    head = entries[-1]["entry_hash"] if entries else CustodyLog.GENESIS
+    if sig.get("head") != head:
+        return False
+    key = (ser.load_pem_public_key(public_pem) if public_pem
+           else Pub.from_public_bytes(bytes.fromhex(sig["public_key"])))
+    try:
+        key.verify(bytes.fromhex(sig["signature"]), f"dragnet-custody-v1:{len(entries)}:{head}".encode())
+    except InvalidSignature:
+        return False
+    return True

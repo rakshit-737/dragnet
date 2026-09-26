@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 from pathlib import Path
 
@@ -10,7 +11,7 @@ from .graph import KnowledgeGraph
 from .ingest import load_case
 from .models import SignalKind
 from .paths import FIXTURES, data_dir
-from .report import to_json, to_markdown
+from .report import to_dict, to_json, to_markdown
 
 DEFAULT_KG = FIXTURES / "campaigns.json"
 CASES = FIXTURES / "cases"
@@ -69,8 +70,22 @@ def main(argv=None) -> int:
     a.add_argument("case")
     a.add_argument("--kg", default=str(DEFAULT_KG), help="knowledge-graph JSON (see build-kg)")
     a.add_argument("--weight", action="append", help="override a kind weight, e.g. imphash=0.2")
-    a.add_argument("--format", choices=["md", "json"], default="md")
+    a.add_argument("--format", choices=["md", "json", "stix"], default="md")
+    a.add_argument("--sign-key", help="Ed25519 private key PEM: sign the custody chain (json output)")
     a.add_argument("-o", "--out")
+
+    kgn = sub.add_parser("keygen", help="create an Ed25519 key pair for signed custody")
+    kgn.add_argument("prefix", help="writes <prefix>.key and <prefix>.pub")
+
+    v = sub.add_parser("verify", help="verify the custody chain (and signature) of a JSON report")
+    v.add_argument("report")
+    v.add_argument("--pub", help="expected signer public key PEM")
+
+    im = sub.add_parser("import", help="build a case file from REVENANT / VITRINE JSON exports")
+    im.add_argument("case_id")
+    im.add_argument("--revenant", action="append", default=[], help="REVENANT export JSON")
+    im.add_argument("--vitrine", action="append", default=[], help="VITRINE triage JSON")
+    im.add_argument("-o", "--out")
 
     d = sub.add_parser("demo", help="run all bundled synthetic scenarios")
     d.add_argument("--kg", default=str(DEFAULT_KG))
@@ -102,7 +117,49 @@ def main(argv=None) -> int:
 
     if args.cmd == "assess":
         res = run(args.case, args.kg, parse_weights(args.weight))
-        _emit(to_json(res) if args.format == "json" else to_markdown(res), args.out)
+        if args.format == "stix":
+            from .stix import to_stix_json
+            _emit(to_stix_json(res) + "\n", args.out)
+        elif args.format == "json" or args.sign_key:
+            d = to_dict(res)
+            if args.sign_key:
+                from .custody import sign_entries
+                d["custody_signature"] = sign_entries(res.custody, Path(args.sign_key).read_bytes())
+            _emit(json.dumps(d, indent=2) + "\n", args.out)
+        else:
+            _emit(to_markdown(res), args.out)
+        return 0
+
+    if args.cmd == "keygen":
+        from .custody import generate_keypair
+        priv, pub = generate_keypair()
+        Path(args.prefix + ".key").write_bytes(priv)
+        Path(args.prefix + ".pub").write_bytes(pub)
+        print(f"wrote {args.prefix}.key (keep private) and {args.prefix}.pub")
+        return 0
+
+    if args.cmd == "verify":
+        from .custody import CustodyLog, verify_signed
+        d = json.loads(Path(args.report).read_text(encoding="utf-8"))
+        entries = d.get("custody", [])
+        if "custody_signature" in d:
+            pub = Path(args.pub).read_bytes() if args.pub else None
+            ok = verify_signed(entries, d["custody_signature"], pub)
+            what = "chain + Ed25519 signature" + (" (pinned key)" if pub else " (embedded key)")
+        else:
+            log = CustodyLog()
+            log.entries = entries
+            ok, what = log.verify(), "hash chain (unsigned)"
+        print(f"{'OK' if ok else 'FAILED'}: {what}, {len(entries)} entries")
+        return 0 if ok else 1
+
+    if args.cmd == "import":
+        from .adapters import build_case_doc
+        rev = [json.loads(Path(x).read_text(encoding="utf-8")) for x in args.revenant]
+        vit = [json.loads(Path(x).read_text(encoding="utf-8")) for x in args.vitrine]
+        if not rev and not vit:
+            raise SystemExit("give at least one --revenant or --vitrine export")
+        _emit(json.dumps(build_case_doc(args.case_id, rev, vit), indent=2) + "\n", args.out)
         return 0
 
     if args.cmd == "demo":
