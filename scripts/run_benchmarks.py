@@ -206,7 +206,7 @@ def figures(res: dict, outdir: Path) -> None:
     fig.savefig(outdir / "a1_methods.png", dpi=130)
     plt.close(fig)
 
-    # 2) reliability diagram (A1 + A2 pooled) dragnet vs ttp-jaccard
+    # 2) reliability diagram (A1) dragnet vs ioc-correlation
     fig, ax = plt.subplots(figsize=(4.4, 4.2))
     ax.plot([0, 1], [0, 1], color="#c3c2b7", linewidth=1, linestyle="--", label="perfect calibration")
     series = [("dragnet", "dragnet", "#2a78d6"), ("ioc-correlation", "ioc-correlation", "#eda100")]
