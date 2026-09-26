@@ -370,6 +370,42 @@ def false_alarm_rate(cases: list[Case], kg: KnowledgeGraph) -> float:
     return sum(fn(c.signals, kg).flags > 0 for c in clean) / len(clean) if clean else float("nan")
 
 
+CI_KEYS = ("top1", "top3", "coverage", "selective_accuracy", "confident_error_rate", "brier")
+
+
+def bootstrap_ci(rows: list[dict], keys=CI_KEYS, n_boot: int = 2000, seed: int = 0,
+                 alpha: float = 0.05) -> dict[str, list[float]]:
+    """Percentile bootstrap CIs over cases (resampling rows with replacement)."""
+    rng = random.Random(seed)
+    samples: dict[str, list[float]] = {k: [] for k in keys}
+    for _ in range(n_boot):
+        s = summarise("boot", [rows[rng.randrange(len(rows))] for _ in rows])
+        for k in keys:
+            if not math.isnan(s[k]):
+                samples[k].append(s[k])
+    out = {}
+    for k, xs in samples.items():
+        xs.sort()
+        out[k] = ([xs[int(alpha / 2 * (len(xs) - 1))], xs[int((1 - alpha / 2) * (len(xs) - 1))]]
+                  if xs else [float("nan"), float("nan")])
+    return out
+
+
+def paired_bootstrap_diff(rows_a: list[dict], rows_b: list[dict], key: str = "top1",
+                          n_boot: int = 2000, seed: int = 0) -> dict:
+    """Paired bootstrap of mean(a) - mean(b) over the same cases (in-KG rows)."""
+    pairs = [(a[key], b[key]) for a, b in zip(rows_a, rows_b) if a["in_kg"]]
+    rng = random.Random(seed)
+    diffs = []
+    for _ in range(n_boot):
+        smp = [pairs[rng.randrange(len(pairs))] for _ in pairs]
+        diffs.append(sum(float(x) - float(y) for x, y in smp) / len(smp))
+    diffs.sort()
+    d = sum(float(x) - float(y) for x, y in pairs) / len(pairs)
+    return {"diff": d, "ci": [diffs[int(0.025 * (n_boot - 1))], diffs[int(0.975 * (n_boot - 1))]],
+            "p_le_0": sum(x <= 0 for x in diffs) / n_boot}
+
+
 def fmt(x) -> str:
     if isinstance(x, float):
         return "n/a" if math.isnan(x) else f"{x:.3f}"

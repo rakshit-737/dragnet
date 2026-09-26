@@ -59,6 +59,18 @@ RANK_COLS = [("n", "n"), ("in KG", "n_in_kg"), ("top-1", "top1"), ("top-3", "top
              ("Brier (dist.)", "brier_dist")]
 
 
+def ci_table(summaries: list[dict], label: str) -> list[str]:
+    keys = [("top-1", "top1"), ("selective acc.", "selective_accuracy"),
+            ("confident-error rate", "confident_error_rate"), ("coverage", "coverage")]
+    out = [f"95% bootstrap CIs ({label}, 2000 case resamples):", "",
+           "| method | " + " | ".join(h for h, _ in keys) + " |", "|---" * (len(keys) + 1) + "|"]
+    for s in summaries:
+        ci = s.get("ci95", {})
+        out.append(f"| {s['method']} | " + " | ".join(
+            f"{fmt(s[k])} [{fmt(ci[k][0])}, {fmt(ci[k][1])}]" if k in ci else fmt(s[k]) for _, k in keys) + " |")
+    return out + [""]
+
+
 def strip_rows(s: dict) -> dict:
     return {k: v for k, v in s.items() if k != "rows"}
 
@@ -280,8 +292,12 @@ def main(argv=None) -> int:
     allm = list(dict.fromkeys(MAIN + ABL))
     preds = {m: bench.predict_all(m, cases, kg) for m in allm}
     summ = {m: bench.evaluate(m, cases, kg, preds[m]) for m in allm}
+    for m in allm:
+        summ[m]["ci95"] = bench.bootstrap_ci(summ[m]["rows"])
     res["A1"] = {"main": [summ[m] for m in MAIN],
-                 "ablation": [strip_rows(summ[m]) for m in ABL]}
+                 "ablation": [strip_rows(summ[m]) for m in ABL],
+                 "paired_top1_vs_dragnet": {m: bench.paired_bootstrap_diff(summ["dragnet"]["rows"], summ[m]["rows"])
+                                            for m in allm if m != "dragnet"}}
 
     # ---- F reporting depth (APTnotes) on A1 rows
     reports = load_aptnotes(d / "APTnotes.csv")
@@ -306,7 +322,11 @@ def main(argv=None) -> int:
         cases10 = bench.attack_campaign_cases(attack, attack10, created_after=attack10.released)
         print(f"A2: {len(cases10)} campaigns created after v{attack10.version} ({attack10.released[:10]})")
         res["A2"] = {"kg_version": attack10.version, "kg_released": attack10.released,
-                     "main": [strip_rows(bench.evaluate(m, cases10, kg10)) for m in MAIN]}
+                     "main": []}
+        for m in MAIN:
+            sm = bench.evaluate(m, cases10, kg10)
+            sm["ci95"] = bench.bootstrap_ci(sm["rows"])
+            res["A2"]["main"].append(strip_rows(sm))
 
     # ---- D false-flag stress test
     kg_rh = bench.reference_rich_headers(kg)
@@ -315,6 +335,17 @@ def main(argv=None) -> int:
         planted = bench.plant_false_flags(cases, kg, level)
         res["D"][f"level{level}"] = [bench.evaluate_false_flag(m, planted, kg_rh)
                                      for m in MAIN + ["dragnet-no-ff"]]
+    # decoy choice is random: repeat over seeds and report the spread
+    seeds = list(range(10))
+    res["D"]["seeds"] = seeds
+    for level in (1, 2):
+        per = {m: [] for m in MAIN + ["dragnet-no-ff"]}
+        for sd in seeds:
+            planted = bench.plant_false_flags(cases, kg, level, seed=sd)
+            for m, vals in per.items():
+                vals.append(bench.evaluate_false_flag(m, planted, kg_rh)["confident_decoy"])
+        res["D"][f"level{level}_seeds"] = {m: {"mean": sum(v) / len(v), "min": min(v), "max": max(v)}
+                                           for m, v in per.items()}
     print("D: false-flag stress test done")
 
     # ---- C curated
@@ -354,6 +385,11 @@ def render_md(res: dict) -> str:
     L += table(res["A3"]["main"], RANK_COLS) + [""]
     L += ["## A1 - ATT&CK campaigns attributed against group profiles (retrospective)", ""]
     L += table(res["A1"]["main"], RANK_COLS) + [""]
+    L += ci_table(res["A1"]["main"], "A1")
+    L += ["Paired bootstrap, top-1 difference DRAGNET minus method (same cases, 2000 resamples):", "",
+          "| method | diff | 95% CI | P(diff <= 0) |", "|---|---|---|---|"]
+    L += [f"| {m} | {fmt(v['diff'])} | [{fmt(v['ci'][0])}, {fmt(v['ci'][1])}] | {fmt(v['p_le_0'])} |"
+          for m, v in res["A1"]["paired_top1_vs_dragnet"].items()] + [""]
     g = next(s for s in res["A1"]["main"] if s["method"] == "dragnet")["grades"]
     L += ["DRAGNET accuracy by stated confidence (A1):", "", "| grade | n | accuracy |", "|---|---|---|"]
     L += [f"| {gr} | {v['n']} | {fmt(v['accuracy'])} |" for gr, v in g.items()] + [""]
@@ -361,6 +397,7 @@ def render_md(res: dict) -> str:
     if "A2" in res:
         L += [f"## A2 - temporal hold-out: v{res['A2']['kg_version']} profiles, campaigns documented later", ""]
         L += table(res["A2"]["main"], RANK_COLS + [("out-of-KG abstain", "out_of_kg_abstain")]) + [""]
+        L += ci_table(res["A2"]["main"], "A2")
     L += ["## C - curated real cases", ""]
     for mode, rows in res["C"].items():
         L += [f"### {mode}", "", "| case | truth | DRAGNET verdict | top score | truth rank | false-flag indicators | as expected | ioc-correlation | ttp-jaccard |",
@@ -382,6 +419,10 @@ def render_md(res: dict) -> str:
             L.append(f"| {r['method']} | {r['n']} | {fmt(r['decoy_top1'])} | {fmt(r['confident_decoy'])} | "
                      f"{fmt(r['truth_top1'])} | {fmt(r['flagged'])} | {fmt(r['withheld'])} |")
         L.append("")
+        sd = D.get(f"{lv}_seeds")
+        if sd:
+            L += [f"Over {len(D['seeds'])} decoy seeds - confidently attributed to decoy, mean [min, max]:", ""]
+            L += [f"- {m}: {fmt(v['mean'])} [{fmt(v['min'])}, {fmt(v['max'])}]" for m, v in sd.items()] + [""]
     if "E_threatfox" in res:
         t = res["E_threatfox"]
         L += ["## E1 - ThreatFox IOC shelf-life (actor-specific families)", "",
