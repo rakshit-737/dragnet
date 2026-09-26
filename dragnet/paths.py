@@ -5,7 +5,19 @@ import os
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
-FIXTURES = REPO / "fixtures"
+
+
+def _fixtures() -> Path:
+    """$DRAGNET_FIXTURES, else the source checkout's fixtures/, else ./fixtures (installed wheel)."""
+    env = os.environ.get("DRAGNET_FIXTURES")
+    if env:
+        return Path(env)
+    if (REPO / "fixtures").is_dir():
+        return REPO / "fixtures"
+    return Path.cwd() / "fixtures"
+
+
+FIXTURES = _fixtures()
 RESULTS = REPO / "results"
 
 

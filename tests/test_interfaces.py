@@ -75,3 +75,16 @@ def test_realdata_case_studies_behave(capsys):
     assert "HIGH" not in od and "MEDIUM" not in od
     wc = next(ln for ln in out.splitlines() if ln.startswith("wannacry_2017"))
     assert "Lazarus Group" in wc.split("truth=")[0]
+
+
+def test_api_assess_stix():
+    pytest.importorskip("fastapi")
+    pytest.importorskip("httpx")
+    from fastapi.testclient import TestClient
+
+    from dragnet.api import create_app
+    client = TestClient(create_app(KG))
+    case = json.loads((CASES / "wannacry_like.json").read_text())
+    r = client.post("/assess?format=stix", json=case)
+    assert r.status_code == 200 and r.json()["type"] == "bundle"
+    assert client.post("/assess?format=xml", json=case).status_code == 422
