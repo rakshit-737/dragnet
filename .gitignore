@@ -3,3 +3,8 @@ __pycache__/
 .pytest_cache/
 *.egg-info/
 *_report.json
+
+# datasets live outside the repo (see scripts/download_data.py)
+data/raw/
+*.part
+.ruff_cache/
