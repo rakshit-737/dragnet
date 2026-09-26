@@ -1,16 +1,26 @@
 PY ?= python
 
-.PHONY: demo test install report
+.PHONY: install data bench demo test lint kg
 
 install:
-	$(PY) -m pip install -r requirements.txt
+	$(PY) -m pip install -e ".[dev,api,bench]"
+
+data:            ## download public datasets (~300 MB) into $$DRAGNET_DATA
+	$(PY) scripts/download_data.py
+
+kg:              ## build the real knowledge graph JSON
+	$(PY) -m dragnet build-kg
+
+bench:           ## run every benchmark, write results/ and docs/figures/
+	$(PY) scripts/run_benchmarks.py
+
+demo:            ## synthetic scenarios + real case studies (if data present)
+	$(PY) -m dragnet demo
+	$(PY) -m dragnet assess fixtures/cases/olympic_destroyer_like.json
+	-$(PY) -m dragnet case-study
 
 test:
 	$(PY) -m pytest -q
 
-demo:
-	$(PY) -m dragnet demo
-	$(PY) -m dragnet assess fixtures/cases/olympic_destroyer_like.json
-
-report:
-	$(PY) -m dragnet assess fixtures/cases/wannacry_like.json --format json -o wannacry_report.json
+lint:
+	$(PY) -m ruff check .
