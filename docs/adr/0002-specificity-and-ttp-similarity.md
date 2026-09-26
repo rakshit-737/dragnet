@@ -13,7 +13,7 @@ having more edges, and every case produced dozens of "contradicting" signals.
 ## Decision
 
 1. **Specificity.** A point signal's effective weight is `kind_weight x 1/|actors it links to|`.
-   An exclusive family counts fully; Mimikatz used by 60 groups counts 1/60.
+   An exclusive family counts fully; Mimikatz, linked to 51 groups in ATT&CK v19.2, counts 1/51.
 2. **TTP profile similarity.** Techniques are not scored one by one. The case's technique set
    (sub-techniques expanded to their parents) is compared with every actor's profile by
    IDF-weighted cosine similarity; the result enters the noisy-OR as a single term weighted by

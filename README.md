@@ -56,7 +56,7 @@ flowchart LR
 
 **Scoring.** For each actor, support is a noisy-OR over (a) the case's point signals that link to it,
 each weighted `kind weight x specificity` where specificity = 1 / number of actors the signal links to
-(an exclusive family counts fully, Mimikatz used by ~60 groups counts 1/60), and (b) one tradecraft term
+(an exclusive family counts fully, Mimikatz, linked to 51 groups in ATT&CK v19.2, counts 1/51), and (b) one tradecraft term
 `0.6 x IDF-cosine(case techniques, actor technique profile)`. Contradiction is the noisy-OR of signals
 that link to other actors; `score = support x (1 - 0.6 x contradiction)`. Every weight is printed in
 the report and can be overridden (`--weight imphash=0.2`). See [ADR 0002](docs/adr/0002-specificity-and-ttp-similarity.md).
