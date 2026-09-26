@@ -1,0 +1,36 @@
+{
+  "case_id": "olympic_destroyer_2018",
+  "title": "Olympic Destroyer wiper, PyeongChang Winter Olympics (Feb 2018) - documented false flag",
+  "date": "2018-02-09",
+  "ground_truth": ["G0034"],
+  "ground_truth_basis": "US DOJ indictment of GRU Unit 74455 officers (Oct 2020) and UK NCSC (Oct 2020) name the GRU; early public reporting pointed at Lazarus (Rich header) and at Chinese groups (code overlaps).",
+  "false_flag": true,
+  "expected": "withhold",
+  "novel_software": ["S0365"],
+  "attack_software_evidence": ["S0365"],
+  "evidence": [
+    {"id": "EV-OD-M1", "kind": "malware", "content": {
+      "family": "Olympic Destroyer",
+      "rich_header": "rh:bluenoroff-sample-copy",
+      "code_reuse": ["code:od-overlap-apt3", "code:od-overlap-apt10"]}},
+    {"id": "EV-OD-F1", "kind": "forensic", "content": {
+      "tools": ["PsExec"],
+      "victimology": "pyeongchang-2018-olympics"}}
+  ],
+  "kg_additions": [
+    {"actor": "G0032", "name": "Rich header of a Lazarus/Bluenoroff sample (copied byte-for-byte into Olympic Destroyer)",
+     "signals": [{"kind": "rich_header", "value": "rh:bluenoroff-sample-copy"}],
+     "source": "Kaspersky GReAT 'The devil's in the Rich header' (8 Mar 2018)"},
+    {"actor": "G0022", "name": "Code fragments reported as overlapping with APT3 tooling",
+     "signals": [{"kind": "code_reuse", "value": "code:od-overlap-apt3"}],
+     "source": "Intezer (Feb 2018); Cisco Talos 'Who Wasn't Responsible for Olympic Destroyer?' (26 Feb 2018)"},
+    {"actor": "G0045", "name": "Code fragments reported as overlapping with APT10 tooling",
+     "signals": [{"kind": "code_reuse", "value": "code:od-overlap-apt10"}],
+     "source": "Intezer (Feb 2018); Cisco Talos 'Who Wasn't Responsible for Olympic Destroyer?' (26 Feb 2018)"}
+  ],
+  "references": [
+    "https://securelist.com/the-devils-in-the-rich-header/84348/",
+    "https://blog.talosintelligence.com/who-wasnt-responsible-for-olympic/",
+    "https://attack.mitre.org/software/S0365/"
+  ]
+}

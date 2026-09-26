@@ -1,0 +1,29 @@
+{
+  "case_id": "sony_pictures_2014",
+  "title": "Sony Pictures Entertainment destructive attack (Nov 2014)",
+  "date": "2014-11-24",
+  "ground_truth": ["G0032"],
+  "ground_truth_basis": "FBI public attribution to North Korea (19 Dec 2014); Operation Blockbuster industry report (Novetta et al., Feb 2016); DOJ complaint (Sep 2018).",
+  "false_flag": false,
+  "expected": "attribute",
+  "novel_software": [],
+  "attack_software_evidence": [],
+  "evidence": [
+    {"id": "EV-SP-M1", "kind": "malware", "content": {
+      "family": "Destover",
+      "code_reuse": ["code:darkseoul-2013-wiper-routine"]}},
+    {"id": "EV-SP-F1", "kind": "forensic", "content": {
+      "ttps": ["T1485", "T1561.002", "T1491.001", "T1021.002"],
+      "language_artifacts": ["lang:ko"],
+      "victimology": "media-entertainment"}}
+  ],
+  "kg_additions": [
+    {"actor": "G0032", "name": "DarkSeoul (Mar 2013) wiper code, attributed to Lazarus in Operation Troy / Blockbuster",
+     "signals": [{"kind": "code_reuse", "value": "code:darkseoul-2013-wiper-routine"}],
+     "source": "McAfee 'Dissecting Operation Troy' (2013); FBI statement (19 Dec 2014) citing similarities in lines of code and data-deletion methods"}
+  ],
+  "references": [
+    "https://www.fbi.gov/news/press-releases/update-on-sony-investigation",
+    "https://www.operationblockbuster.com/"
+  ]
+}

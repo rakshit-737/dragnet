@@ -1,0 +1,31 @@
+{
+  "case_id": "notpetya_2017",
+  "title": "NotPetya destructive supply-chain attack via M.E.Doc (June 2017)",
+  "date": "2017-06-27",
+  "ground_truth": ["G0034"],
+  "ground_truth_basis": "UK NCSC and US White House attribution to the Russian military (Feb 2018); US DOJ indictment of six GRU Unit 74455 officers (Oct 2020).",
+  "false_flag": false,
+  "expected": "attribute",
+  "novel_software": ["S0368"],
+  "attack_software_evidence": ["S0368"],
+  "evidence": [
+    {"id": "EV-NP-F1", "kind": "forensic", "content": {
+      "ttps": ["T1195.002"],
+      "tools": ["PsExec"],
+      "victimology": "ukraine-accounting-software-users"}},
+    {"id": "EV-NP-M1", "kind": "malware", "content": {
+      "sha256": "027cc450ef5f8c5f653329641ec1fed91f694e0d229928963b30f6b0d7d3a745",
+      "family": "NotPetya",
+      "code_reuse": ["code:medoc-update-backdoor"]}}
+  ],
+  "kg_additions": [
+    {"actor": "G0034", "name": "Backdoored M.E.Doc update module attributed to TeleBots",
+     "signals": [{"kind": "code_reuse", "value": "code:medoc-update-backdoor"}],
+     "source": "ESET 'TeleBots are back: Supply-chain attacks against Ukraine' (30 Jun 2017); ESET 'Analysis of TeleBots' cunning backdoor' (4 Jul 2017)"}
+  ],
+  "references": [
+    "https://www.welivesecurity.com/2017/06/30/telebots-back-supply-chain-attacks-against-ukraine/",
+    "https://www.justice.gov/opa/pr/six-russian-gru-officers-charged-connection-worldwide-deployment-destructive-malware-and",
+    "https://attack.mitre.org/software/S0368/"
+  ]
+}

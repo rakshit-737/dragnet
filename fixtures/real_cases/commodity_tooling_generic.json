@@ -1,0 +1,17 @@
+{
+  "case_id": "commodity_tooling_generic",
+  "title": "Intrusion observed only through commodity / dual-use tooling (uncertainty-honesty control)",
+  "date": null,
+  "ground_truth": [],
+  "ground_truth_basis": "No attribution exists; the evidence pattern (Cobalt Strike, Mimikatz, PsExec, PowerShell) is shared by dozens of ATT&CK groups and criminal operators. The correct output is to abstain.",
+  "false_flag": false,
+  "expected": "abstain",
+  "novel_software": [],
+  "attack_software_evidence": [],
+  "evidence": [
+    {"id": "EV-CT-F1", "kind": "forensic", "content": {
+      "tools": ["Cobalt Strike", "Mimikatz", "PsExec"],
+      "ttps": ["T1059.001", "T1003.001", "T1021.002", "T1569.002", "T1105"]}}
+  ],
+  "references": ["https://attack.mitre.org/software/S0154/", "https://attack.mitre.org/software/S0002/"]
+}

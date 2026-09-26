@@ -1,0 +1,31 @@
+{
+  "case_id": "turla_oilrig_2019",
+  "title": "Turla operating through acquired OilRig tooling and infrastructure (2017-2019) - documented piggy-back",
+  "date": "2019-10-21",
+  "ground_truth": ["G0010"],
+  "ground_truth_basis": "UK NCSC / US NSA joint advisory 'Turla group exploits Iranian APT to expand coverage of victims' (21 Oct 2019): Neuron/Nautilus are Iranian-origin tools acquired and deployed by Turla, which also accessed OilRig infrastructure; Symantec 'Waterbug' report (20 Jun 2019).",
+  "false_flag": true,
+  "expected": "withhold",
+  "novel_software": [],
+  "attack_software_evidence": ["S0022"],
+  "evidence": [
+    {"id": "EV-TO-M1", "kind": "malware", "content": {"family": ["Neuron", "Nautilus"]}},
+    {"id": "EV-TO-M2", "kind": "malware", "content": {"family": ["Uroburos"]}},
+    {"id": "EV-TO-F1", "kind": "forensic", "content": {
+      "dns_queries": ["infra:crambus-c2-accessed-by-waterbug"],
+      "victimology": "middle-east-government"}}
+  ],
+  "kg_additions": [
+    {"actor": "G0049", "name": "Neuron / Nautilus implants - Iranian-origin tooling (per NCSC/NSA 2019)",
+     "signals": [{"kind": "family", "value": "Neuron"}, {"kind": "family", "value": "Nautilus"}],
+     "source": "NCSC/NSA advisory 'Turla group exploits Iranian APT to expand coverage of victims' (21 Oct 2019)"},
+    {"actor": "G0049", "name": "OilRig (Crambus) command-and-control infrastructure later accessed by Turla",
+     "signals": [{"kind": "domain", "value": "infra:crambus-c2-accessed-by-waterbug"}],
+     "source": "Symantec 'Waterbug: Espionage Group Rolls Out Brand-New Toolset in Attacks Against Governments' (20 Jun 2019)"}
+  ],
+  "references": [
+    "https://www.ncsc.gov.uk/news/turla-group-exploits-iran-apt-to-expand-coverage-of-victims",
+    "https://attack.mitre.org/software/S0022/"
+  ],
+  "notes": "Tooling and infrastructure point to OilRig (Iran); the co-resident Snake/Uroburos implant and its tradecraft point to Turla (Russia). The infrastructure token stands in for the Crambus C2 servers named by Symantec; values are not reproduced."
+}

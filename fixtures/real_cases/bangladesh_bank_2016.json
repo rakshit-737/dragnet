@@ -1,0 +1,27 @@
+{
+  "case_id": "bangladesh_bank_2016",
+  "title": "Bangladesh Bank SWIFT heist (Feb 2016)",
+  "date": "2016-02-05",
+  "ground_truth": ["G0082", "G0032"],
+  "ground_truth_basis": "US DOJ complaint against Park Jin Hyok (Sep 2018) names the North Korean 'Lazarus Group'; FireEye designates the financially-motivated cluster APT38.",
+  "false_flag": false,
+  "expected": "attribute",
+  "novel_software": [],
+  "attack_software_evidence": [],
+  "evidence": [
+    {"id": "EV-BB-M1", "kind": "malware", "content": {
+      "code_reuse": ["code:secure-file-delete-routine-sony-2014"]}},
+    {"id": "EV-BB-F1", "kind": "forensic", "content": {
+      "ttps": ["T1565.001", "T1070.004", "T1543.003", "T1105"],
+      "victimology": "financial-swift"}}
+  ],
+  "kg_additions": [
+    {"actor": "G0032", "name": "File-wiping routine shared with Lazarus malware used against Sony Pictures (2014)",
+     "signals": [{"kind": "code_reuse", "value": "code:secure-file-delete-routine-sony-2014"}],
+     "source": "BAE Systems 'Cyber Heist Attribution' (13 May 2016); Symantec 'SWIFT attackers' malware linked to more financial attacks' (26 May 2016)"}
+  ],
+  "references": [
+    "https://baesystemsai.blogspot.com/2016/05/cyber-heist-attribution.html",
+    "https://www.justice.gov/opa/press-release/file/1092091/download"
+  ]
+}

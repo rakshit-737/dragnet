@@ -1,0 +1,32 @@
+{
+  "case_id": "wannacry_2017",
+  "title": "WannaCry ransomware worm (May 2017)",
+  "date": "2017-05-12",
+  "ground_truth": ["G0032"],
+  "ground_truth_basis": "US Government public attribution to North Korea / Lazarus Group (19 Dec 2017); US DOJ criminal complaint against Park Jin Hyok (6 Sep 2018); UK NCSC assessment (Dec 2017).",
+  "false_flag": false,
+  "expected": "attribute",
+  "novel_software": ["S0366"],
+  "attack_software_evidence": ["S0366"],
+  "evidence": [
+    {"id": "EV-WC-F1", "kind": "forensic", "content": {
+      "dns_queries": ["iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea.com"],
+      "ttps": ["T1210"],
+      "victimology": "global-opportunistic"}},
+    {"id": "EV-WC-M1", "kind": "malware", "content": {
+      "sha256": "ed01ebfbc9eb5bbea545af4d01bf5f1071661840480439c6e5babe8e080e41aa",
+      "family": "WannaCry",
+      "code_reuse": ["code:wannacry-feb2017-contopee-shared-function"]}}
+  ],
+  "kg_additions": [
+    {"actor": "G0032", "name": "Contopee backdoor (Lazarus, 2015) code shared with an early WannaCry sample",
+     "signals": [{"kind": "code_reuse", "value": "code:wannacry-feb2017-contopee-shared-function"}],
+     "source": "N. Mehta (Google) 15 May 2017; Kaspersky GReAT 'WannaCry and Lazarus Group - the missing link?'; Symantec 'WannaCry: Ransomware attacks show strong links to Lazarus group' (22 May 2017)"}
+  ],
+  "references": [
+    "https://securelist.com/wannacry-and-lazarus-group-the-missing-link/78431/",
+    "https://www.justice.gov/opa/pr/north-korean-regime-backed-programmer-charged-conspiracy-conduct-multiple-cyber-attacks-and",
+    "https://attack.mitre.org/software/S0366/"
+  ],
+  "notes": "The code-reuse token stands for the published function overlap; raw bytes are not reproduced. The kill-switch domain and SHA-256 are the widely published WannaCry IOCs (metadata only)."
+}
