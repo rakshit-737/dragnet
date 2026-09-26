@@ -1,0 +1,4901 @@
+{
+ "datasets": {
+  "aptnotes": {
+   "bytes": 153533,
+   "file": "APTnotes.csv",
+   "licence": "APTnotes (public report index; reports (c) authors)",
+   "pinned": true,
+   "retrieved_utc": "2026-09-26T09:07:15+00:00",
+   "sha256": "dac4579a78ad0ad644d6f57670f31ac54f0424b3ab2619c8119d8f65e48adf0b",
+   "url": "https://raw.githubusercontent.com/aptnotes/data/8595fbdee6747be9e9f730fd0bacd247157314df/APTnotes.csv"
+  },
+  "attack_10_1": {
+   "bytes": 31165486,
+   "file": "enterprise-attack-10.1.json",
+   "licence": "MITRE ATT&CK Terms of Use (royalty-free, attribution)",
+   "pinned": true,
+   "retrieved_utc": "2026-09-26T09:07:15+00:00",
+   "sha256": "0a999035f26f4326ad670ec51727014fd42c21fca4bda4be784ac6ad0510fcb6",
+   "url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/enterprise-attack/enterprise-attack-10.1.json"
+  },
+  "attack_19_2": {
+   "bytes": 53835637,
+   "file": "enterprise-attack-19.2.json",
+   "licence": "MITRE ATT&CK Terms of Use (royalty-free, attribution)",
+   "pinned": true,
+   "retrieved_utc": "2026-09-26T09:07:15+00:00",
+   "sha256": "dc1639caa5501d720e280cf1cbd8fbe009884a0c9b3e6e9ed9d0c25166c3d8f4",
+   "url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/enterprise-attack/enterprise-attack-19.2.json"
+  },
+  "bazaar_full": {
+   "bytes": 223224481,
+   "file": "bazaar-full.csv.zip",
+   "licence": "CC0 (abuse.ch MalwareBazaar, metadata only)",
+   "pinned": false,
+   "retrieved_utc": "2026-09-26T09:07:16+00:00",
+   "sha256": "9113e5965e841f51d644fa4f61c2c59e1f6366831d4215b26cbd9bf1633227d6",
+   "url": "https://bazaar.abuse.ch/export/csv/full/"
+  },
+  "misp_malpedia": {
+   "bytes": 3825941,
+   "file": "misp-malpedia.json",
+   "licence": "CC BY-NC-SA 3.0 (Malpedia via MISP galaxy)",
+   "pinned": true,
+   "retrieved_utc": "2026-09-26T09:07:15+00:00",
+   "sha256": "1a1523635946c2d25572024b2a89553db11b6a296337cd1bcfd17223b24142b4",
+   "url": "https://raw.githubusercontent.com/MISP/misp-galaxy/e9e867fe5a5e94be813540af9e227ac84c8d60ad/clusters/malpedia.json"
+  },
+  "misp_threat_actor": {
+   "bytes": 1412234,
+   "file": "misp-threat-actor.json",
+   "licence": "CC0-1.0 / BSD-2-Clause (MISP galaxy)",
+   "pinned": true,
+   "retrieved_utc": "2026-09-26T09:07:15+00:00",
+   "sha256": "9caebf1f7b9680ba0f1c6a0b0c18e5d250acc74fe2bdc9b127a54dc1759cba6f",
+   "url": "https://raw.githubusercontent.com/MISP/misp-galaxy/e9e867fe5a5e94be813540af9e227ac84c8d60ad/clusters/threat-actor.json"
+  },
+  "threatfox_full": {
+   "bytes": 3760596,
+   "file": "threatfox-full.json.zip",
+   "licence": "CC0 (abuse.ch ThreatFox)",
+   "pinned": false,
+   "retrieved_utc": "2026-09-26T09:07:15+00:00",
+   "sha256": "cf322877489ff364de59d3a6b039091e692eec80d8b1a1b497ea83d826ec3b4f",
+   "url": "https://threatfox.abuse.ch/export/json/full/"
+  }
+ },
+ "kg": {
+  "attack_version": "19.2",
+  "actors": 176,
+  "campaign_nodes": 176,
+  "signal_keys": 1600,
+  "actors_with_country": 117
+ },
+ "A3": {
+  "main": [
+   {
+    "method": "dragnet",
+    "n": 411,
+    "n_in_kg": 411,
+    "n_out_of_kg": 0,
+    "top1": 0.06326034063260341,
+    "top3": 0.12895377128953772,
+    "top5": 0.1630170316301703,
+    "mrr": 0.13366481383290071,
+    "coverage": 0.024330900243309004,
+    "selective_accuracy": 0.0,
+    "confident_error_rate": 0.0,
+    "out_of_kg_abstain": NaN,
+    "brier": 0.0871527604541912,
+    "ece": 0.1621027607444884,
+    "brier_dist": 0.9955343501883677,
+    "reliability": [
+     {
+      "lo": 0.1,
+      "hi": 0.2,
+      "n": 121,
+      "confidence": 0.17741830966081143,
+      "accuracy": 0.049586776859504134
+     },
+     {
+      "lo": 0.2,
+      "hi": 0.3,
+      "n": 266,
+      "confidence": 0.2370048895175101,
+      "accuracy": 0.06766917293233082
+     },
+     {
+      "lo": 0.3,
+      "hi": 0.4,
+      "n": 22,
+      "confidence": 0.3299129971859945,
+      "accuracy": 0.09090909090909091
+     },
+     {
+      "lo": 0.4,
+      "hi": 0.5,
+      "n": 2,
+      "confidence": 0.427616323638497,
+      "accuracy": 0.0
+     }
+    ],
+    "grades": {
+     "HIGH": {
+      "n": 0,
+      "accuracy": NaN
+     },
+     "MEDIUM": {
+      "n": 0,
+      "accuracy": NaN
+     },
+     "LOW": {
+      "n": 10,
+      "accuracy": 0.0
+     },
+     "INSUFFICIENT": {
+      "n": 401,
+      "accuracy": 0.06483790523690773
+     }
+    }
+   },
+   {
+    "method": "ttp-jaccard",
+    "n": 411,
+    "n_in_kg": 411,
+    "n_out_of_kg": 0,
+    "top1": 0.029197080291970802,
+    "top3": 0.06447688564476886,
+    "top5": 0.0827250608272506,
+    "mrr": 0.07517811974768213,
+    "coverage": 1.0,
+    "selective_accuracy": 0.029197080291970802,
+    "confident_error_rate": 0.9708029197080292,
+    "out_of_kg_abstain": NaN,
+    "brier": 0.028236566954322983,
+    "ece": 0.007126759754872088,
+    "brier_dist": 0.9921918891299084,
+    "reliability": [
+     {
+      "lo": 0.0,
+      "hi": 0.1,
+      "n": 411,
+      "confidence": 0.022070320537098714,
+      "accuracy": 0.029197080291970802
+     }
+    ],
+    "grades": {}
+   },
+   {
+    "method": "ttp-cosine",
+    "n": 411,
+    "n_in_kg": 411,
+    "n_out_of_kg": 0,
+    "top1": 0.06326034063260341,
+    "top3": 0.12895377128953772,
+    "top5": 0.1630170316301703,
+    "mrr": 0.13366481383290071,
+    "coverage": 1.0,
+    "selective_accuracy": 0.06326034063260341,
+    "confident_error_rate": 0.9367396593673966,
+    "out_of_kg_abstain": NaN,
+    "brier": 0.060506079704723804,
+    "ece": 0.039728042215822074,
+    "brier_dist": 0.9880692296360772,
+    "reliability": [
+     {
+      "lo": 0.0,
+      "hi": 0.1,
+      "n": 410,
+      "confidence": 0.02386586769104565,
+      "accuracy": 0.06341463414634146
+     },
+     {
+      "lo": 0.1,
+      "hi": 0.2,
+      "n": 1,
+      "confidence": 0.11323110403158704,
+      "accuracy": 0.0
+     }
+    ],
+    "grades": {}
+   }
+  ]
+ },
+ "A1": {
+  "main": [
+   {
+    "method": "dragnet",
+    "n": 25,
+    "n_in_kg": 25,
+    "n_out_of_kg": 0,
+    "top1": 0.68,
+    "top3": 0.68,
+    "top5": 0.68,
+    "mrr": 0.688236679538016,
+    "coverage": 0.6,
+    "selective_accuracy": 0.9333333333333333,
+    "confident_error_rate": 0.0,
+    "out_of_kg_abstain": NaN,
+    "brier": 0.16244756700609148,
+    "ece": 0.2757644103873123,
+    "brier_dist": 0.8922202119783686,
+    "reliability": [
+     {
+      "lo": 0.1,
+      "hi": 0.2,
+      "n": 3,
+      "confidence": 0.16694091749307569,
+      "accuracy": 0.0
+     },
+     {
+      "lo": 0.2,
+      "hi": 0.3,
+      "n": 7,
+      "confidence": 0.2384778748848157,
+      "accuracy": 0.42857142857142855
+     },
+     {
+      "lo": 0.3,
+      "hi": 0.4,
+      "n": 1,
+      "confidence": 0.3775448390654316,
+      "accuracy": 1.0
+     },
+     {
+      "lo": 0.4,
+      "hi": 0.5,
+      "n": 1,
+      "confidence": 0.4725300249781078,
+      "accuracy": 0.0
+     },
+     {
+      "lo": 0.5,
+      "hi": 0.6,
+      "n": 5,
+      "confidence": 0.551801806414565,
+      "accuracy": 1.0
+     },
+     {
+      "lo": 0.6,
+      "hi": 0.7,
+      "n": 3,
+      "confidence": 0.6525874579073023,
+      "accuracy": 1.0
+     },
+     {
+      "lo": 0.7,
+      "hi": 0.8,
+      "n": 2,
+      "confidence": 0.7828883151711172,
+      "accuracy": 1.0
+     },
+     {
+      "lo": 0.8,
+      "hi": 0.9,
+      "n": 1,
+      "confidence": 0.8105762380379105,
+      "accuracy": 1.0
+     },
+     {
+      "lo": 0.9,
+      "hi": 1.0,
+      "n": 2,
+      "confidence": 0.9696141401702545,
+      "accuracy": 1.0
+     }
+    ],
+    "grades": {
+     "HIGH": {
+      "n": 0,
+      "accuracy": NaN
+     },
+     "MEDIUM": {
+      "n": 5,
+      "accuracy": 1.0
+     },
+     "LOW": {
+      "n": 10,
+      "accuracy": 0.9
+     },
+     "INSUFFICIENT": {
+      "n": 10,
+      "accuracy": 0.3
+     }
+    },
+    "rows": [
+     {
+      "case": "C0011",
+      "name": "C0011",
+      "truth": [
+       "Transparent Tribe"
+      ],
+      "in_kg": true,
+      "named": "Transparent Tribe",
+      "grade": "MEDIUM",
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.8877979030977714,
+      "top_hyp": "Transparent Tribe",
+      "top_p": 0.06279834876384617,
+      "top_ok": true,
+      "p_leader": 0.6239752792068802,
+      "leader_ok": true,
+      "p_truth": 0.06279834876384617,
+      "leader": "Transparent Tribe",
+      "aptnotes_reports": 6
+     },
+     {
+      "case": "C0017",
+      "name": "C0017",
+      "truth": [
+       "APT41"
+      ],
+      "in_kg": true,
+      "named": "APT41",
+      "grade": "MEDIUM",
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.8980200149782847,
+      "top_hyp": "APT41",
+      "top_p": 0.05639781800600035,
+      "top_ok": true,
+      "p_leader": 0.6486214076390407,
+      "leader_ok": true,
+      "p_truth": 0.05639781800600035,
+      "leader": "APT41",
+      "aptnotes_reports": 12
+     },
+     {
+      "case": "C0022",
+      "name": "Operation Dream Job",
+      "truth": [
+       "Lazarus Group"
+      ],
+      "in_kg": true,
+      "named": null,
+      "grade": "INSUFFICIENT",
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": false,
+      "brier": 0.9798880454465385,
+      "top_hyp": "UNKNOWN",
+      "top_p": 0.0401599489348027,
+      "top_ok": false,
+      "p_leader": 0.2614398985995876,
+      "leader_ok": true,
+      "p_truth": 0.014216057646995949,
+      "leader": "Lazarus Group",
+      "aptnotes_reports": 6
+     },
+     {
+      "case": "C0023",
+      "name": "Operation Ghost",
+      "truth": [
+       "APT29"
+      ],
+      "in_kg": true,
+      "named": "APT29",
+      "grade": "LOW",
+      "flags": 1,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.6537567649781434,
+      "top_hyp": "APT29",
+      "top_p": 0.19739790258624712,
+      "top_ok": true,
+      "p_leader": 0.9422399074614296,
+      "leader_ok": true,
+      "p_truth": 0.19739790258624712,
+      "leader": "APT29",
+      "aptnotes_reports": 13
+     },
+     {
+      "case": "C0024",
+      "name": "SolarWinds Compromise",
+      "truth": [
+       "APT29"
+      ],
+      "in_kg": true,
+      "named": "APT29",
+      "grade": "MEDIUM",
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.7593202660053511,
+      "top_hyp": "APT29",
+      "top_p": 0.13207279308177197,
+      "top_ok": true,
+      "p_leader": 0.9969883728790793,
+      "leader_ok": true,
+      "p_truth": 0.13207279308177197,
+      "leader": "APT29",
+      "aptnotes_reports": 13
+     },
+     {
+      "case": "C0025",
+      "name": "2016 Ukraine Electric Power Attack",
+      "truth": [
+       "Sandworm Team"
+      ],
+      "in_kg": true,
+      "named": "Sandworm Team",
+      "grade": "LOW",
+      "flags": 1,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.8916467663907338,
+      "top_hyp": "Sandworm Team",
+      "top_p": 0.0611720122259584,
+      "top_ok": true,
+      "p_leader": 0.5409791103464119,
+      "leader_ok": true,
+      "p_truth": 0.0611720122259584,
+      "leader": "Sandworm Team",
+      "aptnotes_reports": 6
+     },
+     {
+      "case": "C0027",
+      "name": "C0027",
+      "truth": [
+       "Scattered Spider"
+      ],
+      "in_kg": true,
+      "named": null,
+      "grade": "INSUFFICIENT",
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": false,
+      "brier": 0.9588966625198833,
+      "top_hyp": "UNKNOWN",
+      "top_p": 0.08545820050849641,
+      "top_ok": false,
+      "p_leader": 0.2503750206757951,
+      "leader_ok": true,
+      "p_truth": 0.028543070614482854,
+      "leader": "Scattered Spider",
+      "aptnotes_reports": 0
+     },
+     {
+      "case": "C0028",
+      "name": "2015 Ukraine Electric Power Attack",
+      "truth": [
+       "Sandworm Team"
+      ],
+      "in_kg": true,
+      "named": "Sandworm Team",
+      "grade": "LOW",
+      "flags": 1,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.8828060573096573,
+      "top_hyp": "Sandworm Team",
+      "top_p": 0.06465689527756865,
+      "top_ok": true,
+      "p_leader": 0.6851656868759859,
+      "leader_ok": true,
+      "p_truth": 0.06465689527756865,
+      "leader": "Sandworm Team",
+      "aptnotes_reports": 6
+     },
+     {
+      "case": "C0030",
+      "name": "Triton Safety Instrumented System Attack",
+      "truth": [
+       "TEMP.Veles"
+      ],
+      "in_kg": true,
+      "named": null,
+      "grade": "INSUFFICIENT",
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.006289308176100629,
+      "named_ok": false,
+      "brier": 1.0100917156679958,
+      "top_hyp": "UNKNOWN",
+      "top_p": 0.0629962759337305,
+      "top_ok": false,
+      "p_leader": 0.2007189332561247,
+      "leader_ok": false,
+      "p_truth": 0.0004636245551662598,
+      "leader": "Winter Vivern",
+      "aptnotes_reports": 0
+     },
+     {
+      "case": "C0032",
+      "name": "C0032",
+      "truth": [
+       "TEMP.Veles"
+      ],
+      "in_kg": true,
+      "named": null,
+      "grade": "INSUFFICIENT",
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.006329113924050633,
+      "named_ok": false,
+      "brier": 1.0090064848972953,
+      "top_hyp": "UNKNOWN",
+      "top_p": 0.046631584551561224,
+      "top_ok": false,
+      "p_leader": 0.2641864735175222,
+      "leader_ok": false,
+      "p_truth": 0.00037278933950818936,
+      "leader": "APT5",
+      "aptnotes_reports": 0
+     },
+     {
+      "case": "C0033",
+      "name": "C0033",
+      "truth": [
+       "PROMETHIUM"
+      ],
+      "in_kg": true,
+      "named": "PROMETHIUM",
+      "grade": "LOW",
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.5,
+      "top_hyp": "UNKNOWN",
+      "top_p": 0.5,
+      "top_ok": false,
+      "p_leader": 0.5,
+      "leader_ok": true,
+      "p_truth": 0.5,
+      "leader": "PROMETHIUM",
+      "aptnotes_reports": 2
+     },
+     {
+      "case": "C0034",
+      "name": "2022 Ukraine Electric Power Attack",
+      "truth": [
+       "Sandworm Team"
+      ],
+      "in_kg": true,
+      "named": null,
+      "grade": "INSUFFICIENT",
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.043478260869565216,
+      "named_ok": false,
+      "brier": 0.9976194363511798,
+      "top_hyp": "UNKNOWN",
+      "top_p": 0.09682959028099579,
+      "top_ok": false,
+      "p_leader": 0.20674316186431518,
+      "leader_ok": false,
+      "p_truth": 0.010082179363294905,
+      "leader": "Cinnamon Tempest",
+      "aptnotes_reports": 6
+     },
+     {
+      "case": "C0035",
+      "name": "KV Botnet Activity",
+      "truth": [
+       "Volt Typhoon"
+      ],
+      "in_kg": true,
+      "named": null,
+      "grade": "INSUFFICIENT",
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.047619047619047616,
+      "named_ok": false,
+      "brier": 0.9916220460823265,
+      "top_hyp": "UNKNOWN",
+      "top_p": 0.06452022040617851,
+      "top_ok": false,
+      "p_leader": 0.2264427742128281,
+      "leader_ok": false,
+      "p_truth": 0.009959779269940084,
+      "leader": "Rocke",
+      "aptnotes_reports": 0
+     },
+     {
+      "case": "C0038",
+      "name": "HomeLand Justice",
+      "truth": [
+       "VOID MANTICORE"
+      ],
+      "in_kg": true,
+      "named": "OilRig",
+      "grade": "LOW",
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.07142857142857142,
+      "named_ok": false,
+      "brier": 0.9921502400259317,
+      "top_hyp": "UNKNOWN",
+      "top_p": 0.06226652451969122,
+      "top_ok": false,
+      "p_leader": 0.4725300249781078,
+      "leader_ok": false,
+      "p_truth": 0.011196199351648511,
+      "leader": "OilRig",
+      "aptnotes_reports": 0
+     },
+     {
+      "case": "C0039",
+      "name": "Versa Director Zero Day Exploitation",
+      "truth": [
+       "Volt Typhoon"
+      ],
+      "in_kg": true,
+      "named": "Volt Typhoon",
+      "grade": "LOW",
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.8438335412164659,
+      "top_hyp": "Volt Typhoon",
+      "top_p": 0.08833964769124403,
+      "top_ok": true,
+      "p_leader": 0.5614299103197358,
+      "leader_ok": true,
+      "p_truth": 0.08833964769124403,
+      "leader": "Volt Typhoon",
+      "aptnotes_reports": 0
+     },
+     {
+      "case": "C0040",
+      "name": "APT41 DUST",
+      "truth": [
+       "APT41"
+      ],
+      "in_kg": true,
+      "named": "APT41",
+      "grade": "MEDIUM",
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.8194504194561519,
+      "top_hyp": "APT41",
+      "top_p": 0.09853006665784678,
+      "top_ok": true,
+      "p_leader": 0.7969383009681787,
+      "leader_ok": true,
+      "p_truth": 0.09853006665784678,
+      "leader": "APT41",
+      "aptnotes_reports": 12
+     },
+     {
+      "case": "C0042",
+      "name": "Outer Space",
+      "truth": [
+       "OilRig"
+      ],
+      "in_kg": true,
+      "named": "OilRig",
+      "grade": "LOW",
+      "flags": 1,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.7771688607953529,
+      "top_hyp": "OilRig",
+      "top_p": 0.12384054693384262,
+      "top_ok": true,
+      "p_leader": 0.7688383293740557,
+      "leader_ok": true,
+      "p_truth": 0.12384054693384262,
+      "leader": "OilRig",
+      "aptnotes_reports": 6
+     },
+     {
+      "case": "C0044",
+      "name": "Juicy Mix",
+      "truth": [
+       "OilRig"
+      ],
+      "in_kg": true,
+      "named": "OilRig",
+      "grade": "LOW",
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.8823310264537874,
+      "top_hyp": "OilRig",
+      "top_p": 0.06600305279376867,
+      "top_ok": true,
+      "p_leader": 0.5657902443927021,
+      "leader_ok": true,
+      "p_truth": 0.06600305279376867,
+      "leader": "OilRig",
+      "aptnotes_reports": 6
+     },
+     {
+      "case": "C0047",
+      "name": "RedDelta Modified PlugX Infection Chain Operations",
+      "truth": [
+       "Mustang Panda"
+      ],
+      "in_kg": true,
+      "named": null,
+      "grade": "INSUFFICIENT",
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": false,
+      "brier": 0.98021933861257,
+      "top_hyp": "UNKNOWN",
+      "top_p": 0.040542512661396246,
+      "top_ok": false,
+      "p_leader": 0.25943886206753686,
+      "leader_ok": true,
+      "p_truth": 0.014203153273201576,
+      "leader": "Mustang Panda",
+      "aptnotes_reports": 3
+     },
+     {
+      "case": "C0049",
+      "name": "Leviathan Australian Intrusions",
+      "truth": [
+       "Leviathan"
+      ],
+      "in_kg": true,
+      "named": null,
+      "grade": "INSUFFICIENT",
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.018867924528301886,
+      "named_ok": false,
+      "brier": 1.0012945441357743,
+      "top_hyp": "UNKNOWN",
+      "top_p": 0.09247920321393965,
+      "top_ok": false,
+      "p_leader": 0.16559592472173168,
+      "leader_ok": false,
+      "p_truth": 0.007803169960125794,
+      "leader": "Indrik Spider",
+      "aptnotes_reports": 0
+     },
+     {
+      "case": "C0051",
+      "name": "APT28 Nearest Neighbor Campaign",
+      "truth": [
+       "APT28"
+      ],
+      "in_kg": true,
+      "named": "APT28",
+      "grade": "LOW",
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.9242946720618309,
+      "top_hyp": "UNKNOWN",
+      "top_p": 0.07512666049676506,
+      "top_ok": false,
+      "p_leader": 0.3775448390654316,
+      "leader_ok": true,
+      "p_truth": 0.04556743156276286,
+      "leader": "APT28",
+      "aptnotes_reports": 28
+     },
+     {
+      "case": "C0052",
+      "name": "SPACEHOP Activity",
+      "truth": [
+       "APT5"
+      ],
+      "in_kg": true,
+      "named": null,
+      "grade": "INSUFFICIENT",
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.011904761904761904,
+      "named_ok": false,
+      "brier": 1.0079293098284405,
+      "top_hyp": "UNKNOWN",
+      "top_p": 0.09738990889207846,
+      "top_ok": false,
+      "p_leader": 0.16923803304293716,
+      "leader_ok": false,
+      "p_truth": 0.005110854119504921,
+      "leader": "PittyTiger",
+      "aptnotes_reports": 0
+     },
+     {
+      "case": "C0056",
+      "name": "RedPenguin",
+      "truth": [
+       "UNC3886"
+      ],
+      "in_kg": true,
+      "named": "UNC3886",
+      "grade": "MEDIUM",
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.7789507236154822,
+      "top_hyp": "UNC3886",
+      "top_p": 0.12115109062264763,
+      "top_ok": true,
+      "p_leader": 0.8105762380379105,
+      "leader_ok": true,
+      "p_truth": 0.12115109062264763,
+      "leader": "UNC3886",
+      "aptnotes_reports": 0
+     },
+     {
+      "case": "C0057",
+      "name": "3CX Supply Chain Attack",
+      "truth": [
+       "AppleJeus"
+      ],
+      "in_kg": true,
+      "named": null,
+      "grade": "INSUFFICIENT",
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.0,
+      "named_ok": false,
+      "brier": 1.0145797838116686,
+      "top_hyp": "UNKNOWN",
+      "top_p": 0.08375630062922912,
+      "top_ok": false,
+      "p_leader": 0.16598879471455819,
+      "leader_ok": false,
+      "p_truth": 0.0,
+      "leader": "Blue Mockingbird",
+      "aptnotes_reports": 6
+     },
+     {
+      "case": "C0060",
+      "name": "Operation AkaiRy\u016b",
+      "truth": [
+       "MirrorFace"
+      ],
+      "in_kg": true,
+      "named": "MirrorFace",
+      "grade": "LOW",
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.8628306757205996,
+      "top_hyp": "MirrorFace",
+      "top_p": 0.07601972872537772,
+      "top_ok": true,
+      "p_leader": 0.5908097670139756,
+      "leader_ok": true,
+      "p_truth": 0.07601972872537772,
+      "leader": "MirrorFace",
+      "aptnotes_reports": 0
+     }
+    ]
+   },
+   {
+    "method": "ttp-jaccard",
+    "n": 25,
+    "n_in_kg": 25,
+    "n_out_of_kg": 0,
+    "top1": 0.12,
+    "top3": 0.16,
+    "top5": 0.16,
+    "mrr": 0.1687958397422634,
+    "coverage": 0.96,
+    "selective_accuracy": 0.125,
+    "confident_error_rate": 0.84,
+    "out_of_kg_abstain": NaN,
+    "brier": 0.11643311397470246,
+    "ece": 0.10197903958957866,
+    "brier_dist": 0.9903545956809403,
+    "reliability": [
+     {
+      "lo": 0.0,
+      "hi": 0.1,
+      "n": 25,
+      "confidence": 0.01802096041042133,
+      "accuracy": 0.12
+     }
+    ],
+    "grades": {},
+    "rows": [
+     {
+      "case": "C0011",
+      "name": "C0011",
+      "truth": [
+       "Transparent Tribe"
+      ],
+      "in_kg": true,
+      "named": "Transparent Tribe",
+      "grade": null,
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.9673898642317906,
+      "top_hyp": "Transparent Tribe",
+      "top_p": 0.021265691259895678,
+      "top_ok": true,
+      "p_leader": 0.021265691259895678,
+      "leader_ok": true,
+      "p_truth": 0.021265691259895678,
+      "leader": "Transparent Tribe"
+     },
+     {
+      "case": "C0017",
+      "name": "C0017",
+      "truth": [
+       "APT41"
+      ],
+      "in_kg": true,
+      "named": "GALLIUM",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.03125,
+      "named_ok": false,
+      "brier": 0.9905478154486699,
+      "top_hyp": "GALLIUM",
+      "top_p": 0.01750089236987169,
+      "top_ok": false,
+      "p_leader": 0.01750089236987169,
+      "leader_ok": false,
+      "p_truth": 0.008554122071812284,
+      "leader": "GALLIUM"
+     },
+     {
+      "case": "C0022",
+      "name": "Operation Dream Job",
+      "truth": [
+       "Lazarus Group"
+      ],
+      "in_kg": true,
+      "named": "Mustang Panda",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.14285714285714285,
+      "named_ok": false,
+      "brier": 0.9846101267988865,
+      "top_hyp": "Mustang Panda",
+      "top_p": 0.013737340917052943,
+      "top_ok": false,
+      "p_leader": 0.013737340917052943,
+      "leader_ok": false,
+      "p_truth": 0.011569416803580526,
+      "leader": "Mustang Panda"
+     },
+     {
+      "case": "C0023",
+      "name": "Operation Ghost",
+      "truth": [
+       "APT29"
+      ],
+      "in_kg": true,
+      "named": "Cleaver",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.019049346879535557,
+      "named_ok": false,
+      "brier": 0.9943038220695515,
+      "top_hyp": "Cleaver",
+      "top_p": 0.0202061556691241,
+      "top_ok": false,
+      "p_leader": 0.0202061556691241,
+      "leader_ok": false,
+      "p_truth": 0.007408923745345504,
+      "leader": "Cleaver"
+     },
+     {
+      "case": "C0024",
+      "name": "SolarWinds Compromise",
+      "truth": [
+       "APT29"
+      ],
+      "in_kg": true,
+      "named": "Chimera",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.1111111111111111,
+      "named_ok": false,
+      "brier": 0.9833443864936912,
+      "top_hyp": "Chimera",
+      "top_p": 0.014879515786933147,
+      "top_ok": false,
+      "p_leader": 0.014879515786933147,
+      "leader_ok": false,
+      "p_truth": 0.012679286635481879,
+      "leader": "Chimera"
+     },
+     {
+      "case": "C0025",
+      "name": "2016 Ukraine Electric Power Attack",
+      "truth": [
+       "Sandworm Team"
+      ],
+      "in_kg": true,
+      "named": "Agrius",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.01639344262295082,
+      "named_ok": false,
+      "brier": 0.9943162265123032,
+      "top_hyp": "Agrius",
+      "top_p": 0.0173672911827914,
+      "top_ok": false,
+      "p_leader": 0.0173672911827914,
+      "leader_ok": false,
+      "p_truth": 0.0068426475579478315,
+      "leader": "Agrius"
+     },
+     {
+      "case": "C0027",
+      "name": "C0027",
+      "truth": [
+       "Scattered Spider"
+      ],
+      "in_kg": true,
+      "named": "LAPSUS$",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 0.5,
+      "named_ok": false,
+      "brier": 0.9642038283244597,
+      "top_hyp": "LAPSUS$",
+      "top_p": 0.02280280812500808,
+      "top_ok": false,
+      "p_leader": 0.02280280812500808,
+      "leader_ok": false,
+      "p_truth": 0.022124996170981664,
+      "leader": "LAPSUS$"
+     },
+     {
+      "case": "C0028",
+      "name": "2015 Ukraine Electric Power Attack",
+      "truth": [
+       "Sandworm Team"
+      ],
+      "in_kg": true,
+      "named": "FIN4",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.023836570878544787,
+      "named_ok": false,
+      "brier": 0.9912210131809533,
+      "top_hyp": "FIN4",
+      "top_p": 0.015017110415085775,
+      "top_ok": false,
+      "p_leader": 0.015017110415085775,
+      "leader_ok": false,
+      "p_truth": 0.008143249666872668,
+      "leader": "FIN4"
+     },
+     {
+      "case": "C0030",
+      "name": "Triton Safety Instrumented System Attack",
+      "truth": [
+       "TEMP.Veles"
+      ],
+      "in_kg": true,
+      "named": "Whitefly",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.0,
+      "named_ok": false,
+      "brier": 1.0075824833108513,
+      "top_hyp": "Whitefly",
+      "top_p": 0.017450986016118407,
+      "top_ok": false,
+      "p_leader": 0.017450986016118407,
+      "leader_ok": false,
+      "p_truth": 0.0,
+      "leader": "Whitefly"
+     },
+     {
+      "case": "C0032",
+      "name": "C0032",
+      "truth": [
+       "TEMP.Veles"
+      ],
+      "in_kg": true,
+      "named": "APT5",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.0,
+      "named_ok": false,
+      "brier": 1.0080259325628838,
+      "top_hyp": "APT5",
+      "top_p": 0.018309848509975676,
+      "top_ok": false,
+      "p_leader": 0.018309848509975676,
+      "leader_ok": false,
+      "p_truth": 0.0,
+      "leader": "APT5"
+     },
+     {
+      "case": "C0033",
+      "name": "C0033",
+      "truth": [
+       "PROMETHIUM"
+      ],
+      "in_kg": true,
+      "named": null,
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.0,
+      "named_ok": false,
+      "brier": 1.0,
+      "top_hyp": null,
+      "top_p": 0.0,
+      "top_ok": false,
+      "p_leader": 0.0,
+      "leader_ok": false,
+      "p_truth": 0.0,
+      "leader": null
+     },
+     {
+      "case": "C0034",
+      "name": "2022 Ukraine Electric Power Attack",
+      "truth": [
+       "Sandworm Team"
+      ],
+      "in_kg": true,
+      "named": "FIN10",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.01694915254237288,
+      "named_ok": false,
+      "brier": 0.9941228224026352,
+      "top_hyp": "FIN10",
+      "top_p": 0.016504306408575725,
+      "top_ok": false,
+      "p_leader": 0.016504306408575725,
+      "leader_ok": false,
+      "p_truth": 0.007170836577519109,
+      "leader": "FIN10"
+     },
+     {
+      "case": "C0035",
+      "name": "KV Botnet Activity",
+      "truth": [
+       "Volt Typhoon"
+      ],
+      "in_kg": true,
+      "named": "Rocke",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.028586990351696234,
+      "named_ok": false,
+      "brier": 0.9909229922028023,
+      "top_hyp": "Rocke",
+      "top_p": 0.017457984782439494,
+      "top_ok": false,
+      "p_leader": 0.017457984782439494,
+      "leader_ok": false,
+      "p_truth": 0.008456211378994131,
+      "leader": "Rocke"
+     },
+     {
+      "case": "C0038",
+      "name": "HomeLand Justice",
+      "truth": [
+       "VOID MANTICORE"
+      ],
+      "in_kg": true,
+      "named": "INC Ransom",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.06666666666666667,
+      "named_ok": false,
+      "brier": 0.9855322674044972,
+      "top_hyp": "INC Ransom",
+      "top_p": 0.016673759126796084,
+      "top_ok": false,
+      "p_leader": 0.016673759126796084,
+      "leader_ok": false,
+      "p_truth": 0.011323007071545856,
+      "leader": "INC Ransom"
+     },
+     {
+      "case": "C0039",
+      "name": "Versa Director Zero Day Exploitation",
+      "truth": [
+       "Volt Typhoon"
+      ],
+      "in_kg": true,
+      "named": "RedEcho",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.03333333333333333,
+      "named_ok": false,
+      "brier": 0.9902198441939071,
+      "top_hyp": "RedEcho",
+      "top_p": 0.03197323471785777,
+      "top_ok": false,
+      "p_leader": 0.03197323471785777,
+      "leader_ok": false,
+      "p_truth": 0.010554271654438487,
+      "leader": "RedEcho"
+     },
+     {
+      "case": "C0040",
+      "name": "APT41 DUST",
+      "truth": [
+       "APT41"
+      ],
+      "in_kg": true,
+      "named": "FIN6",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.07142857142857142,
+      "named_ok": false,
+      "brier": 0.9871383223199436,
+      "top_hyp": "FIN6",
+      "top_p": 0.013223964552957374,
+      "top_ok": false,
+      "p_leader": 0.013223964552957374,
+      "leader_ok": false,
+      "p_truth": 0.010340131487096851,
+      "leader": "FIN6"
+     },
+     {
+      "case": "C0042",
+      "name": "Outer Space",
+      "truth": [
+       "OilRig"
+      ],
+      "in_kg": true,
+      "named": "Metador",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.013700344179796235,
+      "named_ok": false,
+      "brier": 0.9954943010150249,
+      "top_hyp": "Metador",
+      "top_p": 0.01959243918386426,
+      "top_ok": false,
+      "p_leader": 0.01959243918386426,
+      "leader_ok": false,
+      "p_truth": 0.006258695850401083,
+      "leader": "Metador"
+     },
+     {
+      "case": "C0044",
+      "name": "Juicy Mix",
+      "truth": [
+       "OilRig"
+      ],
+      "in_kg": true,
+      "named": "Stealth Falcon",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.03125,
+      "named_ok": false,
+      "brier": 0.9908942800248481,
+      "top_hyp": "Stealth Falcon",
+      "top_p": 0.02268931443365184,
+      "top_ok": false,
+      "p_leader": 0.02268931443365184,
+      "leader_ok": false,
+      "p_truth": 0.008871317535319728,
+      "leader": "Stealth Falcon"
+     },
+     {
+      "case": "C0047",
+      "name": "RedDelta Modified PlugX Infection Chain Operations",
+      "truth": [
+       "Mustang Panda"
+      ],
+      "in_kg": true,
+      "named": "LazyScripter",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.05008354218880534,
+      "named_ok": false,
+      "brier": 0.9895010076292842,
+      "top_hyp": "LazyScripter",
+      "top_p": 0.01461385627671607,
+      "top_ok": false,
+      "p_leader": 0.01461385627671607,
+      "leader_ok": false,
+      "p_truth": 0.00903751638165336,
+      "leader": "LazyScripter"
+     },
+     {
+      "case": "C0049",
+      "name": "Leviathan Australian Intrusions",
+      "truth": [
+       "Leviathan"
+      ],
+      "in_kg": true,
+      "named": "Agrius",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.022222222222222223,
+      "named_ok": false,
+      "brier": 0.9911869719757317,
+      "top_hyp": "Agrius",
+      "top_p": 0.018983502901106675,
+      "top_ok": false,
+      "p_leader": 0.018983502901106675,
+      "leader_ok": false,
+      "p_truth": 0.009254457664289503,
+      "leader": "Agrius"
+     },
+     {
+      "case": "C0051",
+      "name": "APT28 Nearest Neighbor Campaign",
+      "truth": [
+       "APT28"
+      ],
+      "in_kg": true,
+      "named": "Agrius",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.029411764705882353,
+      "named_ok": false,
+      "brier": 0.9893229812575143,
+      "top_hyp": "Agrius",
+      "top_p": 0.021856267175829176,
+      "top_ok": false,
+      "p_leader": 0.021856267175829176,
+      "leader_ok": false,
+      "p_truth": 0.009797219929397694,
+      "leader": "Agrius"
+     },
+     {
+      "case": "C0052",
+      "name": "SPACEHOP Activity",
+      "truth": [
+       "APT5"
+      ],
+      "in_kg": true,
+      "named": "POLONIUM",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.01176579158795301,
+      "named_ok": false,
+      "brier": 1.0016945888027784,
+      "top_hyp": "POLONIUM",
+      "top_p": 0.033229361461601103,
+      "top_ok": false,
+      "p_leader": 0.033229361461601103,
+      "leader_ok": false,
+      "p_truth": 0.004949053834706547,
+      "leader": "POLONIUM"
+     },
+     {
+      "case": "C0056",
+      "name": "RedPenguin",
+      "truth": [
+       "UNC3886"
+      ],
+      "in_kg": true,
+      "named": "UNC3886",
+      "grade": null,
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.9777209950790209,
+      "top_hyp": "UNC3886",
+      "top_p": 0.014874392174004032,
+      "top_ok": true,
+      "p_leader": 0.014874392174004032,
+      "leader_ok": true,
+      "p_truth": 0.014874392174004032,
+      "leader": "UNC3886"
+     },
+     {
+      "case": "C0057",
+      "name": "3CX Supply Chain Attack",
+      "truth": [
+       "AppleJeus"
+      ],
+      "in_kg": true,
+      "named": "Daggerfly",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.0,
+      "named_ok": false,
+      "brier": 1.0083465026648966,
+      "top_hyp": "Daggerfly",
+      "top_p": 0.017337557677897766,
+      "top_ok": false,
+      "p_leader": 0.017337557677897766,
+      "leader_ok": false,
+      "p_truth": 0.0,
+      "leader": "Daggerfly"
+     },
+     {
+      "case": "C0060",
+      "name": "Operation AkaiRy\u016b",
+      "truth": [
+       "MirrorFace"
+      ],
+      "in_kg": true,
+      "named": "MirrorFace",
+      "grade": null,
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.9812215161165823,
+      "top_hyp": "MirrorFace",
+      "top_p": 0.012976429135379039,
+      "top_ok": true,
+      "p_leader": 0.012976429135379039,
+      "leader_ok": true,
+      "p_truth": 0.012976429135379039,
+      "leader": "MirrorFace"
+     }
+    ]
+   },
+   {
+    "method": "ttp-cosine",
+    "n": 25,
+    "n_in_kg": 25,
+    "n_out_of_kg": 0,
+    "top1": 0.08,
+    "top3": 0.16,
+    "top5": 0.2,
+    "mrr": 0.16595836961236107,
+    "coverage": 0.96,
+    "selective_accuracy": 0.08333333333333333,
+    "confident_error_rate": 0.88,
+    "out_of_kg_abstain": NaN,
+    "brier": 0.0759999188175207,
+    "ece": 0.06052936390758599,
+    "brier_dist": 0.9870256201983568,
+    "reliability": [
+     {
+      "lo": 0.0,
+      "hi": 0.1,
+      "n": 25,
+      "confidence": 0.019470636092414013,
+      "accuracy": 0.08
+     }
+    ],
+    "grades": {},
+    "rows": [
+     {
+      "case": "C0011",
+      "name": "C0011",
+      "truth": [
+       "Transparent Tribe"
+      ],
+      "in_kg": true,
+      "named": "LazyScripter",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 0.5,
+      "named_ok": false,
+      "brier": 0.9717972699344016,
+      "top_hyp": "LazyScripter",
+      "top_p": 0.02135120894568372,
+      "top_ok": false,
+      "p_leader": 0.02135120894568372,
+      "leader_ok": false,
+      "p_truth": 0.019052729818979715,
+      "leader": "LazyScripter"
+     },
+     {
+      "case": "C0017",
+      "name": "C0017",
+      "truth": [
+       "APT41"
+      ],
+      "in_kg": true,
+      "named": "GALLIUM",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.03571428571428571,
+      "named_ok": false,
+      "brier": 0.989869575908187,
+      "top_hyp": "GALLIUM",
+      "top_p": 0.016045515680829014,
+      "top_ok": false,
+      "p_leader": 0.016045515680829014,
+      "leader_ok": false,
+      "p_truth": 0.008947233439731654,
+      "leader": "GALLIUM"
+     },
+     {
+      "case": "C0022",
+      "name": "Operation Dream Job",
+      "truth": [
+       "Lazarus Group"
+      ],
+      "in_kg": true,
+      "named": "Kimsuky",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.058823529411764705,
+      "named_ok": false,
+      "brier": 0.9877811090881893,
+      "top_hyp": "Kimsuky",
+      "top_p": 0.012565523152563842,
+      "top_ok": false,
+      "p_leader": 0.012565523152563842,
+      "leader_ok": false,
+      "p_truth": 0.009708493477581076,
+      "leader": "Kimsuky"
+     },
+     {
+      "case": "C0023",
+      "name": "Operation Ghost",
+      "truth": [
+       "APT29"
+      ],
+      "in_kg": true,
+      "named": "Axiom",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.023255813953488372,
+      "named_ok": false,
+      "brier": 0.9928173095412066,
+      "top_hyp": "Axiom",
+      "top_p": 0.02469387649614113,
+      "top_ok": false,
+      "p_leader": 0.02469387649614113,
+      "leader_ok": false,
+      "p_truth": 0.008854964074904438,
+      "leader": "Axiom"
+     },
+     {
+      "case": "C0024",
+      "name": "SolarWinds Compromise",
+      "truth": [
+       "APT29"
+      ],
+      "in_kg": true,
+      "named": "Chimera",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.14285714285714285,
+      "named_ok": false,
+      "brier": 0.9832744398371135,
+      "top_hyp": "Chimera",
+      "top_p": 0.01327356331020689,
+      "top_ok": false,
+      "p_leader": 0.01327356331020689,
+      "leader_ok": false,
+      "p_truth": 0.01227634707740731,
+      "leader": "Chimera"
+     },
+     {
+      "case": "C0025",
+      "name": "2016 Ukraine Electric Power Attack",
+      "truth": [
+       "Sandworm Team"
+      ],
+      "in_kg": true,
+      "named": "Agrius",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.019230769230769232,
+      "named_ok": false,
+      "brier": 0.993630246075752,
+      "top_hyp": "Agrius",
+      "top_p": 0.01878468004883076,
+      "top_ok": false,
+      "p_leader": 0.01878468004883076,
+      "leader_ok": false,
+      "p_truth": 0.007547846942606433,
+      "leader": "Agrius"
+     },
+     {
+      "case": "C0027",
+      "name": "C0027",
+      "truth": [
+       "Scattered Spider"
+      ],
+      "in_kg": true,
+      "named": "Scattered Spider",
+      "grade": null,
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.9455202337811064,
+      "top_hyp": "Scattered Spider",
+      "top_p": 0.032379840638403504,
+      "top_ok": true,
+      "p_leader": 0.032379840638403504,
+      "leader_ok": true,
+      "p_truth": 0.032379840638403504,
+      "leader": "Scattered Spider"
+     },
+     {
+      "case": "C0028",
+      "name": "2015 Ukraine Electric Power Attack",
+      "truth": [
+       "Sandworm Team"
+      ],
+      "in_kg": true,
+      "named": "Wizard Spider",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.07142857142857142,
+      "named_ok": false,
+      "brier": 0.9859901182062265,
+      "top_hyp": "Wizard Spider",
+      "top_p": 0.013630571908353612,
+      "top_ok": false,
+      "p_leader": 0.013630571908353612,
+      "leader_ok": false,
+      "p_truth": 0.010855864184767899,
+      "leader": "Wizard Spider"
+     },
+     {
+      "case": "C0030",
+      "name": "Triton Safety Instrumented System Attack",
+      "truth": [
+       "TEMP.Veles"
+      ],
+      "in_kg": true,
+      "named": "Winter Vivern",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.0,
+      "named_ok": false,
+      "brier": 1.0080411926028479,
+      "top_hyp": "Winter Vivern",
+      "top_p": 0.017304481389734425,
+      "top_ok": false,
+      "p_leader": 0.017304481389734425,
+      "leader_ok": false,
+      "p_truth": 0.0,
+      "leader": "Winter Vivern"
+     },
+     {
+      "case": "C0032",
+      "name": "C0032",
+      "truth": [
+       "TEMP.Veles"
+      ],
+      "in_kg": true,
+      "named": "APT5",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.0,
+      "named_ok": false,
+      "brier": 1.0083293751333429,
+      "top_hyp": "APT5",
+      "top_p": 0.017543399182963965,
+      "top_ok": false,
+      "p_leader": 0.017543399182963965,
+      "leader_ok": false,
+      "p_truth": 0.0,
+      "leader": "APT5"
+     },
+     {
+      "case": "C0033",
+      "name": "C0033",
+      "truth": [
+       "PROMETHIUM"
+      ],
+      "in_kg": true,
+      "named": null,
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.0,
+      "named_ok": false,
+      "brier": 1.0,
+      "top_hyp": null,
+      "top_p": 0.0,
+      "top_ok": false,
+      "p_leader": 0.0,
+      "leader_ok": false,
+      "p_truth": 0.0,
+      "leader": null
+     },
+     {
+      "case": "C0034",
+      "name": "2022 Ukraine Electric Power Attack",
+      "truth": [
+       "Sandworm Team"
+      ],
+      "in_kg": true,
+      "named": "Cinnamon Tempest",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.043478260869565216,
+      "named_ok": false,
+      "brier": 0.9879810900776653,
+      "top_hyp": "Cinnamon Tempest",
+      "top_p": 0.02794188642886585,
+      "top_ok": false,
+      "p_leader": 0.02794188642886585,
+      "leader_ok": false,
+      "p_truth": 0.011163097522683105,
+      "leader": "Cinnamon Tempest"
+     },
+     {
+      "case": "C0035",
+      "name": "KV Botnet Activity",
+      "truth": [
+       "Volt Typhoon"
+      ],
+      "in_kg": true,
+      "named": "Rocke",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.047619047619047616,
+      "named_ok": false,
+      "brier": 0.9871382583514428,
+      "top_hyp": "Rocke",
+      "top_p": 0.020189588035077328,
+      "top_ok": false,
+      "p_leader": 0.020189588035077328,
+      "leader_ok": false,
+      "p_truth": 0.010646707162675977,
+      "leader": "Rocke"
+     },
+     {
+      "case": "C0038",
+      "name": "HomeLand Justice",
+      "truth": [
+       "VOID MANTICORE"
+      ],
+      "in_kg": true,
+      "named": "Magic Hound",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.125,
+      "named_ok": false,
+      "brier": 0.9812626532149542,
+      "top_hyp": "Magic Hound",
+      "top_p": 0.02065068868466327,
+      "top_ok": false,
+      "p_leader": 0.02065068868466327,
+      "leader_ok": false,
+      "p_truth": 0.0137835795562176,
+      "leader": "Magic Hound"
+     },
+     {
+      "case": "C0039",
+      "name": "Versa Director Zero Day Exploitation",
+      "truth": [
+       "Volt Typhoon"
+      ],
+      "in_kg": true,
+      "named": "RedEcho",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.125,
+      "named_ok": false,
+      "brier": 0.9794801255695081,
+      "top_hyp": "RedEcho",
+      "top_p": 0.026878820840393867,
+      "top_ok": false,
+      "p_leader": 0.026878820840393867,
+      "leader_ok": false,
+      "p_truth": 0.01580522295600736,
+      "leader": "RedEcho"
+     },
+     {
+      "case": "C0040",
+      "name": "APT41 DUST",
+      "truth": [
+       "APT41"
+      ],
+      "in_kg": true,
+      "named": "FIN6",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 1.0,
+      "rr": 0.2,
+      "named_ok": false,
+      "brier": 0.9829006639166372,
+      "top_hyp": "FIN6",
+      "top_p": 0.016514565808585086,
+      "top_ok": false,
+      "p_leader": 0.016514565808585086,
+      "leader_ok": false,
+      "p_truth": 0.012501738130846827,
+      "leader": "FIN6"
+     },
+     {
+      "case": "C0042",
+      "name": "Outer Space",
+      "truth": [
+       "OilRig"
+      ],
+      "in_kg": true,
+      "named": "APT16",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.024390243902439025,
+      "named_ok": false,
+      "brier": 0.992435956347291,
+      "top_hyp": "APT16",
+      "top_p": 0.029087482184370166,
+      "top_ok": false,
+      "p_leader": 0.029087482184370166,
+      "leader_ok": false,
+      "p_truth": 0.008373036127699367,
+      "leader": "APT16"
+     },
+     {
+      "case": "C0044",
+      "name": "Juicy Mix",
+      "truth": [
+       "OilRig"
+      ],
+      "in_kg": true,
+      "named": "Stealth Falcon",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.05555555555555555,
+      "named_ok": false,
+      "brier": 0.9853849632246533,
+      "top_hyp": "Stealth Falcon",
+      "top_p": 0.022827435021171516,
+      "top_ok": false,
+      "p_leader": 0.022827435021171516,
+      "leader_ok": false,
+      "p_truth": 0.012017597265988562,
+      "leader": "Stealth Falcon"
+     },
+     {
+      "case": "C0047",
+      "name": "RedDelta Modified PlugX Infection Chain Operations",
+      "truth": [
+       "Mustang Panda"
+      ],
+      "in_kg": true,
+      "named": "BITTER",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.0625,
+      "named_ok": false,
+      "brier": 0.9867204059882754,
+      "top_hyp": "BITTER",
+      "top_p": 0.014733495734401964,
+      "top_ok": false,
+      "p_leader": 0.014733495734401964,
+      "leader_ok": false,
+      "p_truth": 0.010392687008812004,
+      "leader": "BITTER"
+     },
+     {
+      "case": "C0049",
+      "name": "Leviathan Australian Intrusions",
+      "truth": [
+       "Leviathan"
+      ],
+      "in_kg": true,
+      "named": "Indrik Spider",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.018867924528301886,
+      "named_ok": false,
+      "brier": 0.9929399715947301,
+      "top_hyp": "Indrik Spider",
+      "top_p": 0.020223704982862304,
+      "top_ok": false,
+      "p_leader": 0.020223704982862304,
+      "leader_ok": false,
+      "p_truth": 0.008598337346935004,
+      "leader": "Indrik Spider"
+     },
+     {
+      "case": "C0051",
+      "name": "APT28 Nearest Neighbor Campaign",
+      "truth": [
+       "APT28"
+      ],
+      "in_kg": true,
+      "named": "Agrius",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.08333333333333333,
+      "named_ok": false,
+      "brier": 0.9816872143205891,
+      "top_hyp": "Agrius",
+      "top_p": 0.023503953797767464,
+      "top_ok": false,
+      "p_leader": 0.023503953797767464,
+      "leader_ok": false,
+      "p_truth": 0.014021223151136726,
+      "leader": "Agrius"
+     },
+     {
+      "case": "C0052",
+      "name": "SPACEHOP Activity",
+      "truth": [
+       "APT5"
+      ],
+      "in_kg": true,
+      "named": "PittyTiger",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.011904761904761904,
+      "named_ok": false,
+      "brier": 0.9993126428491871,
+      "top_hyp": "PittyTiger",
+      "top_p": 0.021980377058358938,
+      "top_ok": false,
+      "p_leader": 0.021980377058358938,
+      "leader_ok": false,
+      "p_truth": 0.005662305540182396,
+      "leader": "PittyTiger"
+     },
+     {
+      "case": "C0056",
+      "name": "RedPenguin",
+      "truth": [
+       "UNC3886"
+      ],
+      "in_kg": true,
+      "named": "UNC3886",
+      "grade": null,
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.9623779341014183,
+      "top_hyp": "UNC3886",
+      "top_p": 0.022882938002197623,
+      "top_ok": true,
+      "p_leader": 0.022882938002197623,
+      "leader_ok": true,
+      "p_truth": 0.022882938002197623,
+      "leader": "UNC3886"
+     },
+     {
+      "case": "C0057",
+      "name": "3CX Supply Chain Attack",
+      "truth": [
+       "AppleJeus"
+      ],
+      "in_kg": true,
+      "named": "Daggerfly",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.0,
+      "named_ok": false,
+      "brier": 1.008848130856242,
+      "top_hyp": "Daggerfly",
+      "top_p": 0.017405736097607438,
+      "top_ok": false,
+      "p_leader": 0.017405736097607438,
+      "leader_ok": false,
+      "p_truth": 0.0,
+      "leader": "Daggerfly"
+     },
+     {
+      "case": "C0060",
+      "name": "Operation AkaiRy\u016b",
+      "truth": [
+       "MirrorFace"
+      ],
+      "in_kg": true,
+      "named": "Mustang Panda",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 0.5,
+      "named_ok": false,
+      "brier": 0.980119624437953,
+      "top_hyp": "Mustang Panda",
+      "top_p": 0.014372568880316634,
+      "top_ok": false,
+      "p_leader": 0.014372568880316634,
+      "leader_ok": false,
+      "p_truth": 0.013597849492266794,
+      "leader": "Mustang Panda"
+     }
+    ]
+   },
+   {
+    "method": "ioc-correlation",
+    "n": 25,
+    "n_in_kg": 25,
+    "n_out_of_kg": 0,
+    "top1": 0.5599019607843138,
+    "top3": 0.6197058823529411,
+    "top5": 0.6328431372549019,
+    "mrr": 0.5951220645610308,
+    "coverage": 0.84,
+    "selective_accuracy": 0.7142857142857143,
+    "confident_error_rate": 0.24,
+    "out_of_kg_abstain": NaN,
+    "brier": 0.21776025899986046,
+    "ece": 0.22963037688881283,
+    "brier_dist": 0.6425266028138714,
+    "reliability": [
+     {
+      "lo": 0.0,
+      "hi": 0.1,
+      "n": 11,
+      "confidence": 0.0326057290930821,
+      "accuracy": 0.2727272727272727
+     },
+     {
+      "lo": 0.1,
+      "hi": 0.2,
+      "n": 3,
+      "confidence": 0.11765283671224265,
+      "accuracy": 0.6666666666666666
+     },
+     {
+      "lo": 0.2,
+      "hi": 0.3,
+      "n": 1,
+      "confidence": 0.21428571428571427,
+      "accuracy": 1.0
+     },
+     {
+      "lo": 0.3,
+      "hi": 0.4,
+      "n": 2,
+      "confidence": 0.3333333333333333,
+      "accuracy": 0.5
+     },
+     {
+      "lo": 0.6,
+      "hi": 0.7,
+      "n": 1,
+      "confidence": 0.6666666666666666,
+      "accuracy": 1.0
+     },
+     {
+      "lo": 0.9,
+      "hi": 1.0,
+      "n": 7,
+      "confidence": 1.0,
+      "accuracy": 1.0
+     }
+    ],
+    "grades": {},
+    "rows": [
+     {
+      "case": "C0011",
+      "name": "C0011",
+      "truth": [
+       "Transparent Tribe"
+      ],
+      "in_kg": true,
+      "named": "Transparent Tribe",
+      "grade": null,
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.0,
+      "top_hyp": "Transparent Tribe",
+      "top_p": 1.0,
+      "top_ok": true,
+      "p_leader": 1.0,
+      "leader_ok": true,
+      "p_truth": 1.0,
+      "leader": "Transparent Tribe"
+     },
+     {
+      "case": "C0017",
+      "name": "C0017",
+      "truth": [
+       "APT41"
+      ],
+      "in_kg": true,
+      "named": "APT41",
+      "grade": null,
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.9170492806856443,
+      "top_hyp": "APT41",
+      "top_p": 0.050505050505050504,
+      "top_ok": true,
+      "p_leader": 0.050505050505050504,
+      "leader_ok": true,
+      "p_truth": 0.050505050505050504,
+      "leader": "APT41"
+     },
+     {
+      "case": "C0022",
+      "name": "Operation Dream Job",
+      "truth": [
+       "Lazarus Group"
+      ],
+      "in_kg": true,
+      "named": "Lazarus Group",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.3333333333333333,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 0.611111111111111,
+      "named_ok": true,
+      "brier": 0.6666666666666667,
+      "top_hyp": "Lazarus Group",
+      "top_p": 0.3333333333333333,
+      "top_ok": true,
+      "p_leader": 0.3333333333333333,
+      "leader_ok": true,
+      "p_truth": 0.3333333333333333,
+      "leader": "Lazarus Group"
+     },
+     {
+      "case": "C0023",
+      "name": "Operation Ghost",
+      "truth": [
+       "APT29"
+      ],
+      "in_kg": true,
+      "named": "APT29",
+      "grade": null,
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.7970521541950113,
+      "top_hyp": "APT29",
+      "top_p": 0.11904761904761904,
+      "top_ok": true,
+      "p_leader": 0.11904761904761904,
+      "leader_ok": true,
+      "p_truth": 0.11904761904761904,
+      "leader": "APT29"
+     },
+     {
+      "case": "C0024",
+      "name": "SolarWinds Compromise",
+      "truth": [
+       "APT29"
+      ],
+      "in_kg": true,
+      "named": "APT29",
+      "grade": null,
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.8095284776002353,
+      "top_hyp": "APT29",
+      "top_p": 0.10891089108910891,
+      "top_ok": true,
+      "p_leader": 0.10891089108910891,
+      "leader_ok": true,
+      "p_truth": 0.10891089108910891,
+      "leader": "APT29"
+     },
+     {
+      "case": "C0025",
+      "name": "2016 Ukraine Electric Power Attack",
+      "truth": [
+       "Sandworm Team"
+      ],
+      "in_kg": true,
+      "named": "Sandworm Team",
+      "grade": null,
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.0,
+      "top_hyp": "Sandworm Team",
+      "top_p": 1.0,
+      "top_ok": true,
+      "p_leader": 1.0,
+      "leader_ok": true,
+      "p_truth": 1.0,
+      "leader": "Sandworm Team"
+     },
+     {
+      "case": "C0027",
+      "name": "C0027",
+      "truth": [
+       "Scattered Spider"
+      ],
+      "in_kg": true,
+      "named": "menuPass",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.0,
+      "named_ok": false,
+      "brier": 1.0555555555555556,
+      "top_hyp": "menuPass",
+      "top_p": 0.05555555555555555,
+      "top_ok": false,
+      "p_leader": 0.05555555555555555,
+      "leader_ok": false,
+      "p_truth": 0.0,
+      "leader": "menuPass"
+     },
+     {
+      "case": "C0028",
+      "name": "2015 Ukraine Electric Power Attack",
+      "truth": [
+       "Sandworm Team"
+      ],
+      "in_kg": true,
+      "named": "Sandworm Team",
+      "grade": null,
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.22222222222222224,
+      "top_hyp": "Sandworm Team",
+      "top_p": 0.6666666666666666,
+      "top_ok": true,
+      "p_leader": 0.6666666666666666,
+      "leader_ok": true,
+      "p_truth": 0.6666666666666666,
+      "leader": "Sandworm Team"
+     },
+     {
+      "case": "C0030",
+      "name": "Triton Safety Instrumented System Attack",
+      "truth": [
+       "TEMP.Veles"
+      ],
+      "in_kg": true,
+      "named": "menuPass",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0196078431372549,
+      "top3": 0.058823529411764705,
+      "top5": 0.09803921568627451,
+      "rr": 0.08860418002875843,
+      "named_ok": false,
+      "brier": 0.9803921568627451,
+      "top_hyp": "menuPass",
+      "top_p": 0.0196078431372549,
+      "top_ok": false,
+      "p_leader": 0.0196078431372549,
+      "leader_ok": false,
+      "p_truth": 0.0196078431372549,
+      "leader": "menuPass"
+     },
+     {
+      "case": "C0032",
+      "name": "C0032",
+      "truth": [
+       "TEMP.Veles"
+      ],
+      "in_kg": true,
+      "named": "menuPass",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0196078431372549,
+      "top3": 0.058823529411764705,
+      "top5": 0.09803921568627451,
+      "rr": 0.08860418002875843,
+      "named_ok": false,
+      "brier": 0.9803921568627451,
+      "top_hyp": "menuPass",
+      "top_p": 0.0196078431372549,
+      "top_ok": false,
+      "p_leader": 0.0196078431372549,
+      "leader_ok": false,
+      "p_truth": 0.0196078431372549,
+      "leader": "menuPass"
+     },
+     {
+      "case": "C0033",
+      "name": "C0033",
+      "truth": [
+       "PROMETHIUM"
+      ],
+      "in_kg": true,
+      "named": "PROMETHIUM",
+      "grade": null,
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.0,
+      "top_hyp": "PROMETHIUM",
+      "top_p": 1.0,
+      "top_ok": true,
+      "p_leader": 1.0,
+      "leader_ok": true,
+      "p_truth": 1.0,
+      "leader": "PROMETHIUM"
+     },
+     {
+      "case": "C0034",
+      "name": "2022 Ukraine Electric Power Attack",
+      "truth": [
+       "Sandworm Team"
+      ],
+      "in_kg": true,
+      "named": null,
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.0,
+      "named_ok": false,
+      "brier": 1.0,
+      "top_hyp": null,
+      "top_p": 0.0,
+      "top_ok": false,
+      "p_leader": 0.0,
+      "leader_ok": false,
+      "p_truth": 0.0,
+      "leader": null
+     },
+     {
+      "case": "C0035",
+      "name": "KV Botnet Activity",
+      "truth": [
+       "Volt Typhoon"
+      ],
+      "in_kg": true,
+      "named": null,
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.0,
+      "named_ok": false,
+      "brier": 1.0,
+      "top_hyp": null,
+      "top_p": 0.0,
+      "top_ok": false,
+      "p_leader": 0.0,
+      "leader_ok": false,
+      "p_truth": 0.0,
+      "leader": null
+     },
+     {
+      "case": "C0038",
+      "name": "HomeLand Justice",
+      "truth": [
+       "VOID MANTICORE"
+      ],
+      "in_kg": true,
+      "named": "OilRig",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.0,
+      "named_ok": false,
+      "brier": 1.0190443213296398,
+      "top_hyp": "OilRig",
+      "top_p": 0.039473684210526314,
+      "top_ok": false,
+      "p_leader": 0.039473684210526314,
+      "leader_ok": false,
+      "p_truth": 0.0,
+      "leader": "OilRig"
+     },
+     {
+      "case": "C0039",
+      "name": "Versa Director Zero Day Exploitation",
+      "truth": [
+       "Volt Typhoon"
+      ],
+      "in_kg": true,
+      "named": "Volt Typhoon",
+      "grade": null,
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.0,
+      "top_hyp": "Volt Typhoon",
+      "top_p": 1.0,
+      "top_ok": true,
+      "p_leader": 1.0,
+      "leader_ok": true,
+      "p_truth": 1.0,
+      "leader": "Volt Typhoon"
+     },
+     {
+      "case": "C0040",
+      "name": "APT41 DUST",
+      "truth": [
+       "APT41"
+      ],
+      "in_kg": true,
+      "named": "APT41",
+      "grade": null,
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.8563327032136107,
+      "top_hyp": "APT41",
+      "top_p": 0.08695652173913043,
+      "top_ok": true,
+      "p_leader": 0.08695652173913043,
+      "leader_ok": true,
+      "p_truth": 0.08695652173913043,
+      "leader": "APT41"
+     },
+     {
+      "case": "C0042",
+      "name": "Outer Space",
+      "truth": [
+       "OilRig"
+      ],
+      "in_kg": true,
+      "named": "OilRig",
+      "grade": null,
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.0,
+      "top_hyp": "OilRig",
+      "top_p": 1.0,
+      "top_ok": true,
+      "p_leader": 1.0,
+      "leader_ok": true,
+      "p_truth": 1.0,
+      "leader": "OilRig"
+     },
+     {
+      "case": "C0044",
+      "name": "Juicy Mix",
+      "truth": [
+       "OilRig"
+      ],
+      "in_kg": true,
+      "named": "OilRig",
+      "grade": null,
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.0,
+      "top_hyp": "OilRig",
+      "top_p": 1.0,
+      "top_ok": true,
+      "p_leader": 1.0,
+      "leader_ok": true,
+      "p_truth": 1.0,
+      "leader": "OilRig"
+     },
+     {
+      "case": "C0047",
+      "name": "RedDelta Modified PlugX Infection Chain Operations",
+      "truth": [
+       "Mustang Panda"
+      ],
+      "in_kg": true,
+      "named": "Mustang Panda",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.5,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 0.75,
+      "named_ok": true,
+      "brier": 0.8771266540642723,
+      "top_hyp": "Mustang Panda",
+      "top_p": 0.08695652173913043,
+      "top_ok": true,
+      "p_leader": 0.08695652173913043,
+      "leader_ok": true,
+      "p_truth": 0.08695652173913043,
+      "leader": "Mustang Panda"
+     },
+     {
+      "case": "C0049",
+      "name": "Leviathan Australian Intrusions",
+      "truth": [
+       "Leviathan"
+      ],
+      "in_kg": true,
+      "named": null,
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.0,
+      "named_ok": false,
+      "brier": 1.0,
+      "top_hyp": null,
+      "top_p": 0.0,
+      "top_ok": false,
+      "p_leader": 0.0,
+      "leader_ok": false,
+      "p_truth": 0.0,
+      "leader": null
+     },
+     {
+      "case": "C0051",
+      "name": "APT28 Nearest Neighbor Campaign",
+      "truth": [
+       "APT28"
+      ],
+      "in_kg": true,
+      "named": "Volt Typhoon",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.125,
+      "top3": 0.375,
+      "top5": 0.625,
+      "rr": 0.33973214285714287,
+      "named_ok": false,
+      "brier": 0.875,
+      "top_hyp": "Volt Typhoon",
+      "top_p": 0.125,
+      "top_ok": false,
+      "p_leader": 0.125,
+      "leader_ok": false,
+      "p_truth": 0.125,
+      "leader": "Volt Typhoon"
+     },
+     {
+      "case": "C0052",
+      "name": "SPACEHOP Activity",
+      "truth": [
+       "APT5"
+      ],
+      "in_kg": true,
+      "named": null,
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.0,
+      "named_ok": false,
+      "brier": 1.0,
+      "top_hyp": null,
+      "top_p": 0.0,
+      "top_ok": false,
+      "p_leader": 0.0,
+      "leader_ok": false,
+      "p_truth": 0.0,
+      "leader": null
+     },
+     {
+      "case": "C0056",
+      "name": "RedPenguin",
+      "truth": [
+       "UNC3886"
+      ],
+      "in_kg": true,
+      "named": "UNC3886",
+      "grade": null,
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.0,
+      "top_hyp": "UNC3886",
+      "top_p": 1.0,
+      "top_ok": true,
+      "p_leader": 1.0,
+      "leader_ok": true,
+      "p_truth": 1.0,
+      "leader": "UNC3886"
+     },
+     {
+      "case": "C0057",
+      "name": "3CX Supply Chain Attack",
+      "truth": [
+       "AppleJeus"
+      ],
+      "in_kg": true,
+      "named": "Volt Typhoon",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.0,
+      "named_ok": false,
+      "brier": 1.3333333333333333,
+      "top_hyp": "Volt Typhoon",
+      "top_p": 0.3333333333333333,
+      "top_ok": false,
+      "p_leader": 0.3333333333333333,
+      "leader_ok": false,
+      "p_truth": 0.0,
+      "leader": "Volt Typhoon"
+     },
+     {
+      "case": "C0060",
+      "name": "Operation AkaiRy\u016b",
+      "truth": [
+       "MirrorFace"
+      ],
+      "in_kg": true,
+      "named": "MirrorFace",
+      "grade": null,
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.673469387755102,
+      "top_hyp": "MirrorFace",
+      "top_p": 0.21428571428571427,
+      "top_ok": true,
+      "p_leader": 0.21428571428571427,
+      "leader_ok": true,
+      "p_truth": 0.21428571428571427,
+      "leader": "MirrorFace"
+     }
+    ]
+   },
+   {
+    "method": "code-only",
+    "n": 25,
+    "n_in_kg": 25,
+    "n_out_of_kg": 0,
+    "top1": 0.54,
+    "top3": 0.56,
+    "top5": 0.56,
+    "mrr": 0.55,
+    "coverage": 0.6,
+    "selective_accuracy": 0.9333333333333333,
+    "confident_error_rate": 0.04,
+    "out_of_kg_abstain": NaN,
+    "brier": 0.1714435444778311,
+    "ece": 0.2040507430919515,
+    "brier_dist": 0.6232703319193201,
+    "reliability": [
+     {
+      "lo": 0.0,
+      "hi": 0.1,
+      "n": 13,
+      "confidence": 0.018863280828568346,
+      "accuracy": 0.23076923076923078
+     },
+     {
+      "lo": 0.2,
+      "hi": 0.3,
+      "n": 1,
+      "confidence": 0.23684210526315788,
+      "accuracy": 1.0
+     },
+     {
+      "lo": 0.6,
+      "hi": 0.7,
+      "n": 1,
+      "confidence": 0.6666666666666666,
+      "accuracy": 1.0
+     },
+     {
+      "lo": 0.7,
+      "hi": 0.8,
+      "n": 1,
+      "confidence": 0.75,
+      "accuracy": 1.0
+     },
+     {
+      "lo": 0.9,
+      "hi": 1.0,
+      "n": 9,
+      "confidence": 1.0,
+      "accuracy": 0.8888888888888888
+     }
+    ],
+    "grades": {},
+    "rows": [
+     {
+      "case": "C0011",
+      "name": "C0011",
+      "truth": [
+       "Transparent Tribe"
+      ],
+      "in_kg": true,
+      "named": "Transparent Tribe",
+      "grade": null,
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.0,
+      "top_hyp": "Transparent Tribe",
+      "top_p": 1.0,
+      "top_ok": true,
+      "p_leader": 1.0,
+      "leader_ok": true,
+      "p_truth": 1.0,
+      "leader": "Transparent Tribe"
+     },
+     {
+      "case": "C0017",
+      "name": "C0017",
+      "truth": [
+       "APT41"
+      ],
+      "in_kg": true,
+      "named": "APT41",
+      "grade": null,
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.9053069719042665,
+      "top_hyp": "APT41",
+      "top_p": 0.06451612903225806,
+      "top_ok": true,
+      "p_leader": 0.06451612903225806,
+      "leader_ok": true,
+      "p_truth": 0.06451612903225806,
+      "leader": "APT41"
+     },
+     {
+      "case": "C0022",
+      "name": "Operation Dream Job",
+      "truth": [
+       "Lazarus Group"
+      ],
+      "in_kg": true,
+      "named": null,
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.0,
+      "named_ok": false,
+      "brier": 1.0,
+      "top_hyp": null,
+      "top_p": 0.0,
+      "top_ok": false,
+      "p_leader": 0.0,
+      "leader_ok": false,
+      "p_truth": 0.0,
+      "leader": null
+     },
+     {
+      "case": "C0023",
+      "name": "Operation Ghost",
+      "truth": [
+       "APT29"
+      ],
+      "in_kg": true,
+      "named": "APT29",
+      "grade": null,
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.0,
+      "top_hyp": "APT29",
+      "top_p": 1.0,
+      "top_ok": true,
+      "p_leader": 1.0,
+      "leader_ok": true,
+      "p_truth": 1.0,
+      "leader": "APT29"
+     },
+     {
+      "case": "C0024",
+      "name": "SolarWinds Compromise",
+      "truth": [
+       "APT29"
+      ],
+      "in_kg": true,
+      "named": "APT29",
+      "grade": null,
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.6024930747922438,
+      "top_hyp": "APT29",
+      "top_p": 0.23684210526315788,
+      "top_ok": true,
+      "p_leader": 0.23684210526315788,
+      "leader_ok": true,
+      "p_truth": 0.23684210526315788,
+      "leader": "APT29"
+     },
+     {
+      "case": "C0025",
+      "name": "2016 Ukraine Electric Power Attack",
+      "truth": [
+       "Sandworm Team"
+      ],
+      "in_kg": true,
+      "named": "Sandworm Team",
+      "grade": null,
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.0,
+      "top_hyp": "Sandworm Team",
+      "top_p": 1.0,
+      "top_ok": true,
+      "p_leader": 1.0,
+      "leader_ok": true,
+      "p_truth": 1.0,
+      "leader": "Sandworm Team"
+     },
+     {
+      "case": "C0027",
+      "name": "C0027",
+      "truth": [
+       "Scattered Spider"
+      ],
+      "in_kg": true,
+      "named": null,
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.0,
+      "named_ok": false,
+      "brier": 1.0,
+      "top_hyp": null,
+      "top_p": 0.0,
+      "top_ok": false,
+      "p_leader": 0.0,
+      "leader_ok": false,
+      "p_truth": 0.0,
+      "leader": null
+     },
+     {
+      "case": "C0028",
+      "name": "2015 Ukraine Electric Power Attack",
+      "truth": [
+       "Sandworm Team"
+      ],
+      "in_kg": true,
+      "named": "Sandworm Team",
+      "grade": null,
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.22222222222222224,
+      "top_hyp": "Sandworm Team",
+      "top_p": 0.6666666666666666,
+      "top_ok": true,
+      "p_leader": 0.6666666666666666,
+      "leader_ok": true,
+      "p_truth": 0.6666666666666666,
+      "leader": "Sandworm Team"
+     },
+     {
+      "case": "C0030",
+      "name": "Triton Safety Instrumented System Attack",
+      "truth": [
+       "TEMP.Veles"
+      ],
+      "in_kg": true,
+      "named": null,
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.0,
+      "named_ok": false,
+      "brier": 1.0,
+      "top_hyp": null,
+      "top_p": 0.0,
+      "top_ok": false,
+      "p_leader": 0.0,
+      "leader_ok": false,
+      "p_truth": 0.0,
+      "leader": null
+     },
+     {
+      "case": "C0032",
+      "name": "C0032",
+      "truth": [
+       "TEMP.Veles"
+      ],
+      "in_kg": true,
+      "named": null,
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.0,
+      "named_ok": false,
+      "brier": 1.0,
+      "top_hyp": null,
+      "top_p": 0.0,
+      "top_ok": false,
+      "p_leader": 0.0,
+      "leader_ok": false,
+      "p_truth": 0.0,
+      "leader": null
+     },
+     {
+      "case": "C0033",
+      "name": "C0033",
+      "truth": [
+       "PROMETHIUM"
+      ],
+      "in_kg": true,
+      "named": "PROMETHIUM",
+      "grade": null,
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.0,
+      "top_hyp": "PROMETHIUM",
+      "top_p": 1.0,
+      "top_ok": true,
+      "p_leader": 1.0,
+      "leader_ok": true,
+      "p_truth": 1.0,
+      "leader": "PROMETHIUM"
+     },
+     {
+      "case": "C0034",
+      "name": "2022 Ukraine Electric Power Attack",
+      "truth": [
+       "Sandworm Team"
+      ],
+      "in_kg": true,
+      "named": null,
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.0,
+      "named_ok": false,
+      "brier": 1.0,
+      "top_hyp": null,
+      "top_p": 0.0,
+      "top_ok": false,
+      "p_leader": 0.0,
+      "leader_ok": false,
+      "p_truth": 0.0,
+      "leader": null
+     },
+     {
+      "case": "C0035",
+      "name": "KV Botnet Activity",
+      "truth": [
+       "Volt Typhoon"
+      ],
+      "in_kg": true,
+      "named": null,
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.0,
+      "named_ok": false,
+      "brier": 1.0,
+      "top_hyp": null,
+      "top_p": 0.0,
+      "top_ok": false,
+      "p_leader": 0.0,
+      "leader_ok": false,
+      "p_truth": 0.0,
+      "leader": null
+     },
+     {
+      "case": "C0038",
+      "name": "HomeLand Justice",
+      "truth": [
+       "VOID MANTICORE"
+      ],
+      "in_kg": true,
+      "named": "OilRig",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.0,
+      "named_ok": false,
+      "brier": 2.0,
+      "top_hyp": "OilRig",
+      "top_p": 1.0,
+      "top_ok": false,
+      "p_leader": 1.0,
+      "leader_ok": false,
+      "p_truth": 0.0,
+      "leader": "OilRig"
+     },
+     {
+      "case": "C0039",
+      "name": "Versa Director Zero Day Exploitation",
+      "truth": [
+       "Volt Typhoon"
+      ],
+      "in_kg": true,
+      "named": "Volt Typhoon",
+      "grade": null,
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.0,
+      "top_hyp": "Volt Typhoon",
+      "top_p": 1.0,
+      "top_ok": true,
+      "p_leader": 1.0,
+      "leader_ok": true,
+      "p_truth": 1.0,
+      "leader": "Volt Typhoon"
+     },
+     {
+      "case": "C0040",
+      "name": "APT41 DUST",
+      "truth": [
+       "APT41"
+      ],
+      "in_kg": true,
+      "named": "APT41",
+      "grade": null,
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.849609375,
+      "top_hyp": "APT41",
+      "top_p": 0.09375,
+      "top_ok": true,
+      "p_leader": 0.09375,
+      "leader_ok": true,
+      "p_truth": 0.09375,
+      "leader": "APT41"
+     },
+     {
+      "case": "C0042",
+      "name": "Outer Space",
+      "truth": [
+       "OilRig"
+      ],
+      "in_kg": true,
+      "named": "OilRig",
+      "grade": null,
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.0,
+      "top_hyp": "OilRig",
+      "top_p": 1.0,
+      "top_ok": true,
+      "p_leader": 1.0,
+      "leader_ok": true,
+      "p_truth": 1.0,
+      "leader": "OilRig"
+     },
+     {
+      "case": "C0044",
+      "name": "Juicy Mix",
+      "truth": [
+       "OilRig"
+      ],
+      "in_kg": true,
+      "named": "OilRig",
+      "grade": null,
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.0,
+      "top_hyp": "OilRig",
+      "top_p": 1.0,
+      "top_ok": true,
+      "p_leader": 1.0,
+      "leader_ok": true,
+      "p_truth": 1.0,
+      "leader": "OilRig"
+     },
+     {
+      "case": "C0047",
+      "name": "RedDelta Modified PlugX Infection Chain Operations",
+      "truth": [
+       "Mustang Panda"
+      ],
+      "in_kg": true,
+      "named": "Mustang Panda",
+      "grade": null,
+      "flags": 0,
+      "top1": 0.5,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 0.75,
+      "named_ok": true,
+      "brier": 0.8771266540642723,
+      "top_hyp": "Mustang Panda",
+      "top_p": 0.08695652173913043,
+      "top_ok": true,
+      "p_leader": 0.08695652173913043,
+      "leader_ok": true,
+      "p_truth": 0.08695652173913043,
+      "leader": "Mustang Panda"
+     },
+     {
+      "case": "C0049",
+      "name": "Leviathan Australian Intrusions",
+      "truth": [
+       "Leviathan"
+      ],
+      "in_kg": true,
+      "named": null,
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.0,
+      "named_ok": false,
+      "brier": 1.0,
+      "top_hyp": null,
+      "top_p": 0.0,
+      "top_ok": false,
+      "p_leader": 0.0,
+      "leader_ok": false,
+      "p_truth": 0.0,
+      "leader": null
+     },
+     {
+      "case": "C0051",
+      "name": "APT28 Nearest Neighbor Campaign",
+      "truth": [
+       "APT28"
+      ],
+      "in_kg": true,
+      "named": null,
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.0,
+      "named_ok": false,
+      "brier": 1.0,
+      "top_hyp": null,
+      "top_p": 0.0,
+      "top_ok": false,
+      "p_leader": 0.0,
+      "leader_ok": false,
+      "p_truth": 0.0,
+      "leader": null
+     },
+     {
+      "case": "C0052",
+      "name": "SPACEHOP Activity",
+      "truth": [
+       "APT5"
+      ],
+      "in_kg": true,
+      "named": null,
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.0,
+      "named_ok": false,
+      "brier": 1.0,
+      "top_hyp": null,
+      "top_p": 0.0,
+      "top_ok": false,
+      "p_leader": 0.0,
+      "leader_ok": false,
+      "p_truth": 0.0,
+      "leader": null
+     },
+     {
+      "case": "C0056",
+      "name": "RedPenguin",
+      "truth": [
+       "UNC3886"
+      ],
+      "in_kg": true,
+      "named": "UNC3886",
+      "grade": null,
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.0,
+      "top_hyp": "UNC3886",
+      "top_p": 1.0,
+      "top_ok": true,
+      "p_leader": 1.0,
+      "leader_ok": true,
+      "p_truth": 1.0,
+      "leader": "UNC3886"
+     },
+     {
+      "case": "C0057",
+      "name": "3CX Supply Chain Attack",
+      "truth": [
+       "AppleJeus"
+      ],
+      "in_kg": true,
+      "named": null,
+      "grade": null,
+      "flags": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top5": 0.0,
+      "rr": 0.0,
+      "named_ok": false,
+      "brier": 1.0,
+      "top_hyp": null,
+      "top_p": 0.0,
+      "top_ok": false,
+      "p_leader": 0.0,
+      "leader_ok": false,
+      "p_truth": 0.0,
+      "leader": null
+     },
+     {
+      "case": "C0060",
+      "name": "Operation AkaiRy\u016b",
+      "truth": [
+       "MirrorFace"
+      ],
+      "in_kg": true,
+      "named": "MirrorFace",
+      "grade": null,
+      "flags": 0,
+      "top1": 1.0,
+      "top3": 1.0,
+      "top5": 1.0,
+      "rr": 1.0,
+      "named_ok": true,
+      "brier": 0.125,
+      "top_hyp": "MirrorFace",
+      "top_p": 0.75,
+      "top_ok": true,
+      "p_leader": 0.75,
+      "leader_ok": true,
+      "p_truth": 0.75,
+      "leader": "MirrorFace"
+     }
+    ]
+   }
+  ],
+  "ablation": [
+   {
+    "method": "dragnet",
+    "n": 25,
+    "n_in_kg": 25,
+    "n_out_of_kg": 0,
+    "top1": 0.68,
+    "top3": 0.68,
+    "top5": 0.68,
+    "mrr": 0.688236679538016,
+    "coverage": 0.6,
+    "selective_accuracy": 0.9333333333333333,
+    "confident_error_rate": 0.0,
+    "out_of_kg_abstain": NaN,
+    "brier": 0.16244756700609148,
+    "ece": 0.2757644103873123,
+    "brier_dist": 0.8922202119783686,
+    "reliability": [
+     {
+      "lo": 0.1,
+      "hi": 0.2,
+      "n": 3,
+      "confidence": 0.16694091749307569,
+      "accuracy": 0.0
+     },
+     {
+      "lo": 0.2,
+      "hi": 0.3,
+      "n": 7,
+      "confidence": 0.2384778748848157,
+      "accuracy": 0.42857142857142855
+     },
+     {
+      "lo": 0.3,
+      "hi": 0.4,
+      "n": 1,
+      "confidence": 0.3775448390654316,
+      "accuracy": 1.0
+     },
+     {
+      "lo": 0.4,
+      "hi": 0.5,
+      "n": 1,
+      "confidence": 0.4725300249781078,
+      "accuracy": 0.0
+     },
+     {
+      "lo": 0.5,
+      "hi": 0.6,
+      "n": 5,
+      "confidence": 0.551801806414565,
+      "accuracy": 1.0
+     },
+     {
+      "lo": 0.6,
+      "hi": 0.7,
+      "n": 3,
+      "confidence": 0.6525874579073023,
+      "accuracy": 1.0
+     },
+     {
+      "lo": 0.7,
+      "hi": 0.8,
+      "n": 2,
+      "confidence": 0.7828883151711172,
+      "accuracy": 1.0
+     },
+     {
+      "lo": 0.8,
+      "hi": 0.9,
+      "n": 1,
+      "confidence": 0.8105762380379105,
+      "accuracy": 1.0
+     },
+     {
+      "lo": 0.9,
+      "hi": 1.0,
+      "n": 2,
+      "confidence": 0.9696141401702545,
+      "accuracy": 1.0
+     }
+    ],
+    "grades": {
+     "HIGH": {
+      "n": 0,
+      "accuracy": NaN
+     },
+     "MEDIUM": {
+      "n": 5,
+      "accuracy": 1.0
+     },
+     "LOW": {
+      "n": 10,
+      "accuracy": 0.9
+     },
+     "INSUFFICIENT": {
+      "n": 10,
+      "accuracy": 0.3
+     }
+    }
+   },
+   {
+    "method": "dragnet-no-spec",
+    "n": 25,
+    "n_in_kg": 25,
+    "n_out_of_kg": 0,
+    "top1": 0.6,
+    "top3": 0.6,
+    "top5": 0.64,
+    "mrr": 0.6191836110406629,
+    "coverage": 0.6,
+    "selective_accuracy": 0.9333333333333333,
+    "confident_error_rate": 0.0,
+    "out_of_kg_abstain": NaN,
+    "brier": 0.12231400302103392,
+    "ece": 0.17676047495002184,
+    "brier_dist": 0.9062424311337469,
+    "reliability": [
+     {
+      "lo": 0.1,
+      "hi": 0.2,
+      "n": 2,
+      "confidence": 0.16741697888233442,
+      "accuracy": 0.0
+     },
+     {
+      "lo": 0.2,
+      "hi": 0.3,
+      "n": 2,
+      "confidence": 0.21659296803857164,
+      "accuracy": 0.0
+     },
+     {
+      "lo": 0.3,
+      "hi": 0.4,
+      "n": 2,
+      "confidence": 0.34607943514695083,
+      "accuracy": 0.0
+     },
+     {
+      "lo": 0.4,
+      "hi": 0.5,
+      "n": 5,
+      "confidence": 0.4536902744754675,
+      "accuracy": 0.4
+     },
+     {
+      "lo": 0.5,
+      "hi": 0.6,
+      "n": 5,
+      "confidence": 0.5419603288529213,
+      "accuracy": 0.8
+     },
+     {
+      "lo": 0.6,
+      "hi": 0.7,
+      "n": 1,
+      "confidence": 0.6239752792068802,
+      "accuracy": 1.0
+     },
+     {
+      "lo": 0.7,
+      "hi": 0.8,
+      "n": 3,
+      "confidence": 0.7848853531952908,
+      "accuracy": 1.0
+     },
+     {
+      "lo": 0.8,
+      "hi": 0.9,
+      "n": 1,
+      "confidence": 0.8105762380379105,
+      "accuracy": 1.0
+     },
+     {
+      "lo": 0.9,
+      "hi": 1.0,
+      "n": 4,
+      "confidence": 0.952652260416809,
+      "accuracy": 1.0
+     }
+    ],
+    "grades": {
+     "HIGH": {
+      "n": 0,
+      "accuracy": NaN
+     },
+     "MEDIUM": {
+      "n": 2,
+      "accuracy": 1.0
+     },
+     "LOW": {
+      "n": 13,
+      "accuracy": 0.9230769230769231
+     },
+     "INSUFFICIENT": {
+      "n": 10,
+      "accuracy": 0.1
+     }
+    }
+   },
+   {
+    "method": "dragnet-no-ttpsim",
+    "n": 25,
+    "n_in_kg": 25,
+    "n_out_of_kg": 0,
+    "top1": 0.6,
+    "top3": 0.68,
+    "top5": 0.72,
+    "mrr": 0.6506758066313312,
+    "coverage": 0.56,
+    "selective_accuracy": 0.9285714285714286,
+    "confident_error_rate": 0.0,
+    "out_of_kg_abstain": NaN,
+    "brier": 0.15702638630474808,
+    "ece": 0.281011074656403,
+    "brier_dist": 0.8246294628349379,
+    "reliability": [
+     {
+      "lo": 0.0,
+      "hi": 0.1,
+      "n": 5,
+      "confidence": 0.06597623021527205,
+      "accuracy": 0.0
+     },
+     {
+      "lo": 0.1,
+      "hi": 0.2,
+      "n": 3,
+      "confidence": 0.15251834647884357,
+      "accuracy": 0.3333333333333333
+     },
+     {
+      "lo": 0.2,
+      "hi": 0.3,
+      "n": 2,
+      "confidence": 0.2205984695760848,
+      "accuracy": 0.0
+     },
+     {
+      "lo": 0.3,
+      "hi": 0.4,
+      "n": 2,
+      "confidence": 0.37271763790153123,
+      "accuracy": 0.5
+     },
+     {
+      "lo": 0.4,
+      "hi": 0.5,
+      "n": 4,
+      "confidence": 0.47076926471780534,
+      "accuracy": 1.0
+     },
+     {
+      "lo": 0.5,
+      "hi": 0.6,
+      "n": 4,
+      "confidence": 0.5278640555425498,
+      "accuracy": 1.0
+     },
+     {
+      "lo": 0.6,
+      "hi": 0.7,
+      "n": 3,
+      "confidence": 0.6478494661989687,
+      "accuracy": 1.0
+     },
+     {
+      "lo": 0.7,
+      "hi": 0.8,
+      "n": 1,
+      "confidence": 0.7702661684860967,
+      "accuracy": 1.0
+     },
+     {
+      "lo": 0.8,
+      "hi": 0.9,
+      "n": 1,
+      "confidence": 0.8344630604544382,
+      "accuracy": 1.0
+     }
+    ],
+    "grades": {
+     "HIGH": {
+      "n": 0,
+      "accuracy": NaN
+     },
+     "MEDIUM": {
+      "n": 4,
+      "accuracy": 1.0
+     },
+     "LOW": {
+      "n": 10,
+      "accuracy": 0.9
+     },
+     "INSUFFICIENT": {
+      "n": 11,
+      "accuracy": 0.18181818181818182
+     }
+    }
+   },
+   {
+    "method": "dragnet-no-ff",
+    "n": 25,
+    "n_in_kg": 25,
+    "n_out_of_kg": 0,
+    "top1": 0.68,
+    "top3": 0.68,
+    "top5": 0.68,
+    "mrr": 0.688236679538016,
+    "coverage": 0.6,
+    "selective_accuracy": 0.9333333333333333,
+    "confident_error_rate": 0.0,
+    "out_of_kg_abstain": NaN,
+    "brier": 0.16244756700609148,
+    "ece": 0.2757644103873123,
+    "brier_dist": 0.8904106240696353,
+    "reliability": [
+     {
+      "lo": 0.1,
+      "hi": 0.2,
+      "n": 3,
+      "confidence": 0.16694091749307569,
+      "accuracy": 0.0
+     },
+     {
+      "lo": 0.2,
+      "hi": 0.3,
+      "n": 7,
+      "confidence": 0.2384778748848157,
+      "accuracy": 0.42857142857142855
+     },
+     {
+      "lo": 0.3,
+      "hi": 0.4,
+      "n": 1,
+      "confidence": 0.3775448390654316,
+      "accuracy": 1.0
+     },
+     {
+      "lo": 0.4,
+      "hi": 0.5,
+      "n": 1,
+      "confidence": 0.4725300249781078,
+      "accuracy": 0.0
+     },
+     {
+      "lo": 0.5,
+      "hi": 0.6,
+      "n": 5,
+      "confidence": 0.551801806414565,
+      "accuracy": 1.0
+     },
+     {
+      "lo": 0.6,
+      "hi": 0.7,
+      "n": 3,
+      "confidence": 0.6525874579073023,
+      "accuracy": 1.0
+     },
+     {
+      "lo": 0.7,
+      "hi": 0.8,
+      "n": 2,
+      "confidence": 0.7828883151711172,
+      "accuracy": 1.0
+     },
+     {
+      "lo": 0.8,
+      "hi": 0.9,
+      "n": 1,
+      "confidence": 0.8105762380379105,
+      "accuracy": 1.0
+     },
+     {
+      "lo": 0.9,
+      "hi": 1.0,
+      "n": 2,
+      "confidence": 0.9696141401702545,
+      "accuracy": 1.0
+     }
+    ],
+    "grades": {
+     "HIGH": {
+      "n": 0,
+      "accuracy": NaN
+     },
+     "MEDIUM": {
+      "n": 8,
+      "accuracy": 1.0
+     },
+     "LOW": {
+      "n": 7,
+      "accuracy": 0.8571428571428571
+     },
+     "INSUFFICIENT": {
+      "n": 10,
+      "accuracy": 0.3
+     }
+    }
+   }
+  ]
+ },
+ "F": {
+  "aptnotes_reports_indexed": 689,
+  "actors_with_reports": 82,
+  "buckets": {
+   "0 reports": {
+    "n": 10,
+    "top1": 0.4
+   },
+   "1-5 reports": {
+    "n": 2,
+    "top1": 1.0
+   },
+   ">5 reports": {
+    "n": 13,
+    "top1": 0.8461538461538461
+   }
+  },
+  "top_actors": [
+   [
+    "APT28",
+    28
+   ],
+   [
+    "Carbanak",
+    16
+   ],
+   [
+    "Turla",
+    15
+   ],
+   [
+    "FIN7",
+    15
+   ],
+   [
+    "APT29",
+    13
+   ],
+   [
+    "Winnti Group",
+    12
+   ],
+   [
+    "APT41",
+    12
+   ],
+   [
+    "Darkhotel",
+    7
+   ],
+   [
+    "APT32",
+    7
+   ],
+   [
+    "Ke3chang",
+    6
+   ]
+  ]
+ },
+ "A2": {
+  "kg_version": "10.1",
+  "kg_released": "2021-11-10T14:00:00.188Z",
+  "main": [
+   {
+    "method": "dragnet",
+    "n": 25,
+    "n_in_kg": 17,
+    "n_out_of_kg": 8,
+    "top1": 0.4117647058823529,
+    "top3": 0.5294117647058824,
+    "top5": 0.5882352941176471,
+    "mrr": 0.5072926392779334,
+    "coverage": 0.5294117647058824,
+    "selective_accuracy": 0.7777777777777778,
+    "confident_error_rate": 0.0,
+    "out_of_kg_abstain": 0.75,
+    "brier": 0.08736091142657942,
+    "ece": 0.22772680235841616,
+    "brier_dist": 0.8634526733020589,
+    "reliability": [
+     {
+      "lo": 0.1,
+      "hi": 0.2,
+      "n": 4,
+      "confidence": 0.1630151039599368,
+      "accuracy": 0.0
+     },
+     {
+      "lo": 0.2,
+      "hi": 0.3,
+      "n": 9,
+      "confidence": 0.23598407297151436,
+      "accuracy": 0.0
+     },
+     {
+      "lo": 0.3,
+      "hi": 0.4,
+      "n": 4,
+      "confidence": 0.34562422971597484,
+      "accuracy": 0.0
+     },
+     {
+      "lo": 0.5,
+      "hi": 0.6,
+      "n": 3,
+      "confidence": 0.526562872635488,
+      "accuracy": 0.6666666666666666
+     },
+     {
+      "lo": 0.6,
+      "hi": 0.7,
+      "n": 2,
+      "confidence": 0.619289718063887,
+      "accuracy": 1.0
+     },
+     {
+      "lo": 0.7,
+      "hi": 0.8,
+      "n": 1,
+      "confidence": 0.7023102875459784,
+      "accuracy": 1.0
+     },
+     {
+      "lo": 0.9,
+      "hi": 1.0,
+      "n": 2,
+      "confidence": 0.9723327954533282,
+      "accuracy": 1.0
+     }
+    ],
+    "grades": {
+     "HIGH": {
+      "n": 0,
+      "accuracy": NaN
+     },
+     "MEDIUM": {
+      "n": 4,
+      "accuracy": 1.0
+     },
+     "LOW": {
+      "n": 5,
+      "accuracy": 0.6
+     },
+     "INSUFFICIENT": {
+      "n": 8,
+      "accuracy": 0.0
+     }
+    }
+   },
+   {
+    "method": "ttp-jaccard",
+    "n": 25,
+    "n_in_kg": 17,
+    "n_out_of_kg": 8,
+    "top1": 0.23529411764705882,
+    "top3": 0.23529411764705882,
+    "top5": 0.29411764705882354,
+    "mrr": 0.2902126074919376,
+    "coverage": 0.9411764705882353,
+    "selective_accuracy": 0.25,
+    "confident_error_rate": 0.8,
+    "out_of_kg_abstain": 0.0,
+    "brier": 0.14811444663153245,
+    "ece": 0.13257626643749038,
+    "brier_dist": 0.9856098267890218,
+    "reliability": [
+     {
+      "lo": 0.0,
+      "hi": 0.1,
+      "n": 25,
+      "confidence": 0.027423733562509614,
+      "accuracy": 0.16
+     }
+    ],
+    "grades": {}
+   },
+   {
+    "method": "ttp-cosine",
+    "n": 25,
+    "n_in_kg": 17,
+    "n_out_of_kg": 8,
+    "top1": 0.23529411764705882,
+    "top3": 0.35294117647058826,
+    "top5": 0.4117647058823529,
+    "mrr": 0.3457290394790395,
+    "coverage": 0.9411764705882353,
+    "selective_accuracy": 0.25,
+    "confident_error_rate": 0.8,
+    "out_of_kg_abstain": 0.0,
+    "brier": 0.14907755198395323,
+    "ece": 0.1305341842343828,
+    "brier_dist": 0.9841148671668103,
+    "reliability": [
+     {
+      "lo": 0.0,
+      "hi": 0.1,
+      "n": 25,
+      "confidence": 0.029465815765617225,
+      "accuracy": 0.16
+     }
+    ],
+    "grades": {}
+   },
+   {
+    "method": "ioc-correlation",
+    "n": 25,
+    "n_in_kg": 17,
+    "n_out_of_kg": 8,
+    "top1": 0.40505675954592363,
+    "top3": 0.4905713481564875,
+    "top5": 0.5074584857866592,
+    "mrr": 0.45734313179129576,
+    "coverage": 0.7647058823529411,
+    "selective_accuracy": 0.46153846153846156,
+    "confident_error_rate": 0.4,
+    "out_of_kg_abstain": 0.625,
+    "brier": 0.10950379852894265,
+    "ece": 0.150357467171151,
+    "brier_dist": 0.8832889048245782,
+    "reliability": [
+     {
+      "lo": 0.0,
+      "hi": 0.1,
+      "n": 14,
+      "confidence": 0.016287391059725622,
+      "accuracy": 0.0
+     },
+     {
+      "lo": 0.1,
+      "hi": 0.2,
+      "n": 3,
+      "confidence": 0.15080670963023904,
+      "accuracy": 0.6666666666666666
+     },
+     {
+      "lo": 0.2,
+      "hi": 0.3,
+      "n": 3,
+      "confidence": 0.21666666666666667,
+      "accuracy": 0.0
+     },
+     {
+      "lo": 0.6,
+      "hi": 0.7,
+      "n": 1,
+      "confidence": 0.6666666666666666,
+      "accuracy": 1.0
+     },
+     {
+      "lo": 0.9,
+      "hi": 1.0,
+      "n": 4,
+      "confidence": 1.0,
+      "accuracy": 0.75
+     }
+    ],
+    "grades": {}
+   },
+   {
+    "method": "code-only",
+    "n": 25,
+    "n_in_kg": 17,
+    "n_out_of_kg": 8,
+    "top1": 0.3602941176470588,
+    "top3": 0.3856951871657754,
+    "top5": 0.41109625668449196,
+    "mrr": 0.38904659381765,
+    "coverage": 0.5294117647058824,
+    "selective_accuracy": 0.6666666666666666,
+    "confident_error_rate": 0.16,
+    "out_of_kg_abstain": 0.875,
+    "brier": 0.06271692252075231,
+    "ece": 0.09057413600891862,
+    "brier_dist": 0.8194327866081538,
+    "reliability": [
+     {
+      "lo": 0.0,
+      "hi": 0.1,
+      "n": 17,
+      "confidence": 0.007352941176470588,
+      "accuracy": 0.0
+     },
+     {
+      "lo": 0.1,
+      "hi": 0.2,
+      "n": 1,
+      "confidence": 0.15384615384615385,
+      "accuracy": 0.0
+     },
+     {
+      "lo": 0.3,
+      "hi": 0.4,
+      "n": 1,
+      "confidence": 0.34782608695652173,
+      "accuracy": 1.0
+     },
+     {
+      "lo": 0.6,
+      "hi": 0.7,
+      "n": 1,
+      "confidence": 0.6666666666666666,
+      "accuracy": 1.0
+     },
+     {
+      "lo": 0.9,
+      "hi": 1.0,
+      "n": 5,
+      "confidence": 1.0,
+      "accuracy": 0.8
+     }
+    ],
+    "grades": {}
+   }
+  ]
+ },
+ "D": {
+  "false_alarm_rate_clean": 0.16,
+  "level1": [
+   {
+    "method": "dragnet",
+    "n": 25,
+    "decoy_top1": 0.44,
+    "confident_decoy": 0.0,
+    "truth_top1": 0.52,
+    "flagged": 1.0,
+    "withheld": 1.0
+   },
+   {
+    "method": "ttp-jaccard",
+    "n": 25,
+    "decoy_top1": 0.0,
+    "confident_decoy": 0.0,
+    "truth_top1": 0.12,
+    "flagged": 0.0,
+    "withheld": 0.0
+   },
+   {
+    "method": "ttp-cosine",
+    "n": 25,
+    "decoy_top1": 0.0,
+    "confident_decoy": 0.0,
+    "truth_top1": 0.08,
+    "flagged": 0.0,
+    "withheld": 0.0
+   },
+   {
+    "method": "ioc-correlation",
+    "n": 25,
+    "decoy_top1": 0.52,
+    "confident_decoy": 0.52,
+    "truth_top1": 0.32,
+    "flagged": 0.0,
+    "withheld": 0.0
+   },
+   {
+    "method": "code-only",
+    "n": 25,
+    "decoy_top1": 0.0,
+    "confident_decoy": 0.0,
+    "truth_top1": 0.56,
+    "flagged": 0.0,
+    "withheld": 0.0
+   },
+   {
+    "method": "dragnet-no-ff",
+    "n": 25,
+    "decoy_top1": 0.44,
+    "confident_decoy": 0.0,
+    "truth_top1": 0.52,
+    "flagged": 0.0,
+    "withheld": 0.8
+   }
+  ],
+  "level2": [
+   {
+    "method": "dragnet",
+    "n": 25,
+    "decoy_top1": 0.76,
+    "confident_decoy": 0.24,
+    "truth_top1": 0.24,
+    "flagged": 0.76,
+    "withheld": 0.76
+   },
+   {
+    "method": "ttp-jaccard",
+    "n": 25,
+    "decoy_top1": 0.0,
+    "confident_decoy": 0.0,
+    "truth_top1": 0.12,
+    "flagged": 0.0,
+    "withheld": 0.0
+   },
+   {
+    "method": "ttp-cosine",
+    "n": 25,
+    "decoy_top1": 0.0,
+    "confident_decoy": 0.0,
+    "truth_top1": 0.08,
+    "flagged": 0.0,
+    "withheld": 0.0
+   },
+   {
+    "method": "ioc-correlation",
+    "n": 25,
+    "decoy_top1": 0.76,
+    "confident_decoy": 0.76,
+    "truth_top1": 0.2,
+    "flagged": 0.0,
+    "withheld": 0.0
+   },
+   {
+    "method": "code-only",
+    "n": 25,
+    "decoy_top1": 0.4,
+    "confident_decoy": 0.4,
+    "truth_top1": 0.56,
+    "flagged": 0.0,
+    "withheld": 0.0
+   },
+   {
+    "method": "dragnet-no-ff",
+    "n": 25,
+    "decoy_top1": 0.76,
+    "confident_decoy": 0.4,
+    "truth_top1": 0.24,
+    "flagged": 0.0,
+    "withheld": 0.6
+   }
+  ]
+ },
+ "C": {
+  "time-of-incident": [
+   {
+    "case": "bangladesh_bank_2016",
+    "title": "Bangladesh Bank SWIFT heist (Feb 2016)",
+    "mode": "time-of-incident",
+    "truth": [
+     "APT38",
+     "Lazarus Group"
+    ],
+    "false_flag": false,
+    "expected": "attribute",
+    "leading": "Lazarus Group",
+    "confidence": "MEDIUM",
+    "top_ranked": "Lazarus Group",
+    "truth_rank": 1,
+    "p_truth": 0.2336676764949784,
+    "top_score": 0.7628460009669515,
+    "flags": [],
+    "notes": [],
+    "brier": 0.6000144310531301,
+    "behaved_as_expected": true,
+    "baselines_top1": {
+     "ttp-jaccard": "Group5",
+     "ioc-correlation": "Lazarus Group",
+     "code-only": "Lazarus Group"
+    }
+   },
+   {
+    "case": "commodity_tooling_generic",
+    "title": "Intrusion observed only through commodity / dual-use tooling (uncertainty-honesty control)",
+    "mode": "time-of-incident",
+    "truth": [],
+    "false_flag": false,
+    "expected": "abstain",
+    "leading": null,
+    "confidence": "INSUFFICIENT",
+    "top_ranked": "Blue Mockingbird",
+    "truth_rank": null,
+    "p_truth": 0.07144733338181965,
+    "top_score": 0.24773565896484204,
+    "flags": [],
+    "notes": [],
+    "brier": 0.8714748576121502,
+    "behaved_as_expected": true,
+    "baselines_top1": {
+     "ttp-jaccard": "Threat Group-1314",
+     "ioc-correlation": "menuPass",
+     "code-only": null
+    }
+   },
+   {
+    "case": "notpetya_2017",
+    "title": "NotPetya destructive supply-chain attack via M.E.Doc (June 2017)",
+    "mode": "time-of-incident",
+    "truth": [
+     "Sandworm Team"
+    ],
+    "false_flag": false,
+    "expected": "attribute",
+    "leading": "Sandworm Team",
+    "confidence": "HIGH",
+    "top_ranked": "Sandworm Team",
+    "truth_rank": 1,
+    "p_truth": 0.14435053382881222,
+    "top_score": 0.8917451158619405,
+    "flags": [],
+    "notes": [],
+    "brier": 0.739259697720429,
+    "behaved_as_expected": true,
+    "baselines_top1": {
+     "ttp-jaccard": "Blue Mockingbird",
+     "ioc-correlation": "Sandworm Team",
+     "code-only": "Sandworm Team"
+    }
+   },
+   {
+    "case": "olympic_destroyer_2018",
+    "title": "Olympic Destroyer wiper, PyeongChang Winter Olympics (Feb 2018) - documented false flag",
+    "mode": "time-of-incident",
+    "truth": [
+     "Sandworm Team"
+    ],
+    "false_flag": true,
+    "expected": "withhold",
+    "leading": null,
+    "confidence": "INSUFFICIENT",
+    "top_ranked": "APT3",
+    "truth_rank": 12,
+    "p_truth": 0.010899900600547097,
+    "top_score": 0.38417734473341364,
+    "flags": [
+     "Lazarus Group: supported only by forgeable/soft signals (rich_header) with no hard infra/code overlap",
+     "forgeable artifacts point to ['Lazarus Group'] while hard evidence points to ['APT3', 'menuPass']",
+     "tooling/infrastructure points to menuPass while tradecraft (TTP profile) best matches Medusa Group - possible tool theft, infrastructure hijack or shared supplier"
+    ],
+    "notes": [
+     "hard evidence shared by overlapping clusters of one sponsor state (CN): ['APT3', 'menuPass'] - not treated as a false flag"
+    ],
+    "brier": 1.0313742533051309,
+    "behaved_as_expected": true,
+    "baselines_top1": {
+     "ttp-jaccard": "Play",
+     "ioc-correlation": "menuPass",
+     "code-only": "menuPass"
+    }
+   },
+   {
+    "case": "sony_pictures_2014",
+    "title": "Sony Pictures Entertainment destructive attack (Nov 2014)",
+    "mode": "time-of-incident",
+    "truth": [
+     "Lazarus Group"
+    ],
+    "false_flag": false,
+    "expected": "attribute",
+    "leading": "Lazarus Group",
+    "confidence": "MEDIUM",
+    "top_ranked": "Lazarus Group",
+    "truth_rank": 1,
+    "p_truth": 0.3228310519838524,
+    "top_score": 0.7941183760969989,
+    "flags": [],
+    "notes": [],
+    "brier": 0.4757647531216944,
+    "behaved_as_expected": true,
+    "baselines_top1": {
+     "ttp-jaccard": "Orangeworm",
+     "ioc-correlation": "Lazarus Group",
+     "code-only": "Lazarus Group"
+    }
+   },
+   {
+    "case": "turla_oilrig_2019",
+    "title": "Turla operating through acquired OilRig tooling and infrastructure (2017-2019) - documented piggy-back",
+    "mode": "time-of-incident",
+    "truth": [
+     "Turla"
+    ],
+    "false_flag": true,
+    "expected": "withhold",
+    "leading": "OilRig",
+    "confidence": "LOW",
+    "top_ranked": "OilRig",
+    "truth_rank": 2,
+    "p_truth": 0.04159585882570995,
+    "top_score": 0.6391593710092339,
+    "flags": [
+     "hard evidence overlaps with multiple actors: ['OilRig', 'Turla'] (sponsor states: ['IR', 'RU'])"
+    ],
+    "notes": [],
+    "brier": 0.9394811701142539,
+    "behaved_as_expected": true,
+    "baselines_top1": {
+     "ttp-jaccard": "Tropic Trooper",
+     "ioc-correlation": "OilRig",
+     "code-only": "OilRig"
+    }
+   },
+   {
+    "case": "wannacry_2017",
+    "title": "WannaCry ransomware worm (May 2017)",
+    "mode": "time-of-incident",
+    "truth": [
+     "Lazarus Group"
+    ],
+    "false_flag": false,
+    "expected": "attribute",
+    "leading": "Lazarus Group",
+    "confidence": "MEDIUM",
+    "top_ranked": "Lazarus Group",
+    "truth_rank": 1,
+    "p_truth": 0.173525438278941,
+    "top_score": 0.7696726531658726,
+    "flags": [],
+    "notes": [],
+    "brier": 0.6924954517505171,
+    "behaved_as_expected": true,
+    "baselines_top1": {
+     "ttp-jaccard": "Lotus Blossom",
+     "ioc-correlation": "Lazarus Group",
+     "code-only": "Lazarus Group"
+    }
+   }
+  ],
+  "retrospective": [
+   {
+    "case": "bangladesh_bank_2016",
+    "title": "Bangladesh Bank SWIFT heist (Feb 2016)",
+    "mode": "retrospective",
+    "truth": [
+     "APT38",
+     "Lazarus Group"
+    ],
+    "false_flag": false,
+    "expected": "attribute",
+    "leading": "Lazarus Group",
+    "confidence": "MEDIUM",
+    "top_ranked": "Lazarus Group",
+    "truth_rank": 1,
+    "p_truth": 0.2336676764949784,
+    "top_score": 0.7628460009669515,
+    "flags": [],
+    "notes": [],
+    "brier": 0.6000144310531301,
+    "behaved_as_expected": true,
+    "baselines_top1": {
+     "ttp-jaccard": "Group5",
+     "ioc-correlation": "Lazarus Group",
+     "code-only": "Lazarus Group"
+    }
+   },
+   {
+    "case": "commodity_tooling_generic",
+    "title": "Intrusion observed only through commodity / dual-use tooling (uncertainty-honesty control)",
+    "mode": "retrospective",
+    "truth": [],
+    "false_flag": false,
+    "expected": "abstain",
+    "leading": null,
+    "confidence": "INSUFFICIENT",
+    "top_ranked": "Blue Mockingbird",
+    "truth_rank": null,
+    "p_truth": 0.07144733338181965,
+    "top_score": 0.24773565896484204,
+    "flags": [],
+    "notes": [],
+    "brier": 0.8714748576121502,
+    "behaved_as_expected": true,
+    "baselines_top1": {
+     "ttp-jaccard": "Threat Group-1314",
+     "ioc-correlation": "menuPass",
+     "code-only": null
+    }
+   },
+   {
+    "case": "notpetya_2017",
+    "title": "NotPetya destructive supply-chain attack via M.E.Doc (June 2017)",
+    "mode": "retrospective",
+    "truth": [
+     "Sandworm Team"
+    ],
+    "false_flag": false,
+    "expected": "attribute",
+    "leading": "Sandworm Team",
+    "confidence": "HIGH",
+    "top_ranked": "Sandworm Team",
+    "truth_rank": 1,
+    "p_truth": 0.14435053382881222,
+    "top_score": 0.8917451158619405,
+    "flags": [],
+    "notes": [],
+    "brier": 0.739259697720429,
+    "behaved_as_expected": true,
+    "baselines_top1": {
+     "ttp-jaccard": "Blue Mockingbird",
+     "ioc-correlation": "Sandworm Team",
+     "code-only": "Sandworm Team"
+    }
+   },
+   {
+    "case": "olympic_destroyer_2018",
+    "title": "Olympic Destroyer wiper, PyeongChang Winter Olympics (Feb 2018) - documented false flag",
+    "mode": "retrospective",
+    "truth": [
+     "Sandworm Team"
+    ],
+    "false_flag": true,
+    "expected": "withhold",
+    "leading": null,
+    "confidence": "INSUFFICIENT",
+    "top_ranked": "APT3",
+    "truth_rank": 3,
+    "p_truth": 0.04119209125699824,
+    "top_score": 0.3467711522667873,
+    "flags": [
+     "Lazarus Group: supported only by forgeable/soft signals (rich_header) with no hard infra/code overlap",
+     "forgeable artifacts point to ['Lazarus Group'] while hard evidence points to ['APT3', 'Sandworm Team', 'menuPass']",
+     "hard evidence overlaps with multiple actors: ['APT3', 'Sandworm Team', 'menuPass'] (sponsor states: ['CN', 'RU'])",
+     "tooling/infrastructure points to menuPass while tradecraft (TTP profile) best matches Medusa Group - possible tool theft, infrastructure hijack or shared supplier"
+    ],
+    "notes": [],
+    "brier": 0.9711331814681858,
+    "behaved_as_expected": true,
+    "baselines_top1": {
+     "ttp-jaccard": "Play",
+     "ioc-correlation": "menuPass",
+     "code-only": "menuPass"
+    }
+   },
+   {
+    "case": "sony_pictures_2014",
+    "title": "Sony Pictures Entertainment destructive attack (Nov 2014)",
+    "mode": "retrospective",
+    "truth": [
+     "Lazarus Group"
+    ],
+    "false_flag": false,
+    "expected": "attribute",
+    "leading": "Lazarus Group",
+    "confidence": "MEDIUM",
+    "top_ranked": "Lazarus Group",
+    "truth_rank": 1,
+    "p_truth": 0.3228310519838524,
+    "top_score": 0.7941183760969989,
+    "flags": [],
+    "notes": [],
+    "brier": 0.4757647531216944,
+    "behaved_as_expected": true,
+    "baselines_top1": {
+     "ttp-jaccard": "Orangeworm",
+     "ioc-correlation": "Lazarus Group",
+     "code-only": "Lazarus Group"
+    }
+   },
+   {
+    "case": "turla_oilrig_2019",
+    "title": "Turla operating through acquired OilRig tooling and infrastructure (2017-2019) - documented piggy-back",
+    "mode": "retrospective",
+    "truth": [
+     "Turla"
+    ],
+    "false_flag": true,
+    "expected": "withhold",
+    "leading": "OilRig",
+    "confidence": "LOW",
+    "top_ranked": "OilRig",
+    "truth_rank": 2,
+    "p_truth": 0.04159585882570995,
+    "top_score": 0.6391593710092339,
+    "flags": [
+     "hard evidence overlaps with multiple actors: ['OilRig', 'Turla'] (sponsor states: ['IR', 'RU'])"
+    ],
+    "notes": [],
+    "brier": 0.9394811701142539,
+    "behaved_as_expected": true,
+    "baselines_top1": {
+     "ttp-jaccard": "Tropic Trooper",
+     "ioc-correlation": "OilRig",
+     "code-only": "OilRig"
+    }
+   },
+   {
+    "case": "wannacry_2017",
+    "title": "WannaCry ransomware worm (May 2017)",
+    "mode": "retrospective",
+    "truth": [
+     "Lazarus Group"
+    ],
+    "false_flag": false,
+    "expected": "attribute",
+    "leading": "Lazarus Group",
+    "confidence": "HIGH",
+    "top_ranked": "Lazarus Group",
+    "truth_rank": 1,
+    "p_truth": 0.22304780002216276,
+    "top_score": 0.8848363265829363,
+    "flags": [],
+    "notes": [],
+    "brier": 0.6107808814633808,
+    "behaved_as_expected": true,
+    "baselines_top1": {
+     "ttp-jaccard": "Lotus Blossom",
+     "ioc-correlation": "Lazarus Group",
+     "code-only": "Lazarus Group"
+    }
+   }
+  ]
+ },
+ "E_threatfox": {
+  "threatfox_rows": 107811,
+  "families": 43,
+  "apt_family_iocs_before": 1363,
+  "apt_family_iocs_after": 1395,
+  "cutoff": "2026-07-09 08:59:16",
+  "after_seen_before": 6,
+  "ioc_reuse_rate": 0.004301075268817204,
+  "top_families": [
+   [
+    "WannaCryptor",
+    456
+   ],
+   [
+    "Akira",
+    406
+   ],
+   [
+    "Havoc",
+    327
+   ],
+   [
+    "Agent Tesla",
+    302
+   ],
+   [
+    "AgendaCrypt",
+    194
+   ],
+   [
+    "CrossRAT",
+    165
+   ],
+   [
+    "Amadey",
+    109
+   ],
+   [
+    "Qilin",
+    72
+   ],
+   [
+    "Bashlite",
+    66
+   ],
+   [
+    "FAKEUPDATES",
+    65
+   ]
+  ]
+ },
+ "E_bazaar": {
+  "rows_with_imphash_and_label": 493634,
+  "apt_family_samples": 205222,
+  "train": 191843,
+  "test": 13379,
+  "cutoff": "2024-01-01",
+  "apt_families_seen": [
+   "ALPHV",
+   "AZORult",
+   "Adwind",
+   "AgentTesla",
+   "Akira",
+   "Amadey",
+   "Anchor",
+   "AnchorDNS",
+   "AveMariaRAT",
+   "BadNews",
+   "BadRabbit",
+   "Bandook",
+   "BazaLoader",
+   "BeaverTail",
+   "BlackBasta",
+   "BlackCat",
+   "BumbleBee",
+   "Carbanak",
+   "Clop",
+   "ComRAT",
+   "Conti",
+   "CosmicDuke",
+   "DarkComet",
+   "Diavol",
+   "DiceLoader",
+   "Dridex",
+   "Dyre",
+   "EKANS",
+   "Embargo",
+   "Emotet",
+   "Evilnum",
+   "FakeM",
+   "FinFisher",
+   "FlawedAmmyy",
+   "Gazer",
+   "Geodo",
+   "Get2",
+   "GoldMax",
+   "GoldenEye",
+   "Gozi",
+   "Havoc",
+   "Heodo",
+   "IcedID",
+   "Industroyer",
+   "JSSLoader",
+   "Kapeka",
+   "Kazuar",
+   "Latrodectus",
+   "LightSpy",
+   "LockerGoga",
+   "Loki",
+   "MagicRAT",
+   "ManusCrypt",
+   "Maze",
+   "Medusa",
+   "Micropsia",
+   "Miniduke",
+   "Mispadu",
+   "NotPetya",
+   "ObliqueRAT",
+   "OutSteel",
+   "PLAY",
+   "PUBLOAD",
+   "Pandora",
+   "Pay2Key",
+   "Pikabot",
+   "Play",
+   "PureCrypter",
+   "Qilin",
+   "QuakBot",
+   "Quakbot",
+   "RDAT",
+   "ROKRAT",
+   "RTM",
+   "RaccoonStealer",
+   "RagnarLocker",
+   "RevengeRAT",
+   "Rifdoor",
+   "Ryuk",
+   "SDBBot",
+   "SUNBURST",
+   "SaintBot",
+   "Sakula",
+   "SakulaRAT",
+   "Seduploader",
+   "ServHelper",
+   "Servhelper",
+   "Skid",
+   "Snake",
+   "SocGholish",
+   "Sodinokibi",
+   "Spark",
+   "StrongPity",
+   "SystemBC",
+   "TEARDROP",
+   "TURNEDUP",
+   "TrickBot",
+   "Valak",
+   "WannaCry",
+   "WastedLocker",
+   "WellMess",
+   "WhisperGate",
+   "Zebrocy"
+  ],
+  "collision-filtered": {
+   "n_test": 13379,
+   "dragnet_coverage": 0.04522012108528291,
+   "dragnet_selective_acc": 0.996694214876033,
+   "dragnet_medium_plus": 0.03759623290230959,
+   "dragnet_medium_plus_acc": 0.9980119284294234,
+   "lookup_coverage": 0.049032065176769564,
+   "lookup_selective_acc": 0.8948170731707317,
+   "families_indexed": 81
+  },
+  "unfiltered": {
+   "n_test": 13379,
+   "dragnet_coverage": 0.11293818671051647,
+   "dragnet_selective_acc": 0.8643282594308405,
+   "dragnet_medium_plus": 0.09126242619029823,
+   "dragnet_medium_plus_acc": 0.9107289107289107,
+   "lookup_coverage": 0.8337693400104642,
+   "lookup_selective_acc": 0.12891080233079336,
+   "families_indexed": 90
+  },
+  "seconds": 270.3
+ },
+ "runtime_seconds": 345.6
+}
