@@ -3,6 +3,15 @@
 All notable changes are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and the project uses [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Fixed
+- E2 imphash benchmark: the collision filter was built from all MalwareBazaar samples, including the
+  test period, leaking future knowledge of shared imphashes. It now uses training-period samples only;
+  collision-filtered accuracy is 91.7% at 7.7% coverage (was reported as 99.7% at 4.5%).
+- `scripts/download_data.py` no longer overwrites the committed `data/MANIFEST.json` on every run
+  (a partial `--only` download dropped the other entries); updating it now needs `--record` and merges.
+
 ## [0.2.0] - 2026-09-26
 
 ### Added

@@ -7,8 +7,9 @@ exports (hashes, imphash, family label, IOC values), never as binaries.
 
 Pinned sources (ATT&CK, MISP galaxy, APTnotes) are verified against a hard-coded
 SHA-256. Live feeds (abuse.ch) change daily, so their SHA-256 is recorded in
-``MANIFEST.json`` next to the data and in ``data/MANIFEST.json`` in the repo, which
-documents the exact snapshot the published benchmark numbers were produced from.
+``MANIFEST.json`` next to the data. ``data/MANIFEST.json`` in the repo documents the exact
+snapshot the published benchmark numbers were produced from; it is only updated (merged, per
+source) when ``--record`` is passed, so a partial or fresh download never overwrites it.
 
 Usage:
     python scripts/download_data.py                # everything (~300 MB)
@@ -119,6 +120,9 @@ def main(argv=None) -> int:
     ap.add_argument("--only", nargs="*", choices=sorted(SOURCES), help="subset of sources")
     ap.add_argument("--skip-bazaar", action="store_true", help="skip the 220 MB MalwareBazaar dump")
     ap.add_argument("--force", action="store_true", help="re-download even if present")
+    ap.add_argument("--record", action="store_true",
+                    help="also merge these checksums into the repo's data/MANIFEST.json "
+                         "(do this only when re-publishing benchmark results)")
     args = ap.parse_args(argv)
 
     dest = Path(args.dest) if args.dest else data_dir()
@@ -150,10 +154,14 @@ def main(argv=None) -> int:
         }
         print(f"       sha256={digest}  {path.stat().st_size / 1e6:.1f} MB")
     manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True))
-    repo_manifest = REPO / "data" / "MANIFEST.json"
-    repo_manifest.parent.mkdir(exist_ok=True)
-    repo_manifest.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n")
-    print(f"manifest -> {manifest_path} and {repo_manifest}")
+    print(f"manifest -> {manifest_path}")
+    if args.record:
+        repo_manifest = REPO / "data" / "MANIFEST.json"
+        repo_manifest.parent.mkdir(exist_ok=True)
+        recorded = json.loads(repo_manifest.read_text()) if repo_manifest.exists() else {}
+        recorded.update({n: manifest[n] for n in names})
+        repo_manifest.write_text(json.dumps(recorded, indent=2, sort_keys=True) + "\n")
+        print(f"recorded -> {repo_manifest}")
     return 0
 
 

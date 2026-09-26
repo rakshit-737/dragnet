@@ -244,7 +244,8 @@ python scripts/run_benchmarks.py       # ~5 min; writes results/ and docs/figure
 
 `make` targets mirror these (`make data`, `make bench`, `make demo`, `make test`). abuse.ch exports are
 regenerated daily, so E1/E2 will drift slightly from the committed snapshot; everything else is
-deterministic (seeded decoy selection, tie-aware metrics).
+deterministic (seeded decoy selection, tie-aware metrics). The committed `data/MANIFEST.json` is only
+rewritten by `download_data.py --record`, so a fresh download does not silently replace the recorded snapshot.
 
 ## Prior art and how DRAGNET differs
 

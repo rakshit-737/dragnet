@@ -2,8 +2,9 @@
 
 All data is public threat-intelligence *metadata*. No malware sample is downloaded, stored or executed.
 Files land in `$DRAGNET_DATA` (default `../../datasets/dragnet` next to the repo, else `data/raw/`),
-never in git. `python scripts/download_data.py` fetches everything and writes `data/MANIFEST.json`
-(SHA-256, size, retrieval time) - the exact snapshot the committed results were produced from.
+never in git. `python scripts/download_data.py` fetches everything and writes `$DRAGNET_DATA/MANIFEST.json`
+(SHA-256, size, retrieval time). The committed `data/MANIFEST.json` records the exact snapshot the
+committed results were produced from; it is only updated when `--record` is passed.
 
 | Source | File | Size | Version / pin | Licence / terms | Used for |
 |---|---|---|---|---|---|
