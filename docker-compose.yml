@@ -1,0 +1,14 @@
+# docker compose up api  ->  http://127.0.0.1:8000/docs
+# Uses the synthetic KG by default; mount a built KG (python -m dragnet build-kg) via DRAGNET_KG.
+services:
+  api:
+    build: .
+    image: ghcr.io/rakshit-737/dragnet:latest
+    command: ["serve", "--host", "0.0.0.0", "--port", "8000", "--kg", "${DRAGNET_KG:-/app/fixtures/campaigns.json}"]
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - ${DRAGNET_DATA:-./data}:/data:ro
+    read_only: true
+    tmpfs: [/tmp]
+    security_opt: ["no-new-privileges:true"]
