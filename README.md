@@ -167,8 +167,9 @@ no indexed reports (n = 10) and 0.85 for actors with more than five (n = 13). At
 bounded by how well-documented the actor already is.
 
 **Calibration.** DRAGNET's ACH score for its top actor is conservative: in A1 the Brier score of the
-binary forecast "top actor is correct" is 0.16 with ECE 0.28, driven by *under*-confidence (cases scored
-0.5-0.7 are right > 90% of the time); the stated grades, not the raw score, are the calibrated output.
+binary forecast "top actor is correct" is 0.16 with ECE 0.28, driven by *under*-confidence (all 8 cases scored
+0.5-0.7 were correct; n is small, so the curve is noisy); the stated grades, not the raw score, are the
+output to rely on.
 
 ![reliability](docs/figures/reliability.png)
 
