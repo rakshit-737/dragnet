@@ -1,0 +1,124 @@
+{
+  "type": "bundle",
+  "id": "bundle--7426eacb-681e-5889-b030-2deede4fdac0",
+  "objects": [
+    {
+      "type": "identity",
+      "id": "identity--69c7465d-882d-5b58-8bac-d2592578c428",
+      "spec_version": "2.1",
+      "created": "2026-01-01T00:00:00.000Z",
+      "modified": "2026-01-01T00:00:00.000Z",
+      "name": "DRAGNET",
+      "identity_class": "system"
+    },
+    {
+      "type": "attack-pattern",
+      "id": "attack-pattern--59faf39c-ffe3-5190-9b4c-bc2540c2eba9",
+      "spec_version": "2.1",
+      "created": "2026-01-01T00:00:00.000Z",
+      "modified": "2026-01-01T00:00:00.000Z",
+      "created_by_ref": "identity--69c7465d-882d-5b58-8bac-d2592578c428",
+      "name": "T1485",
+      "external_references": [
+        {
+          "source_name": "mitre-attack",
+          "external_id": "T1485",
+          "url": "https://attack.mitre.org/techniques/T1485/"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "id": "attack-pattern--4884b548-b4aa-5865-8e9a-6d205f14a120",
+      "spec_version": "2.1",
+      "created": "2026-01-01T00:00:00.000Z",
+      "modified": "2026-01-01T00:00:00.000Z",
+      "created_by_ref": "identity--69c7465d-882d-5b58-8bac-d2592578c428",
+      "name": "T1570",
+      "external_references": [
+        {
+          "source_name": "mitre-attack",
+          "external_id": "T1570",
+          "url": "https://attack.mitre.org/techniques/T1570/"
+        }
+      ]
+    },
+    {
+      "type": "campaign",
+      "id": "campaign--cfd0f19e-27db-5bd7-8d93-e20619448a2c",
+      "spec_version": "2.1",
+      "created": "2026-01-01T00:00:00.000Z",
+      "modified": "2026-01-01T00:00:00.000Z",
+      "created_by_ref": "identity--69c7465d-882d-5b58-8bac-d2592578c428",
+      "name": "multi_signal_boost",
+      "description": "Incident under assessment."
+    },
+    {
+      "type": "intrusion-set",
+      "id": "intrusion-set--a1c51dd7-d23a-57c2-94fc-3458169e23bb",
+      "spec_version": "2.1",
+      "created": "2026-01-01T00:00:00.000Z",
+      "modified": "2026-01-01T00:00:00.000Z",
+      "created_by_ref": "identity--69c7465d-882d-5b58-8bac-d2592578c428",
+      "name": "SANDWORM_SIM"
+    },
+    {
+      "type": "relationship",
+      "id": "relationship--806fd753-90a0-5323-b2f8-3145e5640fa7",
+      "spec_version": "2.1",
+      "created": "2026-01-01T00:00:00.000Z",
+      "modified": "2026-01-01T00:00:00.000Z",
+      "created_by_ref": "identity--69c7465d-882d-5b58-8bac-d2592578c428",
+      "relationship_type": "attributed-to",
+      "source_ref": "campaign--cfd0f19e-27db-5bd7-8d93-e20619448a2c",
+      "target_ref": "intrusion-set--a1c51dd7-d23a-57c2-94fc-3458169e23bb",
+      "confidence": 85,
+      "description": "DRAGNET ACH assessment: HIGH confidence."
+    },
+    {
+      "type": "note",
+      "id": "note--f80ac1de-b446-50bb-a8bd-c2f291c1d035",
+      "spec_version": "2.1",
+      "created": "2026-01-01T00:00:00.000Z",
+      "modified": "2026-01-01T00:00:00.000Z",
+      "created_by_ref": "identity--69c7465d-882d-5b58-8bac-d2592578c428",
+      "abstract": "DRAGNET ACH matrix",
+      "content": "Assessment: SANDWORM_SIM (HIGH)\nFalse-flag indicators: none\nRaise confidence: Independent infrastructure overlap (C2 IP/domain) with a known campaign; Code-reuse match in non-trivial, non-public functions; Corroboration from an independent reporting source\nLower confidence: Shared infrastructure turns out to be public/shared hosting (CDN, VPS pool); Shared code is shown to be publicly leaked or open-source; Hard evidence linking to a different actor\nACH matrix (signal: hypothesis=C/I/N):\n  ip:198.51.100.23: SANDWORM_SIM=C, FALSE_FLAG=N, UNKNOWN=N\n  ttp:T1485: SANDWORM_SIM=C, FALSE_FLAG=N, UNKNOWN=N\n  ttp:T1570: SANDWORM_SIM=C, FALSE_FLAG=N, UNKNOWN=N\n  file_hash:0000000000000000000000000000000000000000000000000000000000000003: SANDWORM_SIM=N, FALSE_FLAG=N, UNKNOWN=C\n  imphash:bb22bb22bb22bb22bb22bb22bb22bb22: SANDWORM_SIM=C, FALSE_FLAG=N, UNKNOWN=N",
+      "object_refs": [
+        "campaign--cfd0f19e-27db-5bd7-8d93-e20619448a2c"
+      ],
+      "x_dragnet_custody_head": "76fde0bb20e498e1f37e7255c194f990ff0a76f9c91efb156e81f6eaad9b3804",
+      "x_dragnet_signals": [
+        "file_hash:0000000000000000000000000000000000000000000000000000000000000003",
+        "imphash:bb22bb22bb22bb22bb22bb22bb22bb22",
+        "ip:198.51.100.23",
+        "ttp:T1485",
+        "ttp:T1570"
+      ]
+    },
+    {
+      "type": "report",
+      "id": "report--b58c1d30-2c6e-53b9-afa8-959d5790d370",
+      "spec_version": "2.1",
+      "created": "2026-01-01T00:00:00.000Z",
+      "modified": "2026-01-01T00:00:00.000Z",
+      "created_by_ref": "identity--69c7465d-882d-5b58-8bac-d2592578c428",
+      "name": "DRAGNET attribution assessment: multi_signal_boost",
+      "published": "2026-01-01T00:00:00.000Z",
+      "report_types": [
+        "threat-actor",
+        "attack-pattern"
+      ],
+      "confidence": 85,
+      "description": "Analytic judgment, not proof; must be reviewed by a qualified analyst.",
+      "object_refs": [
+        "attack-pattern--59faf39c-ffe3-5190-9b4c-bc2540c2eba9",
+        "attack-pattern--4884b548-b4aa-5865-8e9a-6d205f14a120",
+        "campaign--cfd0f19e-27db-5bd7-8d93-e20619448a2c",
+        "intrusion-set--a1c51dd7-d23a-57c2-94fc-3458169e23bb",
+        "relationship--806fd753-90a0-5323-b2f8-3145e5640fa7",
+        "note--f80ac1de-b446-50bb-a8bd-c2f291c1d035"
+      ]
+    }
+  ]
+}

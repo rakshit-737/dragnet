@@ -1,0 +1,73 @@
+site_name: DRAGNET
+site_description: Evidence-to-actor attribution with ACH, false-flag reasoning and calibrated confidence
+site_url: https://rakshit-737.github.io/dragnet/
+repo_url: https://github.com/rakshit-737/dragnet
+repo_name: rakshit-737/dragnet
+edit_uri: edit/main/docs/
+copyright: MIT licence. Attribution is an analytic judgment, not proof.
+
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+    - search.highlight
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      toggle: {icon: material/weather-night, name: Dark mode}
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      toggle: {icon: material/weather-sunny, name: Light mode}
+
+markdown_extensions:
+  - admonition
+  - tables
+  - attr_list
+  - toc: {permalink: true}
+  - pymdownx.details
+  - pymdownx.snippets:
+      base_path: ["."]
+      check_paths: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: ["."]
+          options:
+            show_source: false
+            members_order: source
+            docstring_style: sphinx
+            show_root_heading: true
+
+nav:
+  - Home: index.md
+  - Getting started: getting-started.md
+  - Architecture: architecture.md
+  - Datasets: datasets.md
+  - Benchmarks & results: benchmarks.md
+  - Demo reports: demo/index.md
+  - Reference:
+      - CLI: reference/cli.md
+      - REST API: reference/rest.md
+      - Python API: reference/python.md
+      - Case file format: reference/case-format.md
+  - Threat model: threat-model.md
+  - Security: security.md
+  - ADRs:
+      - 0001 Real public CTI as knowledge graph: adr/0001-real-public-cti-as-knowledge-graph.md
+      - 0002 Specificity and TTP similarity: adr/0002-specificity-and-ttp-similarity.md
+      - 0003 False-flag rules: adr/0003-false-flag-rules.md
+      - 0004 Evaluation protocol: adr/0004-evaluation-protocol.md
+  - Changelog: changelog.md
+  - Limitations & roadmap: limitations.md

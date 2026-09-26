@@ -1,0 +1,127 @@
+{
+  "type": "bundle",
+  "id": "bundle--15906ba2-cd92-5434-abe4-887bf6f84108",
+  "objects": [
+    {
+      "type": "identity",
+      "id": "identity--69c7465d-882d-5b58-8bac-d2592578c428",
+      "spec_version": "2.1",
+      "created": "2026-01-01T00:00:00.000Z",
+      "modified": "2026-01-01T00:00:00.000Z",
+      "name": "DRAGNET",
+      "identity_class": "system"
+    },
+    {
+      "type": "attack-pattern",
+      "id": "attack-pattern--509cb01f-ec1d-5867-9f94-118be785d04b",
+      "spec_version": "2.1",
+      "created": "2026-01-01T00:00:00.000Z",
+      "modified": "2026-01-01T00:00:00.000Z",
+      "created_by_ref": "identity--69c7465d-882d-5b58-8bac-d2592578c428",
+      "name": "T1210",
+      "external_references": [
+        {
+          "source_name": "mitre-attack",
+          "external_id": "T1210",
+          "url": "https://attack.mitre.org/techniques/T1210/"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "id": "attack-pattern--338a611b-845f-54c4-a14a-5c64d29d7391",
+      "spec_version": "2.1",
+      "created": "2026-01-01T00:00:00.000Z",
+      "modified": "2026-01-01T00:00:00.000Z",
+      "created_by_ref": "identity--69c7465d-882d-5b58-8bac-d2592578c428",
+      "name": "T1486",
+      "external_references": [
+        {
+          "source_name": "mitre-attack",
+          "external_id": "T1486",
+          "url": "https://attack.mitre.org/techniques/T1486/"
+        }
+      ]
+    },
+    {
+      "type": "campaign",
+      "id": "campaign--52dbe830-b758-51ae-9c91-861e286378e4",
+      "spec_version": "2.1",
+      "created": "2026-01-01T00:00:00.000Z",
+      "modified": "2026-01-01T00:00:00.000Z",
+      "created_by_ref": "identity--69c7465d-882d-5b58-8bac-d2592578c428",
+      "name": "wannacry_like",
+      "description": "Incident under assessment."
+    },
+    {
+      "type": "intrusion-set",
+      "id": "intrusion-set--0b4084b5-1120-5fcb-b9eb-fb13f211e465",
+      "spec_version": "2.1",
+      "created": "2026-01-01T00:00:00.000Z",
+      "modified": "2026-01-01T00:00:00.000Z",
+      "created_by_ref": "identity--69c7465d-882d-5b58-8bac-d2592578c428",
+      "name": "LAZARUS_SIM"
+    },
+    {
+      "type": "relationship",
+      "id": "relationship--7002e1e5-9386-5917-b6d2-3bea7471bf55",
+      "spec_version": "2.1",
+      "created": "2026-01-01T00:00:00.000Z",
+      "modified": "2026-01-01T00:00:00.000Z",
+      "created_by_ref": "identity--69c7465d-882d-5b58-8bac-d2592578c428",
+      "relationship_type": "attributed-to",
+      "source_ref": "campaign--52dbe830-b758-51ae-9c91-861e286378e4",
+      "target_ref": "intrusion-set--0b4084b5-1120-5fcb-b9eb-fb13f211e465",
+      "confidence": 85,
+      "description": "DRAGNET ACH assessment: HIGH confidence."
+    },
+    {
+      "type": "note",
+      "id": "note--5201c243-2a72-5d2e-aaa2-abd4dc43294a",
+      "spec_version": "2.1",
+      "created": "2026-01-01T00:00:00.000Z",
+      "modified": "2026-01-01T00:00:00.000Z",
+      "created_by_ref": "identity--69c7465d-882d-5b58-8bac-d2592578c428",
+      "abstract": "DRAGNET ACH matrix",
+      "content": "Assessment: LAZARUS_SIM (HIGH)\nFalse-flag indicators: none\nRaise confidence: Independent infrastructure overlap (C2 IP/domain) with a known campaign; Code-reuse match in non-trivial, non-public functions; Corroboration from an independent reporting source\nLower confidence: Shared infrastructure turns out to be public/shared hosting (CDN, VPS pool); Shared code is shown to be publicly leaked or open-source; Hard evidence linking to a different actor\nACH matrix (signal: hypothesis=C/I/N):\n  domain:killswitch-sim.example: LAZARUS_SIM=C, FALSE_FLAG=N, UNKNOWN=N\n  ttp:T1486: LAZARUS_SIM=C, FALSE_FLAG=N, UNKNOWN=N\n  ttp:T1210: LAZARUS_SIM=C, FALSE_FLAG=N, UNKNOWN=N\n  victimology:healthcare: LAZARUS_SIM=N, FALSE_FLAG=N, UNKNOWN=C\n  file_hash:0000000000000000000000000000000000000000000000000000000000000001: LAZARUS_SIM=N, FALSE_FLAG=N, UNKNOWN=C\n  imphash:aa11aa11aa11aa11aa11aa11aa11aa11: LAZARUS_SIM=C, FALSE_FLAG=N, UNKNOWN=N\n  code_reuse:fn:rc4_variant_0x3f: LAZARUS_SIM=C, FALSE_FLAG=N, UNKNOWN=N\n  family:WannaSim: LAZARUS_SIM=C, FALSE_FLAG=N, UNKNOWN=N",
+      "object_refs": [
+        "campaign--52dbe830-b758-51ae-9c91-861e286378e4"
+      ],
+      "x_dragnet_custody_head": "d90c0f17a9b83cb57d8753753a0213dd64c7d416fd694f33143e33ad1299e814",
+      "x_dragnet_signals": [
+        "code_reuse:fn:rc4_variant_0x3f",
+        "domain:killswitch-sim.example",
+        "family:WannaSim",
+        "file_hash:0000000000000000000000000000000000000000000000000000000000000001",
+        "imphash:aa11aa11aa11aa11aa11aa11aa11aa11",
+        "ttp:T1210",
+        "ttp:T1486",
+        "victimology:healthcare"
+      ]
+    },
+    {
+      "type": "report",
+      "id": "report--ac04d76e-5ad4-5768-a0af-9c60e667f42a",
+      "spec_version": "2.1",
+      "created": "2026-01-01T00:00:00.000Z",
+      "modified": "2026-01-01T00:00:00.000Z",
+      "created_by_ref": "identity--69c7465d-882d-5b58-8bac-d2592578c428",
+      "name": "DRAGNET attribution assessment: wannacry_like",
+      "published": "2026-01-01T00:00:00.000Z",
+      "report_types": [
+        "threat-actor",
+        "attack-pattern"
+      ],
+      "confidence": 85,
+      "description": "Analytic judgment, not proof; must be reviewed by a qualified analyst.",
+      "object_refs": [
+        "attack-pattern--509cb01f-ec1d-5867-9f94-118be785d04b",
+        "attack-pattern--338a611b-845f-54c4-a14a-5c64d29d7391",
+        "campaign--52dbe830-b758-51ae-9c91-861e286378e4",
+        "intrusion-set--0b4084b5-1120-5fcb-b9eb-fb13f211e465",
+        "relationship--7002e1e5-9386-5917-b6d2-3bea7471bf55",
+        "note--5201c243-2a72-5d2e-aaa2-abd4dc43294a"
+      ]
+    }
+  ]
+}

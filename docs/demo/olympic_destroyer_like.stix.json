@@ -1,0 +1,101 @@
+{
+  "type": "bundle",
+  "id": "bundle--33ab806a-b07e-5e51-8d71-327badb40398",
+  "objects": [
+    {
+      "type": "identity",
+      "id": "identity--69c7465d-882d-5b58-8bac-d2592578c428",
+      "spec_version": "2.1",
+      "created": "2026-01-01T00:00:00.000Z",
+      "modified": "2026-01-01T00:00:00.000Z",
+      "name": "DRAGNET",
+      "identity_class": "system"
+    },
+    {
+      "type": "attack-pattern",
+      "id": "attack-pattern--b1ed174c-3bd0-5532-a5ef-e7d55219f927",
+      "spec_version": "2.1",
+      "created": "2026-01-01T00:00:00.000Z",
+      "modified": "2026-01-01T00:00:00.000Z",
+      "created_by_ref": "identity--69c7465d-882d-5b58-8bac-d2592578c428",
+      "name": "T1003",
+      "external_references": [
+        {
+          "source_name": "mitre-attack",
+          "external_id": "T1003",
+          "url": "https://attack.mitre.org/techniques/T1003/"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "id": "attack-pattern--59faf39c-ffe3-5190-9b4c-bc2540c2eba9",
+      "spec_version": "2.1",
+      "created": "2026-01-01T00:00:00.000Z",
+      "modified": "2026-01-01T00:00:00.000Z",
+      "created_by_ref": "identity--69c7465d-882d-5b58-8bac-d2592578c428",
+      "name": "T1485",
+      "external_references": [
+        {
+          "source_name": "mitre-attack",
+          "external_id": "T1485",
+          "url": "https://attack.mitre.org/techniques/T1485/"
+        }
+      ]
+    },
+    {
+      "type": "campaign",
+      "id": "campaign--5ad8534e-1e86-5fd2-b9d4-07d98a839755",
+      "spec_version": "2.1",
+      "created": "2026-01-01T00:00:00.000Z",
+      "modified": "2026-01-01T00:00:00.000Z",
+      "created_by_ref": "identity--69c7465d-882d-5b58-8bac-d2592578c428",
+      "name": "olympic_destroyer_like",
+      "description": "Incident under assessment."
+    },
+    {
+      "type": "note",
+      "id": "note--5e5d7a90-3723-5e95-bb70-53aafeeb6a62",
+      "spec_version": "2.1",
+      "created": "2026-01-01T00:00:00.000Z",
+      "modified": "2026-01-01T00:00:00.000Z",
+      "created_by_ref": "identity--69c7465d-882d-5b58-8bac-d2592578c428",
+      "abstract": "DRAGNET ACH matrix",
+      "content": "Assessment: insufficient for attribution (INSUFFICIENT)\nFalse-flag indicators: LAZARUS_SIM: supported only by forgeable/soft signals (rich_header) with no hard infra/code overlap; forgeable artifacts point to ['LAZARUS_SIM'] while hard evidence points to ['SANDWORM_SIM']\nRaise confidence: Independent infrastructure overlap (C2 IP/domain) with a known campaign; Code-reuse match in non-trivial, non-public functions; Corroboration from an independent reporting source\nLower confidence: Confirmation that forgeable artifacts (Rich header, strings) were planted; Shared infrastructure turns out to be public/shared hosting (CDN, VPS pool); Shared code is shown to be publicly leaked or open-source; Hard evidence linking to a different actor\nACH matrix (signal: hypothesis=C/I/N):\n  ip:198.51.100.23: SANDWORM_SIM=C, LAZARUS_SIM=I, FALSE_FLAG=N, UNKNOWN=N\n  ttp:T1485: SANDWORM_SIM=C, LAZARUS_SIM=N, FALSE_FLAG=N, UNKNOWN=N\n  ttp:T1003: SANDWORM_SIM=C, LAZARUS_SIM=C, FALSE_FLAG=N, UNKNOWN=N\n  file_hash:0000000000000000000000000000000000000000000000000000000000000002: SANDWORM_SIM=N, LAZARUS_SIM=N, FALSE_FLAG=N, UNKNOWN=C\n  family:UnknownWiper: SANDWORM_SIM=N, LAZARUS_SIM=N, FALSE_FLAG=N, UNKNOWN=C\n  rich_header:rh:9f8e7d6c: SANDWORM_SIM=I, LAZARUS_SIM=C, FALSE_FLAG=C, UNKNOWN=N",
+      "object_refs": [
+        "campaign--5ad8534e-1e86-5fd2-b9d4-07d98a839755"
+      ],
+      "x_dragnet_custody_head": "9aaa81f7222fe49cdcbb56ea4ddebdd1a73bf56f6ad76cbaf5b64fcb57b95d9b",
+      "x_dragnet_signals": [
+        "family:UnknownWiper",
+        "file_hash:0000000000000000000000000000000000000000000000000000000000000002",
+        "ip:198.51.100.23",
+        "rich_header:rh:9f8e7d6c",
+        "ttp:T1003",
+        "ttp:T1485"
+      ]
+    },
+    {
+      "type": "report",
+      "id": "report--adce3733-ce70-521b-93c8-17aae451befd",
+      "spec_version": "2.1",
+      "created": "2026-01-01T00:00:00.000Z",
+      "modified": "2026-01-01T00:00:00.000Z",
+      "created_by_ref": "identity--69c7465d-882d-5b58-8bac-d2592578c428",
+      "name": "DRAGNET attribution assessment: olympic_destroyer_like",
+      "published": "2026-01-01T00:00:00.000Z",
+      "report_types": [
+        "threat-actor",
+        "attack-pattern"
+      ],
+      "confidence": 0,
+      "description": "Analytic judgment, not proof; must be reviewed by a qualified analyst.",
+      "object_refs": [
+        "attack-pattern--b1ed174c-3bd0-5532-a5ef-e7d55219f927",
+        "attack-pattern--59faf39c-ffe3-5190-9b4c-bc2540c2eba9",
+        "campaign--5ad8534e-1e86-5fd2-b9d4-07d98a839755",
+        "note--5e5d7a90-3723-5e95-bb70-53aafeeb6a62"
+      ]
+    }
+  ]
+}

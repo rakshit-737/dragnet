@@ -1,0 +1,80 @@
+{
+  "type": "bundle",
+  "id": "bundle--c84f250f-04c0-5054-8336-07bea9c9ce5b",
+  "objects": [
+    {
+      "type": "identity",
+      "id": "identity--69c7465d-882d-5b58-8bac-d2592578c428",
+      "spec_version": "2.1",
+      "created": "2026-01-01T00:00:00.000Z",
+      "modified": "2026-01-01T00:00:00.000Z",
+      "name": "DRAGNET",
+      "identity_class": "system"
+    },
+    {
+      "type": "attack-pattern",
+      "id": "attack-pattern--b1ed174c-3bd0-5532-a5ef-e7d55219f927",
+      "spec_version": "2.1",
+      "created": "2026-01-01T00:00:00.000Z",
+      "modified": "2026-01-01T00:00:00.000Z",
+      "created_by_ref": "identity--69c7465d-882d-5b58-8bac-d2592578c428",
+      "name": "T1003",
+      "external_references": [
+        {
+          "source_name": "mitre-attack",
+          "external_id": "T1003",
+          "url": "https://attack.mitre.org/techniques/T1003/"
+        }
+      ]
+    },
+    {
+      "type": "campaign",
+      "id": "campaign--3239670d-1655-5ad7-8b8b-57f23b385214",
+      "spec_version": "2.1",
+      "created": "2026-01-01T00:00:00.000Z",
+      "modified": "2026-01-01T00:00:00.000Z",
+      "created_by_ref": "identity--69c7465d-882d-5b58-8bac-d2592578c428",
+      "name": "thin_evidence",
+      "description": "Incident under assessment."
+    },
+    {
+      "type": "note",
+      "id": "note--6e4469ee-d972-54e2-8d25-a43bca69629a",
+      "spec_version": "2.1",
+      "created": "2026-01-01T00:00:00.000Z",
+      "modified": "2026-01-01T00:00:00.000Z",
+      "created_by_ref": "identity--69c7465d-882d-5b58-8bac-d2592578c428",
+      "abstract": "DRAGNET ACH matrix",
+      "content": "Assessment: insufficient for attribution (INSUFFICIENT)\nFalse-flag indicators: none\nRaise confidence: Any hard (infra/code/exclusive-family) signal corroborating SANDWORM_SIM; Independent infrastructure overlap (C2 IP/domain) with a known campaign; Code-reuse match in non-trivial, non-public functions; Corroboration from an independent reporting source\nLower confidence: Shared infrastructure turns out to be public/shared hosting (CDN, VPS pool); Shared code is shown to be publicly leaked or open-source; Hard evidence linking to a different actor\nACH matrix (signal: hypothesis=C/I/N):\n  ip:192.0.2.200: SANDWORM_SIM=N, LAZARUS_SIM=N, FALSE_FLAG=N, UNKNOWN=C\n  ttp:T1003: SANDWORM_SIM=C, LAZARUS_SIM=C, FALSE_FLAG=N, UNKNOWN=N",
+      "object_refs": [
+        "campaign--3239670d-1655-5ad7-8b8b-57f23b385214"
+      ],
+      "x_dragnet_custody_head": "6e7eb30d6991791906a753982d4135131e0c538352013ab1af55c26af09c3d59",
+      "x_dragnet_signals": [
+        "ip:192.0.2.200",
+        "ttp:T1003"
+      ]
+    },
+    {
+      "type": "report",
+      "id": "report--0197b3b1-d02e-5024-aba6-05410d88ceeb",
+      "spec_version": "2.1",
+      "created": "2026-01-01T00:00:00.000Z",
+      "modified": "2026-01-01T00:00:00.000Z",
+      "created_by_ref": "identity--69c7465d-882d-5b58-8bac-d2592578c428",
+      "name": "DRAGNET attribution assessment: thin_evidence",
+      "published": "2026-01-01T00:00:00.000Z",
+      "report_types": [
+        "threat-actor",
+        "attack-pattern"
+      ],
+      "confidence": 0,
+      "description": "Analytic judgment, not proof; must be reviewed by a qualified analyst.",
+      "object_refs": [
+        "attack-pattern--b1ed174c-3bd0-5532-a5ef-e7d55219f927",
+        "campaign--3239670d-1655-5ad7-8b8b-57f23b385214",
+        "note--6e4469ee-d972-54e2-8d25-a43bca69629a"
+      ]
+    }
+  ]
+}
