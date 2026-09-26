@@ -10,6 +10,17 @@ ETHICS = ("_Attribution is an analytic judgment, not proof. This assessment was 
           "qualified analyst before any action is taken._")
 
 
+TOP_N = 8
+
+
+def _shown(a: Assessment):
+    """Top-N actor hypotheses plus the mandatory meta hypotheses."""
+    actors = [h for h in a.hypotheses if h.hypothesis not in ("FALSE_FLAG", "UNKNOWN")
+              and h.score > 0][:TOP_N]
+    meta = [h for h in a.hypotheses if h.hypothesis in ("FALSE_FLAG", "UNKNOWN")]
+    return sorted(actors + meta, key=lambda h: -h.score)
+
+
 def to_dict(a: Assessment) -> dict:
     return {
         "case_id": a.case_id,
@@ -19,11 +30,14 @@ def to_dict(a: Assessment) -> dict:
             {"hypothesis": h.hypothesis, "support": round(h.support, 4),
              "contradiction": round(h.contradiction, 4), "score": round(h.score, 4),
              "matched": [s.label for s in h.matched],
-             "contradicting": [s.label for s in h.contradicting]}
-            for h in a.hypotheses
+             "contradicting": [s.label for s in h.contradicting],
+             "ttp_similarity": round(h.ttp_similarity, 4),
+             "probability": round(a.posterior.get(h.hypothesis, 0.0), 4)}
+            for h in _shown(a)
         ],
         "ach_matrix": a.matrix,
         "false_flag_indicators": a.false_flag_indicators,
+        "notes": a.notes,
         "raise_confidence": a.raise_confidence,
         "lower_confidence": a.lower_confidence,
         "links": [list(e) for e in a.links],
@@ -41,11 +55,13 @@ def to_markdown(a: Assessment) -> str:
     verdict = (f"**{a.leading}** with **{a.confidence.value}** confidence" if a.leading
                else f"**Insufficient for attribution** ({a.confidence.value})")
     L += [f"Assessment: {verdict}", ""]
-    L += ["## Hypotheses", "", "| Hypothesis | Support | Contradiction | Score |",
-          "|---|---|---|---|"]
-    for h in a.hypotheses:
-        L.append(f"| {h.hypothesis} | {h.support:.2f} | {h.contradiction:.2f} | {h.score:.2f} |")
-    hyps = [h.hypothesis for h in a.hypotheses]
+    L += ["## Hypotheses", "",
+          "| Hypothesis | Support | TTP sim | Contradiction | Score | P (normalised) |",
+          "|---|---|---|---|---|---|"]
+    for h in _shown(a):
+        L.append(f"| {h.hypothesis} | {h.support:.2f} | {h.ttp_similarity:.2f} | "
+                 f"{h.contradiction:.2f} | {h.score:.2f} | {a.posterior.get(h.hypothesis, 0):.2f} |")
+    hyps = list(next(iter(a.matrix.values())).keys()) if a.matrix else []
     L += ["", "## ACH matrix (C=consistent, I=inconsistent, N=neutral)", "",
           "| Signal | " + " | ".join(hyps) + " |", "|---" * (len(hyps) + 1) + "|"]
     for sig, row in a.matrix.items():
@@ -54,6 +70,8 @@ def to_markdown(a: Assessment) -> str:
     L += [f"- `{ev}` -> `{sig}` -> {cid}" for ev, sig, cid in a.links] or ["- none"]
     L += ["", "## False-flag indicators", ""]
     L += [f"- {f}" for f in a.false_flag_indicators] or ["- none detected"]
+    if a.notes:
+        L += ["", "## Analyst notes", ""] + [f"- {n}" for n in a.notes]
     L += ["", "## What would raise confidence", ""] + [f"- {x}" for x in a.raise_confidence]
     L += ["", "## What would lower confidence", ""] + [f"- {x}" for x in a.lower_confidence]
     L += ["", "## Chain of custody", "", "| seq | action | item | sha256 | entry_hash |",

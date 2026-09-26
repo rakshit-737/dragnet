@@ -1,4 +1,4 @@
-"""Evidence ingestion: synthetic forensic artifacts + static malware features -> signals.
+"""Evidence ingestion: forensic artifacts + static malware features -> signals.
 
 No real malware is ever loaded; malware evidence is a JSON *feature record*
 (as a static-triage tool like VITRINE would emit), never an executable.
@@ -18,6 +18,8 @@ _FORENSIC_MAP = {
     "ttps": SignalKind.TTP,
     "mutexes": SignalKind.MUTEX,
     "victimology": SignalKind.VICTIMOLOGY,
+    "tools": SignalKind.TOOL,
+    "language_artifacts": SignalKind.LANGUAGE,
 }
 _MALWARE_MAP = {
     "sha256": SignalKind.FILE_HASH,
@@ -30,6 +32,7 @@ _MALWARE_MAP = {
     "c2": SignalKind.DOMAIN,
     "c2_ips": SignalKind.IP,
     "mutexes": SignalKind.MUTEX,
+    "tools": SignalKind.TOOL,
 }
 
 
