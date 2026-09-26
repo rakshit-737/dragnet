@@ -1,0 +1,65 @@
+{
+  "aptnotes": {
+    "bytes": 153533,
+    "file": "APTnotes.csv",
+    "licence": "APTnotes (public report index; reports (c) authors)",
+    "pinned": true,
+    "retrieved_utc": "2026-09-26T09:07:15+00:00",
+    "sha256": "dac4579a78ad0ad644d6f57670f31ac54f0424b3ab2619c8119d8f65e48adf0b",
+    "url": "https://raw.githubusercontent.com/aptnotes/data/8595fbdee6747be9e9f730fd0bacd247157314df/APTnotes.csv"
+  },
+  "attack_10_1": {
+    "bytes": 31165486,
+    "file": "enterprise-attack-10.1.json",
+    "licence": "MITRE ATT&CK Terms of Use (royalty-free, attribution)",
+    "pinned": true,
+    "retrieved_utc": "2026-09-26T09:07:15+00:00",
+    "sha256": "0a999035f26f4326ad670ec51727014fd42c21fca4bda4be784ac6ad0510fcb6",
+    "url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/enterprise-attack/enterprise-attack-10.1.json"
+  },
+  "attack_19_2": {
+    "bytes": 53835637,
+    "file": "enterprise-attack-19.2.json",
+    "licence": "MITRE ATT&CK Terms of Use (royalty-free, attribution)",
+    "pinned": true,
+    "retrieved_utc": "2026-09-26T09:07:15+00:00",
+    "sha256": "dc1639caa5501d720e280cf1cbd8fbe009884a0c9b3e6e9ed9d0c25166c3d8f4",
+    "url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/enterprise-attack/enterprise-attack-19.2.json"
+  },
+  "bazaar_full": {
+    "bytes": 223224481,
+    "file": "bazaar-full.csv.zip",
+    "licence": "CC0 (abuse.ch MalwareBazaar, metadata only)",
+    "pinned": false,
+    "retrieved_utc": "2026-09-26T09:07:16+00:00",
+    "sha256": "9113e5965e841f51d644fa4f61c2c59e1f6366831d4215b26cbd9bf1633227d6",
+    "url": "https://bazaar.abuse.ch/export/csv/full/"
+  },
+  "misp_malpedia": {
+    "bytes": 3825941,
+    "file": "misp-malpedia.json",
+    "licence": "CC BY-NC-SA 3.0 (Malpedia via MISP galaxy)",
+    "pinned": true,
+    "retrieved_utc": "2026-09-26T09:07:15+00:00",
+    "sha256": "1a1523635946c2d25572024b2a89553db11b6a296337cd1bcfd17223b24142b4",
+    "url": "https://raw.githubusercontent.com/MISP/misp-galaxy/e9e867fe5a5e94be813540af9e227ac84c8d60ad/clusters/malpedia.json"
+  },
+  "misp_threat_actor": {
+    "bytes": 1412234,
+    "file": "misp-threat-actor.json",
+    "licence": "CC0-1.0 / BSD-2-Clause (MISP galaxy)",
+    "pinned": true,
+    "retrieved_utc": "2026-09-26T09:07:15+00:00",
+    "sha256": "9caebf1f7b9680ba0f1c6a0b0c18e5d250acc74fe2bdc9b127a54dc1759cba6f",
+    "url": "https://raw.githubusercontent.com/MISP/misp-galaxy/e9e867fe5a5e94be813540af9e227ac84c8d60ad/clusters/threat-actor.json"
+  },
+  "threatfox_full": {
+    "bytes": 3760596,
+    "file": "threatfox-full.json.zip",
+    "licence": "CC0 (abuse.ch ThreatFox)",
+    "pinned": false,
+    "retrieved_utc": "2026-09-26T09:07:15+00:00",
+    "sha256": "cf322877489ff364de59d3a6b039091e692eec80d8b1a1b497ea83d826ec3b4f",
+    "url": "https://threatfox.abuse.ch/export/json/full/"
+  }
+}

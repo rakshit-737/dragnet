@@ -26,6 +26,8 @@ import shutil
 import sys
 import time
 import urllib.request
+import zipfile
+import zlib
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -56,8 +58,13 @@ SOURCES: dict[str, tuple[str, str, bool, str]] = {
                     False, "CC0 (abuse.ch MalwareBazaar, metadata only)"),
 }
 
+# Verified 2026-09-26; a mismatch aborts the run (the upstream file changed or was tampered with).
 PINNED_SHA256 = {
-    # filled from the first verified download; mismatches abort the run
+    "attack_19_2": "dc1639caa5501d720e280cf1cbd8fbe009884a0c9b3e6e9ed9d0c25166c3d8f4",
+    "attack_10_1": "0a999035f26f4326ad670ec51727014fd42c21fca4bda4be784ac6ad0510fcb6",
+    "misp_threat_actor": "9caebf1f7b9680ba0f1c6a0b0c18e5d250acc74fe2bdc9b127a54dc1759cba6f",
+    "misp_malpedia": "1a1523635946c2d25572024b2a89553db11b6a296337cd1bcfd17223b24142b4",
+    "aptnotes": "dac4579a78ad0ad644d6f57670f31ac54f0424b3ab2619c8119d8f65e48adf0b",
 }
 
 
@@ -69,29 +76,39 @@ def sha256_of(path: Path) -> str:
     return h.hexdigest()
 
 
-def fetch(url: str, dest: Path, retries: int = 8) -> None:
-    """Download with gzip transfer-encoding for text sources (ATT&CK JSON is ~10x smaller
-    on the wire) and HTTP Range resume for binary archives on slow/flaky links."""
+def _valid(path: Path, suffix: str) -> bool:
+    """Structural check before a download is accepted (JSON parses, zip CRCs match)."""
+    try:
+        if suffix == ".zip":
+            with zipfile.ZipFile(path) as z:
+                return z.testzip() is None
+        if suffix == ".json":
+            with path.open(encoding="utf-8") as f:
+                json.load(f)
+        return True
+    except (OSError, ValueError, zipfile.BadZipFile, zlib.error):
+        return False
+
+
+def fetch(url: str, dest: Path, retries: int = 5) -> None:
+    """Download with gzip transfer-encoding for text sources (ATT&CK JSON is ~10x smaller on
+    the wire). Every attempt restarts from zero: the abuse.ch exports are regenerated daily, so
+    resuming a partial file across a regeneration silently produces a corrupt archive."""
     tmp = dest.with_suffix(dest.suffix + ".part")
-    text = dest.suffix in (".json", ".csv")
     for attempt in range(1, retries + 1):
-        have = tmp.stat().st_size if tmp.exists() and not text else 0
-        headers = {"User-Agent": "dragnet-dataset-fetcher/1.0"}
-        if text:
-            headers["Accept-Encoding"] = "gzip"
-        elif have:
-            headers["Range"] = f"bytes={have}-"
+        headers = {"User-Agent": "dragnet-dataset-fetcher/1.0", "Accept-Encoding": "gzip"}
         try:
             req = urllib.request.Request(url, headers=headers)
             with urllib.request.urlopen(req, timeout=120) as r:
-                mode = "ab" if have and r.status == 206 else "wb"
                 src = gzip.GzipFile(fileobj=r) if r.headers.get("Content-Encoding") == "gzip" else r
-                with tmp.open(mode) as f:
+                with tmp.open("wb") as f:
                     shutil.copyfileobj(src, f, 1 << 20)
+            if not _valid(tmp, dest.suffix):
+                raise OSError("downloaded file failed structural validation")
             tmp.replace(dest)
             return
         except OSError as e:  # URLError / timeouts are OSErrors
-            print(f"  attempt {attempt} failed at {have} bytes: {e}", file=sys.stderr)
+            print(f"  attempt {attempt} failed: {e}", file=sys.stderr)
             time.sleep(min(30, 2 * attempt))
     raise SystemExit(f"could not download {url}")
 
