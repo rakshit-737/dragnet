@@ -1,0 +1,117 @@
+{
+  "_note": "SYNTHETIC knowledge graph. Actor labels are simulation stand-ins inspired by public reporting; all IOCs use reserved ranges (RFC 5737 IPs, .example domains) and fabricated hashes.",
+  "campaigns": [
+    {
+      "id": "C-LZ-2017-RANSOM",
+      "name": "Worm-ransomware campaign (sim)",
+      "actor": "LAZARUS_SIM",
+      "signals": [
+        {
+          "kind": "imphash",
+          "value": "aa11aa11aa11aa11aa11aa11aa11aa11"
+        },
+        {
+          "kind": "code_reuse",
+          "value": "fn:rc4_variant_0x3f"
+        },
+        {
+          "kind": "domain",
+          "value": "killswitch-sim.example"
+        },
+        {
+          "kind": "family",
+          "value": "WannaSim"
+        },
+        {
+          "kind": "rich_header",
+          "value": "rh:9f8e7d6c"
+        },
+        {
+          "kind": "ttp",
+          "value": "T1486"
+        },
+        {
+          "kind": "ttp",
+          "value": "T1210"
+        },
+        {
+          "kind": "ttp",
+          "value": "T1003"
+        }
+      ]
+    },
+    {
+      "id": "C-LZ-2016-BANK",
+      "name": "Financial intrusion set (sim)",
+      "actor": "LAZARUS_SIM",
+      "signals": [
+        {
+          "kind": "code_reuse",
+          "value": "fn:rc4_variant_0x3f"
+        },
+        {
+          "kind": "ip",
+          "value": "203.0.113.10"
+        },
+        {
+          "kind": "ttp",
+          "value": "T1071.001"
+        }
+      ]
+    },
+    {
+      "id": "C-SW-2017-WIPER",
+      "name": "Destructive wiper campaign (sim)",
+      "actor": "SANDWORM_SIM",
+      "signals": [
+        {
+          "kind": "ip",
+          "value": "198.51.100.23"
+        },
+        {
+          "kind": "imphash",
+          "value": "bb22bb22bb22bb22bb22bb22bb22bb22"
+        },
+        {
+          "kind": "family",
+          "value": "WiperSim"
+        },
+        {
+          "kind": "ttp",
+          "value": "T1485"
+        },
+        {
+          "kind": "ttp",
+          "value": "T1003"
+        },
+        {
+          "kind": "ttp",
+          "value": "T1570"
+        }
+      ]
+    },
+    {
+      "id": "C-A28-2016-PHISH",
+      "name": "Credential phishing wave (sim)",
+      "actor": "APT28_SIM",
+      "signals": [
+        {
+          "kind": "domain",
+          "value": "login-portal-sim.example"
+        },
+        {
+          "kind": "ip",
+          "value": "192.0.2.77"
+        },
+        {
+          "kind": "language",
+          "value": "locale:ru-RU"
+        },
+        {
+          "kind": "ttp",
+          "value": "T1566.001"
+        }
+      ]
+    }
+  ]
+}
