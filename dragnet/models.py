@@ -17,6 +17,8 @@ class SignalKind(str, Enum):
     RICH_HEADER = "rich_header"    # PE Rich header: known to be forgeable
     LANGUAGE = "language"          # strings/locale artifacts: forgeable
     MUTEX = "mutex"
+    TOOL = "tool"                  # ATT&CK "tool": public/dual-use software (Mimikatz, PsExec)
+    TTP_PROFILE = "ttp_profile"    # pseudo-kind: weight of the aggregate TTP-similarity term
 
 
 # Default per-kind evidential weight in [0, 1]. Transparent + overridable.
@@ -32,11 +34,14 @@ DEFAULT_WEIGHTS: dict[SignalKind, float] = {
     SignalKind.RICH_HEADER: 0.35,
     SignalKind.LANGUAGE: 0.15,
     SignalKind.MUTEX: 0.4,
+    SignalKind.TOOL: 0.3,
+    SignalKind.TTP_PROFILE: 0.6,
 }
 
 # Kinds an adversary can cheaply plant to frame someone else.
 FORGEABLE_KINDS = frozenset({SignalKind.RICH_HEADER, SignalKind.LANGUAGE, SignalKind.MUTEX})
-# Kinds that are hard to fake and anchor an attribution.
+# Kinds that are hard to fake and anchor an attribution. A FAMILY signal is also an
+# anchor when it is (near-)exclusive to few actors - see ach.ANCHOR_FAMILY_SPECIFICITY.
 HARD_KINDS = frozenset({SignalKind.IP, SignalKind.DOMAIN, SignalKind.FILE_HASH,
                         SignalKind.IMPHASH, SignalKind.CODE_REUSE})
 
@@ -87,6 +92,7 @@ class HypothesisScore:
     score: float
     matched: list[Signal] = field(default_factory=list)
     contradicting: list[Signal] = field(default_factory=list)
+    ttp_similarity: float = 0.0
 
 
 @dataclass
@@ -102,3 +108,10 @@ class Assessment:
     custody: list[dict]
     weights: dict[str, float]
     links: list[tuple[str, str, str]] = field(default_factory=list)
+    notes: list[str] = field(default_factory=list)
+    posterior: dict[str, float] = field(default_factory=dict)
+
+    @property
+    def ranked_actors(self) -> list[str]:
+        return [h.hypothesis for h in self.hypotheses
+                if h.hypothesis not in ("FALSE_FLAG", "UNKNOWN") and h.score > 0]
