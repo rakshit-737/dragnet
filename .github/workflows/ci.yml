@@ -3,20 +3,23 @@ name: ci
 on:
   push:
   pull_request:
+  workflow_call:
 
 permissions:
   contents: read
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.10", "3.12", "3.13", "3.14"]
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: ${{ matrix.python-version }}
           allow-prereleases: true
@@ -24,3 +27,65 @@ jobs:
       - run: python -m ruff check .
       - run: python -m pytest -q
       - run: python -m dragnet demo
+
+  package:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - name: Build wheel and sdist
+        run: python -m pip install build && python -m build
+      - name: Wheel works outside a checkout
+        run: |
+          python -m venv /tmp/v
+          /tmp/v/bin/pip install dist/*.whl
+          cd "$(mktemp -d)"
+          /tmp/v/bin/dragnet --version
+          /tmp/v/bin/dragnet --help > /dev/null
+          /tmp/v/bin/dragnet demo | tee demo.txt
+          test "$(wc -l < demo.txt)" -eq 5
+          /tmp/v/bin/dragnet assess /tmp/v/lib/python3.12/site-packages/dragnet/data/cases/wannacry_like.json --format json > r.json
+          set +e; /tmp/v/bin/dragnet serve; rc=$?; set -e
+          test "$rc" -eq 2   # missing [api] extra: one-line error, exit 2
+      - name: sdist test suite runs
+        run: |
+          mkdir /tmp/sd && tar xzf dist/*.tar.gz -C /tmp/sd
+          cd /tmp/sd/*/ && python -m venv /tmp/sv && /tmp/sv/bin/pip install -q ".[dev]" && /tmp/sv/bin/python -m pytest -q
+      - name: Docker image builds and runs
+        run: |
+          docker build -t dragnet:ci .
+          docker run --rm dragnet:ci demo
+          docker run --rm dragnet:ci --version
+
+  neo4j:
+    runs-on: ubuntu-24.04
+    services:
+      neo4j:
+        image: neo4j:5
+        env:
+          NEO4J_AUTH: neo4j/ci-only-password
+        ports: ["127.0.0.1:7687:7687"]
+        options: >-
+          --health-cmd "wget -qO- http://localhost:7474 || exit 1"
+          --health-interval 5s --health-timeout 5s --health-retries 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -e . neo4j
+      - name: Load the Cypher export into Neo4j and check counts
+        run: |
+          python -m dragnet export-cypher --case dragnet/data/cases/wannacry_like.json -o /tmp/kg.cypher
+          python scripts/check_neo4j.py /tmp/kg.cypher | tee neo4j.log
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always()
+        with:
+          name: neo4j-log
+          path: neo4j.log
