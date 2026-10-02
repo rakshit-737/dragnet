@@ -12,7 +12,7 @@ Thanks for helping. DRAGNET is a defensive, analyst-support tool; contributions 
 - **No real victim data** in fixtures or examples.
 - **Every attribution rule must be explainable.** New scoring terms or false-flag rules need a sentence
   in the report output and an ADR in `docs/adr/` if they change behaviour.
-- **Curated cases need sources.** Each file in `fixtures/real_cases/` names its ground-truth basis and
+- **Curated cases need sources.** Each file in `dragnet/data/real_cases/` names its ground-truth basis and
   public references; every `kg_additions` entry carries a `source`.
 
 ## Development

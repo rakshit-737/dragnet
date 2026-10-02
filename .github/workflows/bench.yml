@@ -28,6 +28,7 @@ jobs:
     timeout-minutes: 180
     env:
       DRAGNET_DATA: ${{ github.workspace }}/../dragnet-data
+      PYTHONHASHSEED: "0"   # set iteration order fixed so tie-breaks and float sums reproduce exactly
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:

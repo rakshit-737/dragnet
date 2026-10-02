@@ -186,7 +186,7 @@ output to rely on.
 
 ## Documented case studies
 
-Seven curated cases in [`fixtures/real_cases/`](fixtures/real_cases/), each with its ground-truth basis
+Seven curated cases in [`dragnet/data/real_cases/`](dragnet/data/real_cases/), each with its ground-truth basis
 (indictments, government attributions) and references. In **time-of-incident** mode the family first seen
 in the incident (WannaCry, NotPetya, Olympic Destroyer) is hidden from the graph, so DRAGNET must
 attribute from pre-existing knowledge.
@@ -226,7 +226,7 @@ git clone https://github.com/rakshit-737/dragnet && cd dragnet
 python -m pip install -e ".[dev]"              # runtime is stdlib-only
 python -m pytest -q                            # 66 tests; real-data tests skip without downloads
 python -m dragnet demo                         # five synthetic spec scenarios
-python -m dragnet assess fixtures/cases/olympic_destroyer_like.json
+python -m dragnet assess dragnet/data/cases/olympic_destroyer_like.json
 ```
 
 With real data (~320 MB):

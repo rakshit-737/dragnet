@@ -26,7 +26,7 @@ committed results were produced from; it is only updated when `--record` is pass
 
 ## Curated real cases
 
-`fixtures/real_cases/*.json` are small hand-curated evidence abstractions of documented incidents.
+`dragnet/data/real_cases/*.json` are small hand-curated evidence abstractions of documented incidents.
 Values that are widely published (WannaCry kill-switch domain, sample SHA-256s, ATT&CK technique
 lists) are used verbatim. Where the public evidence is a relationship rather than a value (e.g. "the
 Rich header is byte-identical to a Lazarus sample", "code overlaps with Contopee"), the case uses a

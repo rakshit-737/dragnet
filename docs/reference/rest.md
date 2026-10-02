@@ -14,5 +14,5 @@ for a lab or analyst workstation, not the internet (see [Security](../security.m
 
 ```bash
 curl -s -X POST localhost:8000/assess -H 'content-type: application/json' \
-     -d @fixtures/cases/wannacry_like.json | jq .leading
+     -d @dragnet/data/cases/wannacry_like.json | jq .leading
 ```

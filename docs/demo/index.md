@@ -1,7 +1,7 @@
 # Demo reports
 
-Static reports for the synthetic spec scenarios in `fixtures/cases/`, assessed against the
-synthetic knowledge graph `fixtures/campaigns.json` (no downloads needed). Regenerate with
+Static reports for the synthetic spec scenarios in `dragnet/data/cases/`, assessed against the
+synthetic knowledge graph `dragnet/data/campaigns.json` (no downloads needed). Regenerate with
 `python scripts/build_demo_pages.py`. Each report also has a STIX 2.1 bundle.
 
 | scenario | verdict | confidence | false-flag indicators | STIX |

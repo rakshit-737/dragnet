@@ -23,8 +23,8 @@ docker compose up api                      # FastAPI on http://127.0.0.1:8000/do
 
 ```bash
 python -m dragnet demo
-python -m dragnet assess fixtures/cases/olympic_destroyer_like.json
-python -m dragnet assess fixtures/cases/wannacry_like.json --weight imphash=0.2   # auditability
+python -m dragnet assess dragnet/data/cases/olympic_destroyer_like.json
+python -m dragnet assess dragnet/data/cases/wannacry_like.json --weight imphash=0.2   # auditability
 ```
 
 ## Real data (~320 MB of public metadata)
