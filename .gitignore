@@ -9,3 +9,18 @@ data/raw/
 *.part
 .ruff_cache/
 site/
+
+# local environments, build outputs, secrets
+.venv/
+venv/
+dist/
+build/
+.env
+.coverage
+htmlcov/
+.mypy_cache/
+*.key
+*.pem
+notes.md
+.idea/
+.vscode/
