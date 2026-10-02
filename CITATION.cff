@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use DRAGNET, please cite it as below."
+title: "DRAGNET: evidence-to-actor attribution with ACH, false-flag reasoning and abstention"
+type: software
+authors:
+  - name: Rakshit
+    affiliation: "VIT Chennai"
+repository-code: "https://github.com/rakshit-737/dragnet"
+url: "https://rakshit-737.github.io/dragnet/"
+license: MIT
+keywords:
+  - cyber threat intelligence
+  - attribution
+  - analysis of competing hypotheses
+  - MITRE ATT&CK
+  - false flag

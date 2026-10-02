@@ -1,0 +1,14 @@
+name: Feature or evaluation request
+description: Propose a capability, data source or benchmark
+labels: [enhancement]
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: What analyst problem would this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Public data or published work it would use (with licence)
