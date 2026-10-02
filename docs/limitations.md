@@ -2,35 +2,30 @@
 
 ## Limitations
 
-- **Small n.** 25 attributed ATT&CK campaigns and 7 curated cases; bootstrap CIs are wide
-  (DRAGNET top-1 0.68 [0.48, 0.84]) and the ablation differences (+0.08) are not significant.
-- **Ground truth is itself attribution.** ATT&CK and government statements can be wrong or incomplete.
-- **Residual leakage.** v19.2 group profiles were partly written from the same reporting as the
-  campaigns; the temporal hold-out (A2) and time-of-incident mode reduce but do not remove this.
-- **Curated tokens.** Where public evidence is a relationship (a copied Rich header, a shared function),
-  curated cases use descriptive tokens with cited sources rather than raw artifacts.
-- **Coarse sponsor-state and language signals** (MISP country); some "actor-specific" ATT&CK families
-  are commodity malware.
-- **Raw scores are under-confident**; use the discrete grade.
-- **Zero confident errors is not a zero error rate**: 0/25 bounds the rate below ~12% (rule of three).
-- **Adapters are file-based.** REVENANT / VITRINE integration reads their JSON exports; no live coupling.
-- **Signing** proves integrity and (with a pinned key) signer identity; key management is out of scope.
+- **Small curated n.** 25 attributed campaigns (26 across all releases and domains) and 7 curated cases.
+  Per-report cases (n = 637) are the larger set; leave-report-out reduces but does not remove overlap.
+- **Ground truth is itself attribution.** ATT&CK, Malpedia and government statements can be wrong.
+- **Leakage.** Plain A1 (0.68) is a leaky upper bound; A1-LF (0.40) and R are the controlled numbers.
+- **Genetics is dominated by commodity families** (AgentTesla, WannaCry).
+- **Tradecraft-only LOW verdicts are unreliable** (A3: 0/10 correct).
+- **Raw scores are not calibrated**; an isotonic map on a temporal split brings ECE to 0.051.
+- **Zero confident errors is not a zero error rate**: 0/25 has an exact 95% upper bound of 0.137.
+- **Adapters are file-based**; **signing** proves integrity and, with a pinned key, signer identity.
 
 ## Not done, and why
 
 | Item | Why it stays open |
 |---|---|
-| Fuzzy genetics (TLSH/ssdeep) | MalwareBazaar publishes TLSH, but a fair benchmark needs a distance index over ~500k samples with family-collision handling; not reported half-measured |
-| Learned calibration | 25 + 7 labelled cases would overfit any fitted calibrator |
-| Live sample handling | by design: DRAGNET never touches binaries; the spec's SPECIMEN lab needs isolated VMs |
-| Ground-truth attribution judgment | needs human analysts; public attributions are used as-is |
+| Victimology signals | MISP sector/country metadata exists but is not yet wired into the graph |
+| OCCAM STIX import | file-format adapter not written yet |
+| Live sample handling | by design: DRAGNET never touches binaries |
+| Matching Kida & Olukoya (2023) | needs the APTMalware binaries; only 12 of 3,719 hashes are in MalwareBazaar metadata |
 
 ## Roadmap
 
 - [x] Real knowledge graph from ATT&CK + MISP + abuse.ch with provenance
-- [x] Case-study validation and Brier/ECE; bootstrap CIs and paired tests
-- [x] False-flag stress test (multi-seed), ablations
-- [x] Neo4j export, FastAPI service, STIX 2.1 export, Ed25519-signed custody
-- [x] REVENANT / VITRINE adapters
-- [ ] Fuzzy genetics (TLSH distance)
-- [ ] Learned monotone calibration on a larger curated case set
+- [x] Leave-report-out and per-report evaluation, rolling-origin release split
+- [x] TLSH fuzzy genetics with a banded index and a time-split benchmark
+- [x] Isotonic calibration on a temporal split; Guru et al. (2025) comparison
+- [x] Neo4j export, FastAPI service, STIX 2.1 export, Ed25519-signed custody, adapters
+- [ ] Victimology signals; OCCAM import

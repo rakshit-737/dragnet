@@ -9,17 +9,36 @@ and `UNKNOWN` hypotheses, a conservative confidence ladder and a hash-chained (o
 Ed25519-signed) custody log. It is evaluated on real public threat intelligence: MITRE ATT&CK,
 MISP galaxy, abuse.ch metadata and APTnotes.
 
-!!! note "Headline (ATT&CK campaigns, n = 25)"
-    DRAGNET ranks the attributed group first in **68%** of campaigns (95% CI 48-84%) and **never
-    commits at MEDIUM+ to a wrong actor**. The MISP-style indicator-correlation baseline gets 56% and
-    commits to a wrong actor in 24% of cases. With a planted Rich header and decoy-language strings,
-    DRAGNET flags every case and confidently names the decoy in **0%** (baseline 52%).
+**Contribution.** DRAGNET attributes from artifact-level evidence - host IOCs, malware genetics from
+published imphash/TLSH metadata, infrastructure and ATT&CK techniques - fused with specificity
+weighting and forgeability-aware false-flag rules into an ACH that abstains rather than misattributes,
+evaluated leakage-controlled and time-split on public data.
+
+[Try it in 60 seconds](getting-started.md){ .md-button .md-button--primary }
+[Evaluation](benchmarks.md){ .md-button }
+[How it works](how-it-works.md){ .md-button }
+
+![DRAGNET report for the Olympic Destroyer-like demo case](figures/demo.png)
+
+!!! note "Headline (leakage-controlled per-report ATT&CK cases, n = 637, 161 groups)"
+    DRAGNET ranks the true group first in **45%** [40, 51] vs 30-31% for IOC-correlation and
+    code-only matchers and 13-22% for TTP-similarity baselines; MEDIUM verdicts are right 79/83
+    times. On the 25 ATT&CK campaigns with their own reports removed from the profiles, top-1 is
+    0.40 and the edge over IOC correlation is not significant. With a stolen decoy family planted,
+    the false-flag rules cut confident decoy attributions from 0.40 to 0.17.
+
+![A1 methods](figures/a1_methods.png)
 
 | Where to go | |
 |---|---|
 | [Getting started](getting-started.md) | install, demo, first assessment |
 | [Architecture](architecture.md) | pipeline, scoring, false-flag rules, confidence ladder |
-| [Benchmarks](benchmarks.md) | every number, with confidence intervals |
+| [How it works](how-it-works.md) | one case traced through the pipeline |
+| [Evaluation](benchmarks.md) | protocol, every number, confidence intervals, published comparison |
+| [Reproduce](reproduce.md) | commands, runtimes, expected values |
+| [Datasets](datasets.md) | sources, pins, licences |
+| [ADRs](adr/0004-evaluation-protocol.md) | design decisions |
+| [Threat model](threat-model.md) / [Changelog](changelog.md) | security model, history |
 | [Demo reports](demo/index.md) | static rendered reports + STIX bundles |
 | [CLI](reference/cli.md) / [REST](reference/rest.md) / [Python API](reference/python.md) | reference |
 | [Limitations](limitations.md) | what DRAGNET cannot do |

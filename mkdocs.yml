@@ -1,5 +1,5 @@
 site_name: DRAGNET
-site_description: Evidence-to-actor attribution with ACH, false-flag reasoning and calibrated confidence
+site_description: Evidence-to-actor attribution with ACH, false-flag reasoning and conservative, abstention-aware confidence grades
 site_url: https://rakshit-737.github.io/dragnet/
 repo_url: https://github.com/rakshit-737/dragnet
 repo_name: rakshit-737/dragnet
@@ -53,9 +53,11 @@ plugins:
 nav:
   - Home: index.md
   - Getting started: getting-started.md
+  - How it works: how-it-works.md
   - Architecture: architecture.md
   - Datasets: datasets.md
-  - Benchmarks & results: benchmarks.md
+  - Evaluation: benchmarks.md
+  - Reproduce: reproduce.md
   - Demo reports: demo/index.md
   - Reference:
       - CLI: reference/cli.md
