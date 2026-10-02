@@ -5,6 +5,30 @@ and the project uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+- Per-report ATT&CK case set (637 cases, 161 groups) with leave-report-out k-fold and temporal splits;
+  A1-LF leave-report-out campaigns; cross-release/domain union (B1), rolling origin (B2) and
+  Malpedia-labelled abuse.ch cases (B3).
+- TLSH fuzzy genetics (stdlib digest distance, banded index) and the E3 time-split benchmark.
+- Comparison with Guru, Moss & Kochenderfer (2025) under an adapted protocol (section G).
+- Isotonic calibration evaluated on a temporal split; selective-risk curves; signal-family ablations.
+- `bench` workflow (weekly / dispatch) that checks deterministic sections against committed results.
+- Docs: How it works, Evaluation and Reproduce pages; demo screenshot; CITATION.cff, CODEOWNERS,
+  Dependabot, issue and PR templates.
+
+### Changed
+- Baselines abstain on tied top scores; DRAGNET's LOW verdicts are reported as wrong-actor-named.
+- Exact Clopper-Pearson intervals and sign-flip tests with Holm correction replace percentile
+  bootstrap p-values. The previously reported significant A1 advantage over ioc-correlation and
+  code-only (P = 0.01) does not hold (exact p = 0.06 leaky, 0.25 leakage-controlled).
+- "Calibrated confidence" wording replaced by "abstention-aware confidence grades".
+
+### Fixed
+- A1 leakage: the headline moved from 0.68 (campaign's own reports in the profiles) to leakage-controlled numbers.
+- A2 was described as a temporal hold-out although v10.1 has no campaigns; relabelled.
+- E1 no longer draws an IOC-longevity conclusion the export cannot support.
+- Truncated ATT&CK downloads are rejected: every pinned source has a SHA-256 and existing files are revalidated.
+
 ## [1.0.0] - 2026-09-26
 
 ### Added

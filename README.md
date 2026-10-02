@@ -12,16 +12,43 @@ Competing Hypotheses (ACH) with mandatory false-flag and unknown hypotheses, a c
 ladder and a hash-chained custody log - evaluated on real public threat intelligence (MITRE ATT&CK,
 MISP galaxy, abuse.ch, APTnotes) and on documented cases including the Olympic Destroyer false flag.
 
-> Headline (ATT&CK campaigns, n = 25): DRAGNET ranks the attributed group first in **68%** of
-> campaigns and **never commits at MEDIUM+ to a wrong actor**; the MISP-style indicator-correlation
-> baseline gets 56% and commits to a wrong actor in 24% of cases. With a planted Rich header and
-> decoy-language strings, DRAGNET flags every case and confidently names the decoy in **0%** (baseline 52%).
+**Contribution in one sentence.** DRAGNET attributes from artifact-level evidence - host IOCs, malware
+genetics from published imphash/TLSH metadata, infrastructure and ATT&CK techniques - fused with
+specificity weighting and forgeability-aware false-flag rules into an ACH that abstains rather than
+misattributes, and it is evaluated leakage-controlled and time-split on public data.
+
+> Headline (leakage-controlled, per-report ATT&CK cases, n = 637, 161 groups): DRAGNET ranks the true
+> group first in **45%** [40, 51] vs 30-31% for IOC-correlation and code-only matchers and 13-22% for
+> TTP-similarity baselines; when it commits at MEDIUM it is right **95%** of the time (79/83). On the
+> 25 ATT&CK campaigns with the campaign's own reports removed from the profiles, top-1 is **0.40**
+> (0.68 without that control - read 0.68 as a leaky upper bound) and its edge over IOC correlation
+> there is **not** significant (p = 0.25). With a stolen exclusive decoy family planted, the
+> false-flag rules cut confident decoy attributions from 0.40 to 0.17 (effect 0.23 [0.11, 0.37]).
+
+![DRAGNET report for the Olympic Destroyer-like demo case](docs/figures/demo.png)
+
+## Try it in 60 seconds
+
+No install needed - the runtime is stdlib-only:
+
+```bash
+git clone --depth 1 https://github.com/rakshit-737/dragnet && cd dragnet
+python -m dragnet demo
+python -m dragnet assess dragnet/data/cases/olympic_destroyer_like.json
+```
+
+`demo` prints one row per synthetic scenario (four cases: a confident multi-signal attribution, a
+Rich-header false flag that is withheld with 2 flags, a WannaCry-like code-reuse case, and thin
+evidence that abstains). The fifth spec scenario, auditability, is `assess dragnet/data/cases/wannacry_like.json
+--weight imphash=0.2`: every weight is printed in the report, and the overridden weight and the
+resulting scores show up in the ACH matrix (here the verdict stays LAZARUS_SIM, HIGH, because two
+independent anchors remain).
 
 **Docs site:** <https://rakshit-737.github.io/dragnet/> (architecture, benchmarks, CLI/API reference, demo reports).
 
 ## Contents
 
-[How it works](#how-it-works) · [Results](#results-on-real-data) · [Case studies](#documented-case-studies) ·
+[Try it](#try-it-in-60-seconds) · [How it works](#how-it-works) · [Results](#results-on-real-data) · [Case studies](#documented-case-studies) ·
 [Datasets](#datasets) · [Quickstart](#quickstart) · [Reproduce](#reproducing-the-numbers) ·
 [Prior art](#prior-art-and-how-dragnet-differs) · [Limitations](#limitations) · [Roadmap](#roadmap) · [Safety](#safety-and-ethics)
 
@@ -91,96 +118,159 @@ is named.
 
 ## Results on real data
 
-All numbers below come from `python scripts/run_benchmarks.py` on the snapshot in
-[`data/MANIFEST.json`](data/MANIFEST.json); the full tables are in [`results/RESULTS.md`](results/RESULTS.md)
-and the raw per-case output in `results/benchmark.json`. Protocol: [ADR 0004](docs/adr/0004-evaluation-protocol.md).
+All numbers come from `scripts/run_benchmarks.py`, run by the [`bench` workflow](.github/workflows/bench.yml)
+on a GitHub runner; the full tables (with every CI) are in [`results/RESULTS.md`](results/RESULTS.md) and
+the per-case output in `results/benchmark.json`. Protocol: [ADR 0004](docs/adr/0004-evaluation-protocol.md);
+exact commands and expected values: [Reproduce](docs/reproduce.md).
 
-**Methods.** `dragnet` (full engine); `ttp-jaccard` (nearest actor by Jaccard over techniques, the common
-literature baseline); `ttp-cosine` (the same IDF-cosine DRAGNET uses, alone); `ioc-correlation`
-(MISP-style count of shared families/tools/IOCs); `code-only` (shared family/imphash/code count - a
-Malpedia/Intezer-style single-signal matcher). Ties are scored in expectation.
+**Methods.** `dragnet` (full engine); `ttp-jaccard` and `ttp-cosine` (nearest actor by technique
+overlap; a generic nearest-profile baseline with no single canonical reference);
+`ttp-bayes` (P(technique | actor) scoring after Guru, Moss & Kochenderfer, arXiv:2505.11547);
+`ioc-correlation` (MISP-style count of shared families/tools/IOCs); `code-only` (shared family/imphash
+count, a Malpedia/Intezer-style single-signal matcher).
 
-### A1 - ATT&CK v19.2 campaigns attributed against group profiles (n = 25, 176 candidate groups)
+**How commitments are counted.** A baseline commits only when one actor holds the unique top score; a
+tie at the top is an abstention (the old alphabetical tie-break made `menuPass` win 26-way ties and
+inflated the baselines' error rate). DRAGNET commits at MEDIUM or HIGH. Both "wrong at MEDIUM+ /
+committed" and "wrong actor named at any grade" (which counts DRAGNET's LOW verdicts) are reported, so
+the comparison is like for like. Proportions carry exact Clopper-Pearson intervals; paired top-1
+differences use an exact sign-flip test with Holm correction.
 
-| method | top-1 | top-3 | coverage | selective acc. | confident-error rate |
+### R - per-report ATT&CK cases, leave-report-out (n = 637 over 161 groups; headline)
+
+Each case is the techniques and software that one cited report documents for one group. In the
+k-fold protocol, the fold's reports are removed from every profile first; in the temporal protocol,
+profiles use only reports dated before 2022 and the 193 cases dated 2022+ are attributed.
+
+| method | top-1 (k-fold) | coverage | selective acc. | wrong at any grade | top-1 (temporal) |
 |---|---|---|---|---|---|
-| **dragnet** | **0.68** | **0.68** | 0.60 | **0.93** | **0.00** |
-| ttp-jaccard | 0.12 | 0.16 | 0.96 | 0.13 | 0.84 |
-| ttp-cosine | 0.08 | 0.16 | 0.96 | 0.08 | 0.88 |
-| ioc-correlation | 0.56 | 0.62 | 0.84 | 0.71 | 0.24 |
-| code-only | 0.54 | 0.56 | 0.60 | 0.93 | 0.04 |
+| dragnet | **0.454** [0.401, 0.507] | 0.429 | **0.853** | 0.063 | **0.207** |
+| code-only | 0.310 | 0.323 | 0.913 | 0.028 | 0.124 |
+| ioc-correlation | 0.301 | 0.349 | 0.788 | 0.074 | 0.112 |
+| ttp-cosine | 0.218 | 0.983 | 0.222 | 0.765 | 0.083 |
+| ttp-jaccard | 0.126 | 0.936 | 0.133 | 0.812 | 0.052 |
+| ttp-bayes | 0.018 | 0.702 | 0.022 | 0.686 | 0.008 |
 
-*Coverage* = share of cases where the method names an actor; *confident-error rate* = share of all cases
-where it commits (MEDIUM+ for DRAGNET, always for baselines) to the wrong actor.
+DRAGNET's top-1 lead over every baseline is significant in both protocols (Holm p < 0.001). Per
+grade (k-fold): MEDIUM 79/83 correct (0.95), LOW 154/190 (0.81). Under the temporal split the
+picture is weaker: LOW is right only 20/44 times (0.45), while MEDIUM stays 8/8. Code-only has the
+higher selective accuracy (0.913 vs 0.853) at lower coverage; at equal coverage DRAGNET's selective
+risk is lower (risk at 20% coverage 0.031 vs 0.048; area under the risk-coverage curve 0.247 vs 0.353).
 
-**Uncertainty (n = 25 is small).** 95% percentile-bootstrap CIs over cases: DRAGNET top-1 0.68
-[0.48, 0.84], ioc-correlation 0.56 [0.38, 0.73], code-only 0.54 [0.36, 0.72]. A *paired* bootstrap on
-the same cases puts DRAGNET's top-1 advantage at +0.12 [0.02, 0.25] over ioc-correlation and +0.14
-[0.02, 0.28] over code-only (P(diff <= 0) = 0.01 each) and +0.56 / +0.60 over the TTP-only baselines;
-the ablations (no specificity, no TTP-profile term) are +0.08 [0.00, 0.20], i.e. *not* significant at
-this n. DRAGNET's 0 confident errors in 25 cases bound the true rate below ~12% (rule of three), not at 0.
+**Signal-family ablation (same engine).** TTP-only DRAGNET reaches 0.218 top-1 at 9.6% coverage,
+software-only 0.358; fusing both gives 0.454 (+0.095 over software-only, p < 0.001). Replacing the
+IDF-cosine TTP term with per-technique noisy-OR (`no-ttpsim`) is *better* on top-1 here (0.487 vs
+0.454, k-fold), so the TTP-profile term is not justified by this data; it is kept as the default only
+because it is not worse on the temporal split (0.221 vs 0.207, p = 0.78) and this is reported, not tuned away.
+
+**Calibration.** The raw ACH score is *not* calibrated (temporal ECE 0.145 [0.099, 0.203]). An
+isotonic map fitted on 357 pre-2022 cases brings ECE on the 193 later cases to 0.051 [0.033, 0.118];
+the TTP baselines' normalised shares are already at 0.03-0.06, so "calibrated" is not a DRAGNET
+advantage. Use the discrete grade, or the isotonic map.
+
+### A1-LF / A1 - the 25 ATT&CK v19.2 campaigns (176 candidate groups)
+
+In 18 of 25 campaigns the true group's v19.2 profile already lists the campaign's own software, and all
+14 of DRAGNET's correct named verdicts in plain A1 are among them. A1-LF removes, before each campaign,
+every group edge whose citations are a subset of the campaign's own citations.
+
+| method | top-1 A1-LF | coverage | selective acc. | wrong at any grade | top-1 A1 (leaky) |
+|---|---|---|---|---|---|
+| dragnet | **0.400** [0.20, 0.60] | 0.40 | 0.80 | 0.08 | 0.680 [0.48, 0.84] |
+| ioc-correlation | 0.354 | 0.32 | **1.00** | **0.00** | 0.560 |
+| code-only | 0.341 | 0.36 | 0.89 | 0.04 | 0.540 |
+| ttp-jaccard | 0.120 | 0.96 | 0.13 | 0.84 | 0.120 |
+| ttp-cosine | 0.080 | 0.96 | 0.08 | 0.88 | 0.080 |
+
+At n = 25 DRAGNET's advantage over ioc-correlation (+0.046 [-0.03, 0.15]) and code-only (+0.059)
+is **not significant** (exact sign-flip p = 0.25, Holm 1.0); in leaky A1 it was +0.12 / +0.14 with
+p = 0.06 (Holm 0.31), so the earlier "P = 0.01" claim from a percentile bootstrap is withdrawn. With
+ties treated as abstentions, ioc-correlation makes no wrong commitments; DRAGNET's 0/25 wrong at
+MEDIUM+ bounds its rate below 0.137 (exact 95%), not at zero.
 
 ![A1 methods](docs/figures/a1_methods.png)
 
-DRAGNET's stated grades are well ordered: **MEDIUM 5/5 correct, LOW 9/10 correct, INSUFFICIENT - the
-top-ranked actor was right only 3/10 times**, i.e. it abstains exactly where evidence is weak.
-Ablations: removing specificity drops top-1 to 0.60, replacing the TTP profile term with per-technique
-noisy-OR drops it to 0.60; the false-flag reasoner does not cost accuracy on clean cases.
+### A2 / B2 - older profiles and rolling origin
 
-### A2 - temporal hold-out: ATT&CK v10.1 (Nov 2021) profiles vs campaigns documented later (n = 25)
+ATT&CK v10.1 has no campaign objects, so A2 (v19.2 campaigns against v10.1 profiles) measures stale,
+open-world profiles rather than a temporal hold-out: DRAGNET top-1 0.41 vs ioc-correlation 0.41 and
+code-only 0.36, abstaining on 75% of cases whose group did not exist in v10.1. Restricted to the 12
+campaigns whose activity began after v10.1 (A2-later), every method is near the floor (DRAGNET 0.14).
+B2 attributes each campaign against the newest release published before it was added (12.1-18.1):
+DRAGNET 0.47, ioc-correlation 0.35, code-only 0.32 (n = 25).
 
-8 of the 25 campaigns belong to groups that did not exist in v10.1 (open world - the right answer is to abstain).
+### A3 - a new family from its documented techniques only (n = 411)
 
-| method | top-1 (in-KG) | selective acc. | confident-error rate | abstains when actor unknown |
-|---|---|---|---|---|
-| **dragnet** | **0.41** | **0.78** | **0.00** | **0.75** |
-| ttp-cosine | 0.24 | 0.25 | 0.80 | 0.00 |
-| ioc-correlation | 0.41 | 0.46 | 0.40 | 0.63 |
-| code-only | 0.36 | 0.67 | 0.16 | 0.88 |
+Top-1 is 0.063 for DRAGNET and ttp-cosine, 0.029 for ttp-jaccard. DRAGNET names an actor in 2.4% of
+cases, and **all 10 of those LOW verdicts are wrong** (0/10, 95% CI [0, 0.31]): technique overlap alone
+does not attribute, and a LOW verdict from tradecraft only should be read as "no attribution".
 
-### A3 - "new malware family" attribution from behaviour alone (n = 411 families used by one group)
+### G - comparison with published work: Guru, Moss & Kochenderfer (2025)
 
-Evidence is only the family's documented ATT&CK techniques. Top-1 is **0.063 (DRAGNET, ttp-cosine)
-vs 0.029 (ttp-jaccard)** among 176 groups, and DRAGNET names an actor in only 2.4% of cases - an honest
-reflection that technique overlap alone cannot attribute. This is the strongest empirical argument in
-this repo for multi-signal fusion.
+Guru et al. rank 29 actors per threat report with P(technique | actor) estimated from technique counts
+in training reports (machine-extracted with text-embeddings over 727 reports) and report the mean rank
+of the true actor (random = 15). Their corpus and extracted counts are not public in reusable form, so
+this is an **adaptation, not a reproduction**: same scorer, same 29 actors, same 70/20/10 per-actor
+splits and 10 repetitions, but ATT&CK's human-curated per-report technique lists (261 reports).
+
+| setting | mean rank of the true actor (of 29) |
+|---|---|
+| paper: uniform prior | 10.68 +/- 0.53 |
+| paper: expert prior | 7.75 +/- 0.09 |
+| paper: HyDE + expert prior (best) | 7.55 +/- 0.21 |
+| ours: their scorer, uniform prior, human technique lists | 8.72 +/- 0.55 |
+| ours: their scorer, report-share prior (expert-prior proxy) | 9.71 +/- 0.45 |
+| **ours: DRAGNET** (techniques + software, same splits) | **5.38 +/- 0.79** (top-1 0.53) |
+
+Their scorer on cleaner human technique lists lands between their uniform-prior and expert-prior
+results; DRAGNET's lower rank comes mostly from the software evidence their setup does not use. The
+fuzzy-hash study of Kida & Olukoya (IEEE Access 2023, 89% on APTMalware) cannot be matched: it needs
+the binaries, and only 12 of its 3,719 SHA-256s appear in MalwareBazaar metadata.
 
 ### D - false-flag stress test (A1 cases with planted decoy artifacts, decoy from another sponsor state)
 
-| method | L1: Rich header + language planted - confidently names decoy | L2: + stolen exclusive decoy family - confidently names decoy |
+| method | L1: Rich header + language planted | L2: + stolen exclusive decoy family (10-seed mean, range) |
 |---|---|---|
-| **dragnet** | **0.00** (flagged 100%) | **0.24** (flagged 76%); 0.17 mean over 10 decoy seeds [0.12, 0.24] |
-| dragnet without false-flag rules | 0.00 | 0.40 |
-| ioc-correlation | 0.52 (10-seed mean 0.52) | 0.76 (10-seed mean 0.80) |
-| code-only | 0.00 | 0.40 (10-seed mean 0.46) |
+| **dragnet** | 0.00 confidently names decoy | **0.17** (0.12-0.24) |
+| dragnet without false-flag rules | 0.00 | 0.40 (0.40-0.40) |
+| ioc-correlation | 0.48 | 0.77 (0.76-0.80) |
+| code-only | 0.00 | 0.40 (0.40-0.40) |
+
+Level 1 does not test the rules: forgeable artifacts cannot reach MEDIUM on their own, so DRAGNET
+without the rules (and code-only) also score 0.00, and R1 fires by construction because the planted
+Rich header matches exactly one simulated reference. Level 2 isolates the rules: they reduce
+confident decoy attributions by 0.23 [0.11, 0.37] (bootstrap clustered by case, all case x seed
+cells). Only cross-state decoys are tested. False-alarm cost: indicators fire on 16% of clean
+campaigns (grade capped at LOW).
 
 ![false-flag stress test](docs/figures/false_flag.png)
 
-The TTP-only baselines never pick the decoy - but they also rank the true actor first in only 8-12% of
-cases. False-alarm cost: indicators fire on 16% of *clean* campaigns (grade capped at LOW, never a wrong name).
+### E - genetics and IOCs from abuse.ch metadata (time split at 2024-01-01)
 
-### E - abuse.ch metadata
+- **E2 imphash (MalwareBazaar).** 13,400 test samples share only 1,139 imphashes and are 63% AgentTesla,
+  so per-sample accuracy mostly measures re-identification of a few commodity families. With the
+  training-period collision filter, DRAGNET covers 7.8% at 0.918 selective accuracy (family-clustered
+  95% CI [0.46, 1.00]; macro over 25 families 0.92). A plain imphash lookup with the same filter gets
+  0.998 at 6.4% - the filter, not the fusion, does the work. 85% of MEDIUM+ verdicts are WannaCry;
+  without WannaCry, coverage is 2.4% at 0.73.
+- **E3 TLSH (MalwareBazaar, metadata only).** Pre-cutoff digests of actor-specific families become
+  fuzzy signals; the radius tau = 100 was chosen on a 2023-H2 validation window. On 30,638 post-cutoff
+  samples DRAGNET covers 3.9% at 0.844 [0.46, 0.96] (macro over 37 families 0.59) vs a TLSH
+  nearest-neighbour lookup at 5.2% / 0.808; no TLSH-only verdict reaches MEDIUM. False alarms on
+  families with no actor mapping: 0.6% named, 0% at MEDIUM+. The stdlib banded index recovers 0.978
+  of true neighbour pairs against exact search.
+- **B3 Malpedia-labelled abuse.ch cases** (129 families; labels from Malpedia, graph from ATT&CK v14.1 +
+  pre-cutoff data). Artifacts alone (IOCs, imphash, TLSH) give 4% top-1: abuse.ch metadata for
+  post-2024 activity rarely links back to what ATT&CK knew in 2023. Adding the family name lifts
+  top-1 to 0.27. All methods tie on top-1 here; this case set does not separate them.
+- **E1 ThreatFox.** 99.2% of IOC values occur in exactly one row of the export (re-sightings do not add
+  rows), so the export cannot measure IOC longevity and no longevity claim is made.
 
-- **IOC shelf-life (ThreatFox).** Of 1,395 IOCs of ATT&CK-attributed families first seen after the
-  median date, only 6 (**0.4%**) were already known from the earlier half. IOC matching alone has almost
-  no longevity for attribution.
-- **Imphash genetics (MalwareBazaar, 493,634 labelled samples; train < 2024-01-01, test after; 13,379
-  test samples of ATT&CK-attributed families).** A naive imphash lookup covers 83% of test samples but
-  is right only **13%** of the time (shared packer/.NET stub imphashes). With DRAGNET's collision filter
-  (drop imphashes seen in > 2 families *in the training period*) plus specificity, coverage falls to
-  7.7% and accuracy rises to **91.7%**; the 6.3% of samples DRAGNET grades MEDIUM or higher are
-  **99.8%** correct - genetics is a precise but rare anchor.
+### F - accuracy vs public reporting depth
 
-### F - does accuracy track public reporting depth?
-
-Grouping A1 cases by how many APTnotes reports mention the true actor: top-1 is 0.40 for actors with
-no indexed reports (n = 10) and 0.85 for actors with more than five (n = 13). Attribution quality is
-bounded by how well-documented the actor already is.
-
-**Calibration.** DRAGNET's ACH score for its top actor is conservative: in A1 the Brier score of the
-binary forecast "top actor is correct" is 0.16 with ECE 0.28, driven by *under*-confidence (all 8 cases scored
-0.5-0.7 were correct; n is small, so the curve is noisy); the stated grades, not the raw score, are the
-output to rely on.
+With ATT&CK-only aliases, top-1 is 0.36 for A1 actors with no APTnotes report (n = 11), 0.89 for 1-5
+reports (n = 9) and 1.00 for more (n = 5); Fisher p = 0.007. This is an association, not a cause:
+APTnotes is dense for 2010-2018, so "0 reports" partly means "recently named actor".
 
 ![reliability](docs/figures/reliability.png)
 
@@ -188,24 +278,24 @@ output to rely on.
 
 Seven curated cases in [`dragnet/data/real_cases/`](dragnet/data/real_cases/), each with its ground-truth basis
 (indictments, government attributions) and references. In **time-of-incident** mode the family first seen
-in the incident (WannaCry, NotPetya, Olympic Destroyer) is hidden from the graph, so DRAGNET must
-attribute from pre-existing knowledge.
+in the incident (WannaCry, NotPetya, Olympic Destroyer) is hidden from the graph. Rules R2 and R4 were
+designed from the Olympic Destroyer and Turla/OilRig patterns, and several cases rely on cited,
+hand-written graph additions, so these are **demonstrations of designed behaviour, not validation**.
 
 | case | truth (public attribution) | DRAGNET (time-of-incident) | false-flag indicators | ioc-correlation baseline |
 |---|---|---|---|---|
 | WannaCry 2017 | Lazarus Group | Lazarus Group, MEDIUM | 0 | Lazarus Group |
-| NotPetya 2017 | Sandworm Team | Sandworm Team, HIGH | 0 | Sandworm Team |
+| NotPetya 2017 | Sandworm Team | Sandworm Team, MEDIUM | 0 | Sandworm Team |
 | **Olympic Destroyer 2018** | Sandworm Team | **withheld (INSUFFICIENT)** | 3 | menuPass (wrong) |
-| **Turla via OilRig 2019** | Turla | OilRig, **LOW** + flag (Turla ranked 2nd) | 1 | OilRig (wrong) |
+| **Turla via OilRig 2019** | Turla | names OilRig at **LOW** with a flag (Turla ranked 2nd) | 1 | OilRig (wrong) |
 | Bangladesh Bank 2016 | Lazarus / APT38 | Lazarus Group, MEDIUM | 0 | Lazarus Group |
 | Sony Pictures 2014 | Lazarus Group | Lazarus Group, MEDIUM | 0 | Lazarus Group |
-| Commodity tooling only | none | withheld (INSUFFICIENT) | 0 | menuPass (wrong) |
+| Commodity tooling only | none | withheld (INSUFFICIENT) | 0 | tie among 26 (abstains) |
 
-All seven behave as specified (attribute / withhold with a flag / abstain). For Olympic Destroyer DRAGNET
-reports that the Lazarus-linked Rich header is the only support for Lazarus and that forgeable and hard
-evidence point to different actors; it does **not** recover Sandworm from tradecraft alone (truth
-ranked 12th), which is the honest limit of the available evidence. Run them with
-`python -m dragnet case-study` (add `--format md` for full reports).
+For Olympic Destroyer DRAGNET reports that the Lazarus-linked Rich header is the only support for
+Lazarus and that forgeable and hard evidence point to different actors; it does **not** recover
+Sandworm from tradecraft alone (truth ranked 12th). Run them with `python -m dragnet case-study`
+(add `--format md` for full reports).
 
 ## Datasets
 
@@ -217,21 +307,25 @@ Metadata only - no sample is ever downloaded. Details, licences and citations: [
 | MISP galaxy threat-actor + malpedia | 1.4 + 3.8 MB | commit `e9e867f` | CC0/BSD-2 ; CC BY-NC-SA 3.0 |
 | APTnotes index | 0.15 MB | commit `8595fbd` | index metadata |
 | abuse.ch ThreatFox full export | 3.8 MB | manifest SHA-256 | CC0 |
-| abuse.ch MalwareBazaar full CSV (metadata) | 223 MB | manifest SHA-256 | CC0 |
+| abuse.ch MalwareBazaar full CSV (metadata, incl. TLSH) | 223 MB | manifest SHA-256 | CC0 |
+| MITRE ATT&CK Enterprise 12.1-18.1, ICS + Mobile 19.2 | ~315 MB | version + SHA-256 | ATT&CK Terms of Use |
+| Malpedia API families and actors | 5.4 MB | manifest SHA-256 (live API) | CC BY-NC-SA 3.0 |
+| trendmicro/tlsh reference vectors (tests) | 0.25 MB | commit + SHA-256 | Apache-2.0 |
 
 ## Quickstart
 
 ```bash
 git clone https://github.com/rakshit-737/dragnet && cd dragnet
-python -m pip install -e ".[dev]"              # runtime is stdlib-only
-python -m pytest -q                            # 66 tests; real-data tests skip without downloads
-python -m dragnet demo                         # five synthetic spec scenarios
+python -m pip install -e ".[dev,api,sign]"     # runtime is stdlib-only; extras for API and signing
+python -m pytest -q                            # ~90 tests; real-data tests are deselected by default
+python -m dragnet demo                         # four synthetic scenarios
 python -m dragnet assess dragnet/data/cases/olympic_destroyer_like.json
 ```
 
-With real data (~320 MB):
+With real data (~600 MB):
 
 ```bash
+export DRAGNET_DATA="$PWD/data/raw"            # PowerShell: $env:DRAGNET_DATA = "$PWD\data\raw"
 python scripts/download_data.py                # or: DRAGNET_DATA=/path python scripts/download_data.py
 python -m dragnet build-kg                     # -> $DRAGNET_DATA/kg-attack-19.2.json
 python -m dragnet case-study olympic_destroyer_2018 --format md
@@ -258,15 +352,18 @@ forensic content accepts `network_connections`, `dns_queries`, `dropped_file_has
 
 ## Reproducing the numbers
 
+See [docs/reproduce.md](docs/reproduce.md) for every command, its runtime and the expected values.
+In short:
+
 ```bash
-python scripts/download_data.py        # checksums verified for pinned sources
-python scripts/run_benchmarks.py       # ~5 min; writes results/ and docs/figures/
+python scripts/download_data.py                              # SHA-256 checked for pinned sources
+PYTHONHASHSEED=0 python scripts/run_benchmarks.py --only A1LF,A1,G   # light sections, ~3 min
 ```
 
-`make` targets mirror these (`make data`, `make bench`, `make demo`, `make test`). abuse.ch exports are
-regenerated daily, so E1/E2 will drift slightly from the committed snapshot; everything else is
-deterministic (seeded decoy selection, tie-aware metrics). The committed `data/MANIFEST.json` is only
-rewritten by `download_data.py --record`, so a fresh download does not silently replace the recorded snapshot.
+The full run (all sections, 1213 s on a 2-vCPU GitHub runner) is the
+[`bench` workflow](https://github.com/rakshit-737/dragnet/actions/workflows/bench.yml); it compares the
+deterministic sections with the committed `results/benchmark.json`. abuse.ch exports and the Malpedia
+API change daily, so B3/E1/E2/E3 drift; everything else is deterministic.
 
 ## Prior art and how DRAGNET differs
 
@@ -275,42 +372,37 @@ rewritten by `download_data.py --record`, so a fresh download does not silently 
 | MISP correlation | IOC-to-IOC matching | ingests forensic + malware evidence and reasons over competing hypotheses; measured as the `ioc-correlation` baseline |
 | Malpedia / Intezer code genetics | single-signal code-similarity attribution | code/imphash is one specificity-weighted anchor among several; `code-only` baseline |
 | TTP-similarity attribution (e.g. ATT&CK-profile nearest neighbour) | ranks actors by technique overlap | IDF-cosine profile term is one input; A3 shows why it cannot stand alone |
+| OCCAM (sibling project) | report/TTP-level ACH over ATT&CK incidents with learned grades | artifact-level evidence (IOCs, imphash/TLSH genetics, infrastructure) with forgeability-aware false-flag rules |
 | Manual analyst ACH | structured but hand-built, not reproducible | deterministic, weight-transparent, custody-hashed, re-runnable, with mandatory false-flag hypothesis |
 
 ## Limitations
 
-- **Small n.** 25 attributed ATT&CK campaigns and 7 curated cases; differences of one case move top-1 by 4 points.
-- **Ground truth is itself attribution.** ATT&CK and government statements can be wrong or incomplete.
-- **Residual leakage.** Group profiles in v19.2 were partly written from the same reporting as the
-  campaigns; A2 (temporal) and the time-of-incident mode reduce but do not eliminate this.
-- **Curated tokens.** Where public evidence is a relationship (a copied Rich header, a shared function),
-  the curated cases use descriptive tokens with cited sources rather than raw artifacts.
-- **Coarse sponsor-state and language signals** (MISP country), and ATT&CK "actor-specific" families
-  include some commodity malware ATT&CK attributes to a few groups (e.g. AgentTesla).
-- **Raw scores are under-confident**; use the grade. No HIGH verdicts occur on ATT&CK-only evidence
-  (it has no infrastructure signals).
-- REVENANT / VITRINE integration is file-based (`dragnet import` reads their JSON exports); there is no
-  live service coupling, and VITRINE triage output carries no imphash unless the analyst adds it.
-- Signed custody proves integrity and, with a pinned public key, signer identity; key management
-  (HSM, rotation, revocation) is out of scope.
-- **Fuzzy genetics (TLSH/ssdeep) not done:** MalwareBazaar publishes TLSH, but a like-for-like benchmark
-  needs a distance index over ~500k samples plus family-collision handling; left as future work rather
-  than reported half-measured.
-- **Learned calibration not done:** with 25 + 7 labelled cases a fitted calibrator would overfit; the
-  raw score stays under-confident and the discrete grade is the output to use.
+- **Small curated n.** 25 attributed ATT&CK campaigns (26 across all releases and domains) and 7
+  curated cases; per-report cases (n = 637) are the larger set, but they are slices of the same reports
+  ATT&CK profiles are built from (handled by leave-report-out, not eliminated).
+- **Ground truth is itself attribution.** ATT&CK, Malpedia and government statements can be wrong;
+  Malpedia and ATT&CK agree on 203 of 217 families both attribute.
+- **Leakage.** Plain A1 is a leaky upper bound (0.68); A1-LF (0.40) and R are the controlled numbers.
+- **Genetics results are dominated by commodity families** (AgentTesla, WannaCry); family-macro and
+  WannaCry-excluded numbers are reported next to per-sample ones.
+- **Tradecraft-only LOW verdicts are unreliable** (A3: 0/10; R-temporal LOW 0.45).
+- **The TTP-profile term is not supported by the per-report data** (no-ttpsim is better on k-fold top-1).
+- **Raw scores are not calibrated**; use the grade or the isotonic map (temporal ECE 0.051).
+- **Curated tokens.** Where public evidence is a relationship (a copied Rich header), curated cases use
+  descriptive tokens with cited sources rather than raw artifacts.
+- REVENANT / VITRINE integration is file-based; there is no live coupling.
+- Signed custody proves integrity and, with a pinned public key, signer identity; key management is out of scope.
 
 ## Roadmap
 
 - [x] Real knowledge graph from ATT&CK + MISP + abuse.ch with provenance
-- [x] Case-study validation (WannaCry, NotPetya, Olympic Destroyer, Turla/OilRig, ...) and Brier/ECE
-- [x] Multi-signal vs single-signal research question, false-flag stress test, ablations
-- [x] Neo4j export, FastAPI service
-- [ ] Fuzzy genetics (TLSH/ssdeep distance) instead of exact imphash
-- [x] Signed (Ed25519) custody log (`keygen`, `assess --sign-key`, `verify`) and STIX 2.1 report export (`--format stix`)
-- [x] REVENANT / VITRINE adapters (`dragnet import --revenant ... --vitrine ...`)
-- [x] Bootstrap CIs, paired significance and multi-seed false-flag stress test
-- [x] Docs site (GitHub Pages), Docker image and tagged releases
-- [ ] Learned monotone calibration of the ACH score on a larger curated case set
+- [x] Leave-report-out evaluation, per-report case set (n = 637), rolling-origin release split
+- [x] TLSH fuzzy genetics with a banded index and a time-split benchmark
+- [x] Comparison with Guru et al. (2025) under an adapted protocol
+- [x] Isotonic calibration evaluated on a temporal split
+- [x] Signed custody, STIX 2.1 export, REVENANT / VITRINE adapters, Neo4j export, FastAPI
+- [ ] Victimology signals from MISP (sector, country) in the signal-family ablation
+- [ ] OCCAM STIX import
 
 ## Safety and ethics
 
