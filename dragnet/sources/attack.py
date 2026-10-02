@@ -27,6 +27,7 @@ class AttackObject:
     first_seen: str | None = None
     last_seen: str | None = None
     created: str | None = None
+    domains: list[str] = field(default_factory=list)   # x_mitre_domains
 
 
 @dataclass
@@ -39,6 +40,16 @@ class AttackData:
     campaigns: dict[str, AttackObject]       # stix id -> campaign
     uses: dict[str, set[str]]                # source stix id -> target stix ids
     attributed: dict[str, str]               # campaign stix id -> group stix id
+    revoked_by: dict[str, str] = field(default_factory=dict)   # revoked stix id -> successor
+    domains: list[str] = field(default_factory=list)            # e.g. enterprise-attack, ics-attack
+
+    def resolve_group(self, gid: str) -> str | None:
+        """Follow revoked-by links (groups merged in later versions) to a live group id."""
+        seen = set()
+        while gid not in self.groups and gid in self.revoked_by and gid not in seen:
+            seen.add(gid)
+            gid = self.revoked_by[gid]
+        return gid if gid in self.groups else None
 
     # --- convenience views -------------------------------------------------
     def techniques_of(self, sid: str) -> set[str]:
@@ -70,11 +81,20 @@ def _live(obj: dict) -> bool:
     return not obj.get("revoked") and not obj.get("x_mitre_deprecated")
 
 
-def load_attack(path: str | Path) -> AttackData:
-    bundle = json.loads(Path(path).read_text(encoding="utf-8"))
-    objs = bundle["objects"]
-    coll = next((o for o in objs if o.get("type") == "x-mitre-collection"), {})
+def load_attack(path: str | Path | list, *extra: str | Path) -> AttackData:
+    """Load one ATT&CK bundle, or merge several domains (enterprise + ics + mobile of the
+    same release) into one graph: ``load_attack(ent, ics, mobile)``. Objects shared between
+    domains (groups, some software) have the same STIX id, so the union is well defined."""
+    paths = [*(path if isinstance(path, list) else [path]), *extra]
+    objs: list[dict] = []
+    colls = []
+    for p in paths:
+        bundle = json.loads(Path(p).read_text(encoding="utf-8"))
+        objs.extend(bundle["objects"])
+        colls.append(next((o for o in bundle["objects"] if o.get("type") == "x-mitre-collection"), {}))
+    coll = colls[0]
     version, released = coll.get("x_mitre_version", ""), coll.get("modified", "")
+    domains = [c.get("name", "") for c in colls]
     groups, software, techniques, campaigns = {}, {}, {}, {}
     for o in objs:
         t = o.get("type")
@@ -82,12 +102,17 @@ def load_attack(path: str | Path) -> AttackData:
             continue
         aliases = list(o.get("aliases") or o.get("x_mitre_aliases") or [])
         ao = AttackObject(o["id"], _ext_id(o), o.get("name", ""), t, aliases,
-                          o.get("first_seen"), o.get("last_seen"), o.get("created"))
+                          o.get("first_seen"), o.get("last_seen"), o.get("created"),
+                          list(o.get("x_mitre_domains") or []))
         {"intrusion-set": groups, "malware": software, "tool": software,
          "attack-pattern": techniques, "campaign": campaigns}[t][o["id"]] = ao
 
     uses: dict[str, set[str]] = defaultdict(set)
     attributed: dict[str, str] = {}
+    revoked_by: dict[str, str] = {}
+    for o in objs:
+        if o.get("type") == "relationship" and o.get("relationship_type") == "revoked-by":
+            revoked_by[o["source_ref"]] = o["target_ref"]
     live = set(groups) | set(software) | set(techniques) | set(campaigns)
     for o in objs:
         if o.get("type") != "relationship" or not _live(o):
@@ -99,4 +124,5 @@ def load_attack(path: str | Path) -> AttackData:
             uses[src].add(dst)
         elif rt == "attributed-to" and src in campaigns and dst in groups:
             attributed[src] = dst
-    return AttackData(version, released, groups, software, techniques, campaigns, dict(uses), attributed)
+    return AttackData(version, released, groups, software, techniques, campaigns, dict(uses), attributed,
+                      revoked_by, domains)
