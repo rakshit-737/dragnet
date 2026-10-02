@@ -5,6 +5,8 @@ and the project uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-10-02
+
 ### Added
 - Per-report ATT&CK case set (637 cases, 161 groups) with leave-report-out k-fold and temporal splits;
   A1-LF leave-report-out campaigns; cross-release/domain union (B1), rolling origin (B2) and
@@ -14,7 +16,13 @@ and the project uses [Semantic Versioning](https://semver.org/).
 - Isotonic calibration evaluated on a temporal split; selective-risk curves; signal-family ablations.
 - `bench` workflow (weekly / dispatch) that checks deterministic sections against committed results.
 - Docs: How it works, Evaluation and Reproduce pages; demo screenshot; CITATION.cff, CODEOWNERS,
-  Dependabot, issue and PR templates.
+  Dependabot, issue and PR templates; API docstrings rendered in the reference.
+- STIX 2.1 export and REVENANT / VITRINE adapters listed in the module table.
+
+### Security
+- Input-size limits, Host allow-list and escaped Markdown reports in the API; safer keygen/verify.
+- Every ATT&CK/TLSH source pinned by SHA-256; downloads fail closed.
+- CI: Python 3.11 in the matrix, SHA-pinned actions, wheel/sdist/Docker/Neo4j checks, least-privilege release.
 
 ### Changed
 - Baselines abstain on tied top scores; DRAGNET's LOW verdicts are reported as wrong-actor-named.
@@ -22,6 +30,9 @@ and the project uses [Semantic Versioning](https://semver.org/).
   bootstrap p-values. The previously reported significant A1 advantage over ioc-correlation and
   code-only (P = 0.01) does not hold (exact p = 0.06 leaky, 0.25 leakage-controlled).
 - "Calibrated confidence" wording replaced by "abstention-aware confidence grades".
+- HIGH grade requires independent anchors.
+- The Bayes baseline is renamed `ttp-binary-bayes`; it is not the Guru et al. scorer.
+- Demo knowledge graph and cases ship as package data; CLI gains `--version` and clearer errors.
 
 ### Fixed
 - A1 leakage: the headline moved from 0.68 (campaign's own reports in the profiles) to leakage-controlled numbers.

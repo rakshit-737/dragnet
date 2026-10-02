@@ -10,6 +10,12 @@
 - **Tradecraft-only LOW verdicts are unreliable** (A3: 0/10 correct).
 - **Raw scores are not calibrated**; an isotonic map on a temporal split brings ECE to 0.051.
 - **Zero confident errors is not a zero error rate**: 0/25 has an exact 95% upper bound of 0.137.
+- **Monte-Carlo p-values print as 0.000.** Where the sign-flip test falls back to Monte Carlo
+  (B = 200,000 sign flips, more than 20 discordant pairs), RESULTS.md prints 0.000; read these as
+  p < 1/(B+1) = 5e-6. The reporting fix lands with the next bench run.
+- **Headline engine is not the best ablation on the per-report set**: no-ttpsim scores 0.487 top-1
+  versus 0.454 for the full engine.
+- **One test warning** (Starlette TestClient / httpx deprecation) remains.
 - **Adapters are file-based**; **signing** proves integrity and, with a pinned key, signer identity.
 
 ## Not done, and why

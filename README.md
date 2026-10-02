@@ -402,6 +402,12 @@ API change daily, so B3/E1/E2/E3 drift; everything else is deterministic.
 - **Raw scores are not calibrated**; use the grade or the isotonic map (temporal ECE 0.051).
 - **Curated tokens.** Where public evidence is a relationship (a copied Rich header), curated cases use
   descriptive tokens with cited sources rather than raw artifacts.
+- **Monte-Carlo p-values print as 0.000.** Where the sign-flip test falls back to Monte Carlo
+  (B = 200,000 sign flips, more than 20 discordant pairs), RESULTS.md prints 0.000; read these as
+  p < 1/(B+1) = 5e-6. The reporting fix lands with the next bench run.
+- **Headline engine is not the best ablation on the per-report set**: no-ttpsim scores 0.487 top-1
+  versus 0.454 for the full engine.
+- **One test warning** (Starlette TestClient / httpx deprecation) remains.
 - REVENANT / VITRINE integration is file-based; there is no live coupling.
 - Signed custody proves integrity and, with a pinned public key, signer identity; key management is out of scope.
 
