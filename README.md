@@ -161,7 +161,10 @@ higher selective accuracy (0.913 vs 0.853) at lower coverage; at equal coverage 
 risk is lower (risk at 20% coverage 0.031 vs 0.048; area under the risk-coverage curve 0.247 vs 0.353).
 
 **Signal-family ablation (same engine).** TTP-only DRAGNET reaches 0.218 top-1 at 9.6% coverage,
-software-only 0.358; fusing both gives 0.454 (+0.095 over software-only, p < 0.001). Replacing the
+software-only 0.358; fusing both gives 0.454 (+0.095 over software-only, p < 0.001).
+
+![signal contribution](docs/figures/signal_contribution.png)
+ Replacing the
 IDF-cosine TTP term with per-technique noisy-OR (`no-ttpsim`) is *better* on top-1 here (0.487 vs
 0.454, k-fold), so the TTP-profile term is not justified by this data; it is kept as the default only
 because it is not worse on the temporal split (0.221 vs 0.207, p = 0.78) and this is reported, not tuned away.
@@ -250,17 +253,17 @@ campaigns (grade capped at LOW).
 
 ### E - genetics and IOCs from abuse.ch metadata (time split at 2024-01-01)
 
-- **E2 imphash (MalwareBazaar).** 13,400 test samples share only 1,139 imphashes and are 63% AgentTesla,
+- **E2 imphash (MalwareBazaar).** 13,402 test samples share only 1,139 imphashes and are 63% AgentTesla,
   so per-sample accuracy mostly measures re-identification of a few commodity families. With the
   training-period collision filter, DRAGNET covers 7.8% at 0.918 selective accuracy (family-clustered
   95% CI [0.46, 1.00]; macro over 25 families 0.92). A plain imphash lookup with the same filter gets
   0.998 at 6.4% - the filter, not the fusion, does the work. 85% of MEDIUM+ verdicts are WannaCry;
   without WannaCry, coverage is 2.4% at 0.73.
 - **E3 TLSH (MalwareBazaar, metadata only).** Pre-cutoff digests of actor-specific families become
-  fuzzy signals; the radius tau = 100 was chosen on a 2023-H2 validation window. On 30,638 post-cutoff
+  fuzzy signals; the radius tau = 100 was chosen on a 2023-H2 validation window. On 30,641 post-cutoff
   samples DRAGNET covers 3.9% at 0.844 [0.46, 0.96] (macro over 37 families 0.59) vs a TLSH
   nearest-neighbour lookup at 5.2% / 0.808; no TLSH-only verdict reaches MEDIUM. False alarms on
-  families with no actor mapping: 0.6% named, 0% at MEDIUM+. The stdlib banded index recovers 0.978
+  families with no actor mapping: 0.7% named, 0% at MEDIUM+. The stdlib banded index recovers 0.969
   of true neighbour pairs against exact search.
 - **B3 Malpedia-labelled abuse.ch cases** (129 families; labels from Malpedia, graph from ATT&CK v14.1 +
   pre-cutoff data). Artifacts alone (IOCs, imphash, TLSH) give 4% top-1: abuse.ch metadata for
@@ -363,7 +366,7 @@ python scripts/download_data.py                              # SHA-256 checked f
 PYTHONHASHSEED=0 python scripts/run_benchmarks.py --only A1LF,A1,G   # light sections, ~3 min
 ```
 
-The full run (all sections, 1213 s on a 2-vCPU GitHub runner) is the
+The full run (all sections, 1454 s on a 2-vCPU GitHub runner) is the
 [`bench` workflow](https://github.com/rakshit-737/dragnet/actions/workflows/bench.yml); it compares the
 deterministic sections with the committed `results/benchmark.json`. abuse.ch exports and the Malpedia
 API change daily, so B3/E1/E2/E3 drift; everything else is deterministic.

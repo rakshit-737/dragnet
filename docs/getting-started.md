@@ -33,7 +33,7 @@ python -m dragnet assess dragnet/data/cases/wannacry_like.json --weight imphash=
 python scripts/download_data.py            # pinned versions + SHA-256 manifest
 python -m dragnet build-kg                 # -> $DRAGNET_DATA/kg-attack-19.2.json
 python -m dragnet case-study olympic_destroyer_2018 --format md
-python scripts/run_benchmarks.py           # full run 1213 s on a GitHub runner; see reproduce.md
+python scripts/run_benchmarks.py           # full run 1454 s on a GitHub runner; see reproduce.md
 ```
 
 `make` targets (`make data`, `make bench`, `make demo`, `make test`) mirror these commands.

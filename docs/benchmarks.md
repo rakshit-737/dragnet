@@ -40,6 +40,10 @@ workflow on the dataset snapshot in `data/MANIFEST.json` ([Reproduce](reproduce.
 
 *Figure 3. Reliability of DRAGNET's top-hypothesis score.*
 
+![Signal contribution](figures/signal_contribution.png)
+
+*Figure 4. Same-engine signal-family ablation on per-report cases.*
+
 ## Full generated results
 
 --8<-- "results/RESULTS.md:3:"

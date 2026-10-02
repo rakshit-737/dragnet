@@ -4,7 +4,7 @@
     "file": "APTnotes.csv",
     "licence": "APTnotes (public report index; reports (c) authors)",
     "pinned": true,
-    "retrieved_utc": "2026-09-26T09:07:15+00:00",
+    "retrieved_utc": "2026-10-02T13:55:48+00:00",
     "sha256": "dac4579a78ad0ad644d6f57670f31ac54f0424b3ab2619c8119d8f65e48adf0b",
     "url": "https://raw.githubusercontent.com/aptnotes/data/8595fbdee6747be9e9f730fd0bacd247157314df/APTnotes.csv"
   },
@@ -13,34 +13,133 @@
     "file": "enterprise-attack-10.1.json",
     "licence": "MITRE ATT&CK Terms of Use (royalty-free, attribution)",
     "pinned": true,
-    "retrieved_utc": "2026-09-26T09:07:15+00:00",
+    "retrieved_utc": "2026-10-02T13:55:29+00:00",
     "sha256": "0a999035f26f4326ad670ec51727014fd42c21fca4bda4be784ac6ad0510fcb6",
-    "url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/enterprise-attack/enterprise-attack-10.1.json"
+    "url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/6cda5ad8462c79e14fbb872f4e09059b18e0cfc4/enterprise-attack/enterprise-attack-10.1.json"
+  },
+  "attack_12_1": {
+    "bytes": 38207821,
+    "file": "enterprise-attack-12.1.json",
+    "licence": "MITRE ATT&CK Terms of Use (royalty-free, attribution)",
+    "pinned": true,
+    "retrieved_utc": "2026-10-02T13:55:31+00:00",
+    "sha256": "e84679af4bc46bba2ba92f60182101f146d5b966898e47924de7321e6bffeaa1",
+    "url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/6cda5ad8462c79e14fbb872f4e09059b18e0cfc4/enterprise-attack/enterprise-attack-12.1.json"
+  },
+  "attack_13_1": {
+    "bytes": 40190414,
+    "file": "enterprise-attack-13.1.json",
+    "licence": "MITRE ATT&CK Terms of Use (royalty-free, attribution)",
+    "pinned": true,
+    "retrieved_utc": "2026-10-02T13:55:33+00:00",
+    "sha256": "5ec90131dc595ef7f2dd6ae0ee24074fbd5e317ed3261f9465660e04f97d426d",
+    "url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/6cda5ad8462c79e14fbb872f4e09059b18e0cfc4/enterprise-attack/enterprise-attack-13.1.json"
+  },
+  "attack_14_1": {
+    "bytes": 41775867,
+    "file": "enterprise-attack-14.1.json",
+    "licence": "MITRE ATT&CK Terms of Use (royalty-free, attribution)",
+    "pinned": true,
+    "retrieved_utc": "2026-10-02T13:55:35+00:00",
+    "sha256": "13af7514ad1bcb59deba6b6b46571168544bbe674eb52f41361916bb1cd9c3d6",
+    "url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/6cda5ad8462c79e14fbb872f4e09059b18e0cfc4/enterprise-attack/enterprise-attack-14.1.json"
+  },
+  "attack_15_1": {
+    "bytes": 43474692,
+    "file": "enterprise-attack-15.1.json",
+    "licence": "MITRE ATT&CK Terms of Use (royalty-free, attribution)",
+    "pinned": true,
+    "retrieved_utc": "2026-10-02T13:55:37+00:00",
+    "sha256": "a57988bffe402bb3e19d92dbe80a12143e1970b814e013e080f9df2fa5a3f6bc",
+    "url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/6cda5ad8462c79e14fbb872f4e09059b18e0cfc4/enterprise-attack/enterprise-attack-15.1.json"
+  },
+  "attack_16_1": {
+    "bytes": 46485155,
+    "file": "enterprise-attack-16.1.json",
+    "licence": "MITRE ATT&CK Terms of Use (royalty-free, attribution)",
+    "pinned": true,
+    "retrieved_utc": "2026-10-02T13:55:39+00:00",
+    "sha256": "8423d8dac3fc2feb825bb07d26e5f5d905e08a88f6fe4652cc20834cbe982813",
+    "url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/6cda5ad8462c79e14fbb872f4e09059b18e0cfc4/enterprise-attack/enterprise-attack-16.1.json"
+  },
+  "attack_17_1": {
+    "bytes": 44879463,
+    "file": "enterprise-attack-17.1.json",
+    "licence": "MITRE ATT&CK Terms of Use (royalty-free, attribution)",
+    "pinned": true,
+    "retrieved_utc": "2026-10-02T13:55:41+00:00",
+    "sha256": "0d1c347a4d584cf7e11ef46556c33b7689341443bf86299188d46c307274323b",
+    "url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/6cda5ad8462c79e14fbb872f4e09059b18e0cfc4/enterprise-attack/enterprise-attack-17.1.json"
+  },
+  "attack_18_1": {
+    "bytes": 50713170,
+    "file": "enterprise-attack-18.1.json",
+    "licence": "MITRE ATT&CK Terms of Use (royalty-free, attribution)",
+    "pinned": true,
+    "retrieved_utc": "2026-10-02T13:55:44+00:00",
+    "sha256": "f857d8f78f2f0c0b7db321a711a39fba98546c1e3076a657684850c83d0962fb",
+    "url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/6cda5ad8462c79e14fbb872f4e09059b18e0cfc4/enterprise-attack/enterprise-attack-18.1.json"
   },
   "attack_19_2": {
     "bytes": 53835637,
     "file": "enterprise-attack-19.2.json",
     "licence": "MITRE ATT&CK Terms of Use (royalty-free, attribution)",
     "pinned": true,
-    "retrieved_utc": "2026-09-26T09:07:15+00:00",
+    "retrieved_utc": "2026-10-02T13:55:28+00:00",
     "sha256": "dc1639caa5501d720e280cf1cbd8fbe009884a0c9b3e6e9ed9d0c25166c3d8f4",
-    "url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/enterprise-attack/enterprise-attack-19.2.json"
+    "url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/6cda5ad8462c79e14fbb872f4e09059b18e0cfc4/enterprise-attack/enterprise-attack-19.2.json"
+  },
+  "attack_ics_19_2": {
+    "bytes": 4057891,
+    "file": "ics-attack-19.2.json",
+    "licence": "MITRE ATT&CK Terms of Use (royalty-free, attribution)",
+    "pinned": true,
+    "retrieved_utc": "2026-10-02T13:55:44+00:00",
+    "sha256": "08b83d2cea6b6d6752468ef0e62e2ab2a53c9443ef72c439ecccb07ab9e89da9",
+    "url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/6cda5ad8462c79e14fbb872f4e09059b18e0cfc4/ics-attack/ics-attack-19.2.json"
+  },
+  "attack_mobile_19_2": {
+    "bytes": 5750325,
+    "file": "mobile-attack-19.2.json",
+    "licence": "MITRE ATT&CK Terms of Use (royalty-free, attribution)",
+    "pinned": true,
+    "retrieved_utc": "2026-10-02T13:55:44+00:00",
+    "sha256": "acfa5ca2d93484476f79bf38590e2b55bb675fc0ce85e76bffa0af2c82dada64",
+    "url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/6cda5ad8462c79e14fbb872f4e09059b18e0cfc4/mobile-attack/mobile-attack-19.2.json"
   },
   "bazaar_full": {
-    "bytes": 223224481,
+    "bytes": 223989456,
     "file": "bazaar-full.csv.zip",
     "licence": "CC0 (abuse.ch MalwareBazaar, metadata only)",
     "pinned": false,
-    "retrieved_utc": "2026-09-26T09:07:16+00:00",
-    "sha256": "9113e5965e841f51d644fa4f61c2c59e1f6366831d4215b26cbd9bf1633227d6",
+    "retrieved_utc": "2026-10-02T13:55:57+00:00",
+    "sha256": "c10da7fdcb15ee59afc1232875c362347ed31659c889751635eee5b32d0b0103",
     "url": "https://bazaar.abuse.ch/export/csv/full/"
+  },
+  "malpedia_actors": {
+    "bytes": 1200341,
+    "file": "malpedia-actors.json",
+    "licence": "CC BY-NC-SA 3.0 (Malpedia, Fraunhofer FKIE)",
+    "pinned": false,
+    "retrieved_utc": "2026-10-02T13:55:47+00:00",
+    "sha256": "20edc4107bd0cf447750942a17a500357247d3163fa3efbdbabb5eccee0bf57b",
+    "url": "https://malpedia.caad.fkie.fraunhofer.de/api/get/actors"
+  },
+  "malpedia_families": {
+    "bytes": 4222722,
+    "file": "malpedia-families.json",
+    "licence": "CC BY-NC-SA 3.0 (Malpedia, Fraunhofer FKIE)",
+    "pinned": false,
+    "retrieved_utc": "2026-10-02T13:55:46+00:00",
+    "sha256": "9a94c971209abde5a20e023dc7203fa04e14b1ef37bdbb293e13be453c5edbc5",
+    "url": "https://malpedia.caad.fkie.fraunhofer.de/api/get/families"
   },
   "misp_malpedia": {
     "bytes": 3825941,
     "file": "misp-malpedia.json",
     "licence": "CC BY-NC-SA 3.0 (Malpedia via MISP galaxy)",
     "pinned": true,
-    "retrieved_utc": "2026-09-26T09:07:15+00:00",
+    "retrieved_utc": "2026-10-02T13:55:48+00:00",
     "sha256": "1a1523635946c2d25572024b2a89553db11b6a296337cd1bcfd17223b24142b4",
     "url": "https://raw.githubusercontent.com/MISP/misp-galaxy/e9e867fe5a5e94be813540af9e227ac84c8d60ad/clusters/malpedia.json"
   },
@@ -49,17 +148,35 @@
     "file": "misp-threat-actor.json",
     "licence": "CC0-1.0 / BSD-2-Clause (MISP galaxy)",
     "pinned": true,
-    "retrieved_utc": "2026-09-26T09:07:15+00:00",
+    "retrieved_utc": "2026-10-02T13:55:48+00:00",
     "sha256": "9caebf1f7b9680ba0f1c6a0b0c18e5d250acc74fe2bdc9b127a54dc1759cba6f",
     "url": "https://raw.githubusercontent.com/MISP/misp-galaxy/e9e867fe5a5e94be813540af9e227ac84c8d60ad/clusters/threat-actor.json"
   },
   "threatfox_full": {
-    "bytes": 3760596,
+    "bytes": 3939155,
     "file": "threatfox-full.json.zip",
     "licence": "CC0 (abuse.ch ThreatFox)",
     "pinned": false,
-    "retrieved_utc": "2026-09-26T09:07:15+00:00",
-    "sha256": "cf322877489ff364de59d3a6b039091e692eec80d8b1a1b497ea83d826ec3b4f",
+    "retrieved_utc": "2026-10-02T13:55:49+00:00",
+    "sha256": "24430134f48cbcd5fc6f6f71bdd4175803ba9d14a17d5261ce1fba7182a18277",
     "url": "https://threatfox.abuse.ch/export/json/full/"
+  },
+  "tlsh_digests": {
+    "bytes": 8686,
+    "file": "tlsh-digests.txt",
+    "licence": "Apache-2.0",
+    "pinned": true,
+    "retrieved_utc": "2026-10-02T13:55:48+00:00",
+    "sha256": "776adcd5a139739d963c9f990cf2eea7b66d8a69dd318da78db234fa7c9766a5",
+    "url": "https://raw.githubusercontent.com/trendmicro/tlsh/ebdec8fde93a4ac359437f4f3796c78d3ae433bf/Testing/exp/example_data.128.1.len.out_EXP"
+  },
+  "tlsh_vectors": {
+    "bytes": 237460,
+    "file": "tlsh-xref-scores.txt",
+    "licence": "Apache-2.0",
+    "pinned": true,
+    "retrieved_utc": "2026-10-02T13:55:47+00:00",
+    "sha256": "a9c2605ce5399827d10b65c514b01bff20fab380c4844db17cb109f87c3c8bc2",
+    "url": "https://raw.githubusercontent.com/trendmicro/tlsh/ebdec8fde93a4ac359437f4f3796c78d3ae433bf/Testing/exp/example_data.128.1.len.xref.scores_EXP"
   }
 }

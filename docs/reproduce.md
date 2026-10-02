@@ -13,7 +13,7 @@ and checks the deterministic sections against the committed `results/benchmark.j
 | 1. data | `python scripts/download_data.py` | ~2-5 min, ~600 MB in `$DRAGNET_DATA` (default `data/raw`) | `[ok]` / `[have]` per source; pinned sources are SHA-256 checked and listed in `data/MANIFEST.json` |
 | 2. graph | `python -m dragnet build-kg` | ~20 s | `kg-attack-19.2.json` with 176 groups, 1600 signal keys |
 | 3. light sections | `PYTHONHASHSEED=0 python scripts/run_benchmarks.py --only A1,A1LF,A2,A3,C,D,F,G` | ~3 min, < 1 GB RAM | merges into `results/benchmark.json` |
-| 4. full run | `PYTHONHASHSEED=0 python scripts/run_benchmarks.py --fresh --out fresh` | 1213 s on the runner (2 vCPU); needs `.[bench]` (numpy) and ~4 GB RAM | a complete `fresh/RESULTS.md` |
+| 4. full run | `PYTHONHASHSEED=0 python scripts/run_benchmarks.py --fresh --out fresh` | 1454 s on the runner (2 vCPU); needs `.[bench]` (numpy) and ~4 GB RAM | a complete `fresh/RESULTS.md` |
 | 5. compare | `python scripts/compare_results.py results/benchmark.json fresh/benchmark.json` | seconds | `[ok]` for deterministic sections |
 
 ```bash
