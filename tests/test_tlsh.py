@@ -94,3 +94,16 @@ REF = data_dir() / "tlsh-xref-scores.txt"
 @pytest.mark.skipif(not REF.exists(), reason="TLSH reference vectors not downloaded")
 def test_distance_matches_full_reference():
     assert _check_pairs(_digests(data_dir() / "tlsh-digests.txt"), REF) == 3160
+
+
+def test_imphash_and_tlsh_of_one_sample_are_not_two_anchors():
+    from dragnet.ach import assess
+    from dragnet.models import Confidence
+    rng = random.Random(9)
+    h = "T1" + "".join(rng.choice("0123456789ABCDEF") for _ in range(70))
+    kg = KnowledgeGraph([Campaign("C1", "c", "A", [Signal(SignalKind.TLSH, h), Signal(SignalKind.IMPHASH, "i1"),
+                                                   Signal(SignalKind.IP, "10.0.0.1")])])
+    one_sample = [Signal(SignalKind.TLSH, h, "s1"), Signal(SignalKind.IMPHASH, "i1", "s1")]
+    assert assess("x", one_sample, kg).confidence != Confidence.HIGH
+    two_items = [*one_sample, Signal(SignalKind.IP, "10.0.0.1", "netflow")]
+    assert assess("y", two_items, kg).confidence == Confidence.HIGH

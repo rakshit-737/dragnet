@@ -44,7 +44,7 @@ class EngineConfig:
     anchor_family_specificity: float = 0.5   # family used by <=2 actors counts as an anchor
     discriminating_forgeable: float = 0.2    # forgeable signal linking to <=5 actors
     divergence_min_sim: float = 0.3          # R4 needs a clearly-matching tradecraft profile
-    posterior_gamma: float = 1.0             # p_i ~ score_i ** gamma (fitted on a calibration set)
+    posterior_gamma: float = 1.0             # p_i ~ score_i ** gamma (1 = plain normalisation; not fitted)
     matrix_top_k: int = 6
 
 
@@ -241,8 +241,7 @@ def _matrix(ctx: _Ctx, shown: list[str]) -> dict[str, dict[str, str]]:
 def posterior(scores, gamma: float = 1.0) -> dict[str, float]:
     """Normalise hypothesis scores into a distribution: p_i ~ score_i ** gamma.
 
-    gamma = 1 is plain normalisation; gamma > 1 sharpens. The benchmark fits gamma on
-    a calibration set that is disjoint from the evaluation cases (see bench.fit_gamma).
+    gamma = 1 is plain normalisation (used for every published result); gamma > 1 sharpens.
     Accepts HypothesisScore objects or (hypothesis, score) pairs."""
     pairs = [(h.hypothesis, h.score) if isinstance(h, HypothesisScore) else h for h in scores]
     powered = [(k, max(0.0, v) ** gamma) for k, v in pairs if v > 0]
@@ -258,18 +257,35 @@ def grade(ctx: _Ctx, top, runner_up, flags, leading_h) -> tuple[Confidence, str 
         return Confidence.INSUFFICIENT, None
     if flags and leading_h.hypothesis == FALSE_FLAG:
         return Confidence.INSUFFICIENT, None
-    anchor_kinds = {s.kind for s in top.matched if ctx.is_anchor(s)}
+    anchors = [s for s in top.matched if ctx.is_anchor(s)]
+    anchor_kinds = {s.kind for s in anchors}
     margin = top.score - runner_up
     if not anchor_kinds:
         # tradecraft-only (TTP profile / tools): at most LOW, and only with a clear margin
         if top.ttp_similarity > 0 and margin >= 0.1 and not flags:
             return Confidence.LOW, top.hypothesis
         return Confidence.INSUFFICIENT, None
-    if top.score >= 0.85 and len(anchor_kinds) >= 2 and margin >= 0.3 and not flags:
+    if top.score >= 0.85 and _independent_anchors(anchors) >= 2 and margin >= 0.3 and not flags:
         return Confidence.HIGH, top.hypothesis
     if top.score >= 0.6 and margin >= 0.2 and not flags:
         return Confidence.MEDIUM, top.hypothesis
     return Confidence.LOW, top.hypothesis
+
+
+# Kinds that describe the same binary: an imphash and a TLSH digest of one sample are one
+# piece of code evidence, not two independent anchors.
+_KIND_FAMILY = {SignalKind.IMPHASH: "binary", SignalKind.TLSH: "binary", SignalKind.FILE_HASH: "binary",
+                SignalKind.IP: "infra", SignalKind.DOMAIN: "infra"}
+
+
+def _independent_anchors(anchors: list[Signal]) -> int:
+    """Number of independent anchors: distinct kind families, counted only once per evidence
+    item (``Signal.source``) when sources are recorded."""
+    fams = {_KIND_FAMILY.get(s.kind, s.kind.value) for s in anchors}
+    sources = {s.source for s in anchors if s.source}
+    if sources and len(sources) < 2 and len(anchors) == sum(1 for s in anchors if s.source):
+        return 1
+    return len(fams)
 
 
 def _guidance(ctx: _Ctx, top, flags):
