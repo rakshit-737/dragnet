@@ -1,0 +1,59 @@
+name: bench
+
+# Full-data benchmark on a GitHub-hosted runner: downloads the pinned public datasets (plus the
+# daily abuse.ch exports and the Malpedia API), runs the real-data tests and every benchmark
+# section, checks that the deterministic sections reproduce the committed results, and uploads
+# results/ and figures as an artifact. Only small result files are ever committed (by hand).
+
+on:
+  workflow_dispatch:
+    inputs:
+      sections:
+        description: "comma-separated sections (empty = all)"
+        required: false
+        default: ""
+  schedule:
+    - cron: "17 4 * * 1"   # weekly, Monday 04:17 UTC
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bench
+  cancel-in-progress: false
+
+jobs:
+  bench:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    env:
+      DRAGNET_DATA: ${{ github.workspace }}/../dragnet-data
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -e ".[dev,bench]"
+      - name: Download datasets (pinned sources are SHA-256 checked)
+        run: python scripts/download_data.py
+      - name: Real-data tests
+        run: python -m pytest -q -m realdata
+      - name: Benchmarks
+        env:
+          SECTIONS: ${{ github.event.inputs.sections }}
+        run: |
+          mkdir -p fresh
+          if [ -n "$SECTIONS" ]; then only="--only $SECTIONS"; else only=""; fi
+          /usr/bin/time -v python scripts/run_benchmarks.py --fresh --out fresh $only 2> fresh/time.txt
+          tail -25 fresh/time.txt
+          cp -r docs/figures fresh/figures
+          cp "$DRAGNET_DATA/MANIFEST.json" fresh/data-manifest.json
+      - name: Deterministic sections match the committed results
+        run: python scripts/compare_results.py results/benchmark.json fresh/benchmark.json | tee fresh/compare.txt
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always()
+        with:
+          name: bench-results
+          path: fresh/
