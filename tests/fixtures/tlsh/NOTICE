@@ -1,0 +1,4 @@
+digests.tsv and xref_scores.tsv are a 12-file subset of the TLSH reference test vectors
+(Testing/exp/example_data.128.1.len.out_EXP and .xref.scores_EXP) from
+https://github.com/trendmicro/tlsh at commit ebdec8fde93a4ac359437f4f3796c78d3ae433bf,
+Copyright Trend Micro, licensed under the Apache License, Version 2.0.

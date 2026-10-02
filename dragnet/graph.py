@@ -18,6 +18,14 @@ from collections import defaultdict
 from pathlib import Path
 
 from .models import Campaign, Signal, SignalKind
+from .tlsh import TlshIndex
+
+# Default TLSH match radius; meta["tlsh_tau"] overrides it per graph. Oliver, Cheng & Chen
+# (TLSH whitepaper, Table 2) report on file pairs (8,766 similar / 55,822 different, not malware
+# family labels): distance < 30 -> FP 0.00181%, detection 32.2%; < 50 -> FP 0.52%, detection
+# 65.3%; < 100 -> FP 6.43%, detection 94.5%. Section E3 of the benchmark reports the radius
+# behaviour on MalwareBazaar family labels.
+TLSH_TAU = 50
 
 
 def ttp_expand(tids) -> set[str]:
@@ -43,6 +51,14 @@ class KnowledgeGraph:
                 self.index[s.key].add(c.id)
         self._actors = sorted({c.actor for c in campaigns})
         self._actor_cache: dict[tuple[str, str], frozenset[str]] = {}
+        self._cid_cache: dict[tuple[str, str], set[str]] = {}
+        # TLSH digests are matched by distance through a banded index, not by equality
+        self.tlsh_tau = int(self.meta.get("tlsh_tau", TLSH_TAU))
+        self.tlsh_index: TlshIndex | None = None
+        tl = [(s.value, c.id) for c in campaigns for s in c.signals if s.kind == SignalKind.TLSH]
+        if tl:
+            self.tlsh_index = TlshIndex()
+            self.tlsh_index.extend(tl)
         # TTP profiles + IDF
         prof: dict[str, set[str]] = defaultdict(set)
         for c in campaigns:
@@ -90,11 +106,23 @@ class KnowledgeGraph:
     def actors(self) -> list[str]:
         return self._actors
 
+    def campaigns_for(self, sig: Signal) -> set[str]:
+        """Campaign ids a signal links to (exact key, or TLSH distance <= tlsh_tau)."""
+        if sig.kind != SignalKind.TLSH or self.tlsh_index is None:
+            return self.index.get(sig.key, set())
+        k = sig.key
+        hit = self._cid_cache.get(k)
+        if hit is None:
+            hit = {lab for _, lab, _ in self.tlsh_index.nearest(sig.value, k=10**9,
+                                                               max_dist=self.tlsh_tau)}
+            self._cid_cache[k] = hit
+        return hit
+
     def actors_for(self, sig: Signal) -> frozenset[str]:
         k = sig.key
         hit = self._actor_cache.get(k)
         if hit is None:
-            hit = frozenset(self.campaigns[cid].actor for cid in self.index.get(k, ()))
+            hit = frozenset(self.campaigns[cid].actor for cid in self.campaigns_for(sig))
             self._actor_cache[k] = hit
         return hit
 
@@ -130,6 +158,6 @@ class KnowledgeGraph:
         """(evidence_id, signal_label, campaign_id) edges: the evidence-to-actor path."""
         res = []
         for s in signals:
-            for cid in sorted(self.index.get(s.key, ())):
+            for cid in sorted(self.campaigns_for(s)):
                 res.append((s.source, s.label, cid))
         return res

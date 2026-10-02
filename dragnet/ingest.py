@@ -24,6 +24,7 @@ _FORENSIC_MAP = {
 _MALWARE_MAP = {
     "sha256": SignalKind.FILE_HASH,
     "imphash": SignalKind.IMPHASH,
+    "tlsh": SignalKind.TLSH,
     "code_reuse": SignalKind.CODE_REUSE,
     "family": SignalKind.FAMILY,
     "ttps": SignalKind.TTP,

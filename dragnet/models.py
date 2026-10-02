@@ -10,6 +10,7 @@ class SignalKind(str, Enum):
     DOMAIN = "domain"
     FILE_HASH = "file_hash"
     IMPHASH = "imphash"
+    TLSH = "tlsh"                  # TLSH fuzzy digest: matched by distance, not equality
     CODE_REUSE = "code_reuse"      # shared function/code-block fingerprint
     FAMILY = "family"
     TTP = "ttp"                    # MITRE ATT&CK technique id
@@ -27,6 +28,7 @@ DEFAULT_WEIGHTS: dict[SignalKind, float] = {
     SignalKind.DOMAIN: 0.6,
     SignalKind.FILE_HASH: 0.9,
     SignalKind.IMPHASH: 0.6,
+    SignalKind.TLSH: 0.55,
     SignalKind.CODE_REUSE: 0.75,
     SignalKind.FAMILY: 0.5,
     SignalKind.TTP: 0.15,
@@ -43,7 +45,7 @@ FORGEABLE_KINDS = frozenset({SignalKind.RICH_HEADER, SignalKind.LANGUAGE, Signal
 # Kinds that are hard to fake and anchor an attribution. A FAMILY signal is also an
 # anchor when it is (near-)exclusive to few actors - see ach.ANCHOR_FAMILY_SPECIFICITY.
 HARD_KINDS = frozenset({SignalKind.IP, SignalKind.DOMAIN, SignalKind.FILE_HASH,
-                        SignalKind.IMPHASH, SignalKind.CODE_REUSE})
+                        SignalKind.IMPHASH, SignalKind.TLSH, SignalKind.CODE_REUSE})
 
 
 class Confidence(str, Enum):
