@@ -58,7 +58,7 @@ from dragnet.sources.aptnotes import load_aptnotes, report_counts
 from dragnet.sources.attack import load_attack
 from dragnet.sources.misp import load_malpedia_families, load_threat_actors, norm
 
-MAIN = ["dragnet", "ttp-jaccard", "ttp-cosine", "ttp-bayes", "ioc-correlation", "code-only"]
+MAIN = ["dragnet", "ttp-jaccard", "ttp-cosine", "ttp-binary-bayes", "ioc-correlation", "code-only"]
 ABL = ["dragnet", "dragnet-no-spec", "dragnet-no-ttpsim", "dragnet-no-ff"]
 ALL_SECTIONS = ["A1", "A1LF", "A2", "A3", "R", "G", "B", "C", "D", "E1", "E2", "E3", "F"]
 ORDER = ["A1LF", "A1", "A2", "A3", "R", "G", "B", "C", "D", "E1", "E2", "E3", "F"]
@@ -199,12 +199,12 @@ def sec_A2(cx: Ctx) -> dict:
 def sec_A3(cx: Ctx) -> dict:
     cases3 = bench.novel_family_cases(cx.attack)
     summ = {m: add_intervals(bench.evaluate(m, cases3, cx.kg), cluster=lambda r: r["truth"][0])
-            for m in ("dragnet", "ttp-jaccard", "ttp-cosine", "ttp-bayes")}
+            for m in ("dragnet", "ttp-jaccard", "ttp-cosine", "ttp-binary-bayes")}
     return {"main": [strip_rows(s) for s in summ.values()], "grades": grade_table(summ["dragnet"])}
 
 
 # ======================================================================== R: per-report cases
-R_METHODS = ["dragnet", "ttp-jaccard", "ttp-cosine", "ttp-bayes", "ioc-correlation", "code-only",
+R_METHODS = ["dragnet", "ttp-jaccard", "ttp-cosine", "ttp-binary-bayes", "ioc-correlation", "code-only",
              "dragnet-ttp-only", "dragnet-software-only", "dragnet-no-ttpsim"]
 
 
@@ -248,7 +248,7 @@ def sec_R(cx: Ctx, k: int = 5, cutoff_year: int = 2022) -> dict:
              "isotonic": {"ece": bench.ece(cal), "brier": brier(cal), "ece_ci": ci(cal, bench.ece),
                           "brier_ci": ci(cal, brier), "reliability": bench.reliability(cal)},
              "map": {"x": iso.x, "y": iso.y},
-             "baselines_ece": {m: tmp[m]["ece"] for m in ("ttp-jaccard", "ttp-cosine", "ttp-bayes",
+             "baselines_ece": {m: tmp[m]["ece"] for m in ("ttp-jaccard", "ttp-cosine", "ttp-binary-bayes",
                                                           "ioc-correlation", "code-only")}}
     return {"n_cases": len(cases), "n_groups": len({c.meta["group"] for c in cases}), "k": k,
             "cutoff_year": cutoff_year, "n_temporal": len(test),
@@ -282,7 +282,7 @@ def sec_G(cx: Ctx, seeds: int = 10) -> dict:
     by_actor: dict[str, list] = defaultdict(list)
     for c in cases:
         by_actor[next(iter(c.truth))].append(c)
-    methods = ["guru-uniform", "guru-report-prior", "ttp-bayes", "ttp-jaccard", "dragnet"]
+    methods = ["guru-uniform", "guru-report-prior", "ttp-binary-bayes", "ttp-jaccard", "dragnet"]
     per_seed = {m: [] for m in methods}
     top1 = {m: [] for m in methods}
     for seed in range(seeds):
@@ -312,7 +312,7 @@ def sec_G(cx: Ctx, seeds: int = 10) -> dict:
             doc = {s.value for s in c.signals if s.kind == SignalKind.TTP}
             sc = {a: sum(ptech.get(a, {}).get(t, 0.0) for t in doc) for a in actors}
             res = {"guru-uniform": sc, "guru-report-prior": {a: sc[a] * prior[a] for a in actors}}
-            for m in ("ttp-bayes", "ttp-jaccard", "dragnet"):
+            for m in ("ttp-binary-bayes", "ttp-jaccard", "dragnet"):
                 res[m] = METHODS[m](c.signals, kg).scores
             for m in methods:
                 ranks[m].append(_rank(res[m], truth, actors))
@@ -738,7 +738,7 @@ def figures(res: dict, outdir: Path) -> None:
         print("matplotlib not installed - skipping figures")
         return
     outdir.mkdir(parents=True, exist_ok=True)
-    colors = {"dragnet": "#2a78d6", "ttp-jaccard": "#eb6834", "ttp-cosine": "#1baf7a", "ttp-bayes": "#7a5cc7",
+    colors = {"dragnet": "#2a78d6", "ttp-jaccard": "#eb6834", "ttp-cosine": "#1baf7a", "ttp-binary-bayes": "#7a5cc7",
               "ioc-correlation": "#eda100", "code-only": "#e87ba4"}
     ink, muted = "#0b0b0b", "#52514e"
     plt.rcParams.update({"font.size": 10, "axes.edgecolor": muted, "axes.labelcolor": ink,
@@ -763,7 +763,7 @@ def figures(res: dict, outdir: Path) -> None:
 
     if "A1LF" in res:
         a = {s["method"]: s for s in res["A1LF"]["main"]}
-        ms = [m for m in ("dragnet", "ttp-jaccard", "ttp-bayes", "ioc-correlation", "code-only") if m in a]
+        ms = [m for m in ("dragnet", "ttp-jaccard", "ttp-binary-bayes", "ioc-correlation", "code-only") if m in a]
         metrics = [("top1", "top-1"), ("coverage", "coverage"), ("wrong_any_grade", "wrong actor named\n(any grade)"),
                    ("confident_error_rate", "wrong actor at\nMEDIUM+ / committed")]
         fig, ax = plt.subplots(figsize=(8, 3.8))
@@ -801,7 +801,7 @@ def figures(res: dict, outdir: Path) -> None:
         plt.close(fig)
     if "R" in res:
         rows = {s["method"]: s for s in res["R"]["kfold"]}
-        ms = [m for m in ("dragnet", "dragnet-ttp-only", "dragnet-software-only", "ttp-bayes", "ioc-correlation") if m in rows]
+        ms = [m for m in ("dragnet", "dragnet-ttp-only", "dragnet-software-only", "ttp-binary-bayes", "ioc-correlation") if m in rows]
         fig, ax = plt.subplots(figsize=(8, 3.6))
         bars(ax, ["top1", "coverage", "selective_accuracy"], ["top-1", "coverage", "selective accuracy"], ms,
              lambda k, m: rows[m][k], f"Per-report ATT&CK cases, 5-fold leave-report-out (n={rows['dragnet']['n']})")
@@ -984,7 +984,7 @@ def md_G(r):
           f"| paper artefact: released single test run | {p['released single test (143 docs)']} | - |"]
     label = {"guru-uniform": "ours: their scorer, uniform prior (ATT&CK technique lists)",
              "guru-report-prior": "ours: their scorer, prior = training-report share (expert-prior proxy)",
-             "ttp-bayes": "ours: ttp-bayes (binary profiles)", "ttp-jaccard": "ours: ttp-jaccard",
+             "ttp-binary-bayes": "ours: ttp-binary-bayes (simplified)", "ttp-jaccard": "ours: ttp-jaccard",
              "dragnet": "ours: DRAGNET"}
     L += [f"| {label[m]} | {fmt(v['mean_rank'])} +/- {fmt(v['sd'])} | {fmt(v['top1'])} |" for m, v in o.items()]
     return L + ["", "+/- is the standard deviation over the 10 random splits.", ""]
@@ -1107,7 +1107,7 @@ def md_E3(r):
           f"by maximising correct minus twice wrong verdicts: chosen tau = {v['chosen_tau']} ("
           f"{taus}). Graph digests: {r['graph_digests']}; test samples: {r['test']}. Searches are exact (numpy); the stdlib "
           f"banded index recovers {fmt(r['band_index_recall']['recall'])} of the {r['band_index_recall']['true_pairs']} "
-          f"true neighbour pairs of {r['band_index_recall']['queries']} test queries."), "",
+          f"true neighbour pairs (within the chosen radius tau) of {r['band_index_recall']['queries']} test queries."), "",
          "| method | coverage | selective acc. [family-cluster 95% CI] | macro acc. over families | families covered | clusters |",
          "|---|---|---|---|---|---|"]
     for lbl, k in (("DRAGNET (any grade)", "dragnet"), ("DRAGNET MEDIUM+", "dragnet_medium_plus"),

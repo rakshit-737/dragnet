@@ -468,7 +468,7 @@
     }
    },
    {
-    "method": "ttp-bayes",
+    "method": "ttp-binary-bayes",
     "n": 25,
     "n_in_kg": 25,
     "n_out_of_kg": 0,
@@ -1326,7 +1326,7 @@
     "exact": true,
     "p_holm": 0.000213623046875
    },
-   "ttp-bayes": {
+   "ttp-binary-bayes": {
     "diff": 0.68,
     "ci": [
      0.48,
@@ -1708,7 +1708,7 @@
     }
    },
    {
-    "method": "ttp-bayes",
+    "method": "ttp-binary-bayes",
     "n": 25,
     "n_in_kg": 25,
     "n_out_of_kg": 0,
@@ -2566,7 +2566,7 @@
     "exact": true,
     "p_holm": 0.02734375
    },
-   "ttp-bayes": {
+   "ttp-binary-bayes": {
     "diff": 0.4,
     "ci": [
      0.2,
@@ -2951,7 +2951,7 @@
     }
    },
    {
-    "method": "ttp-bayes",
+    "method": "ttp-binary-bayes",
     "n": 25,
     "n_in_kg": 17,
     "n_out_of_kg": 8,
@@ -3455,7 +3455,7 @@
     }
    },
    {
-    "method": "ttp-bayes",
+    "method": "ttp-binary-bayes",
     "n": 12,
     "n_in_kg": 7,
     "n_out_of_kg": 5,
@@ -3947,7 +3947,7 @@
     }
    },
    {
-    "method": "ttp-bayes",
+    "method": "ttp-binary-bayes",
     "n": 411,
     "n_in_kg": 411,
     "n_out_of_kg": 0,
@@ -4365,7 +4365,7 @@
     }
    },
    {
-    "method": "ttp-bayes",
+    "method": "ttp-binary-bayes",
     "n": 637,
     "n_in_kg": 637,
     "n_out_of_kg": 0,
@@ -5150,7 +5150,7 @@
     "exact": false,
     "p_holm": 0.0
    },
-   "ttp-bayes": {
+   "ttp-binary-bayes": {
     "diff": 0.4355834641548927,
     "ci": [
      0.39570905285191,
@@ -5538,7 +5538,7 @@
     }
    },
    {
-    "method": "ttp-bayes",
+    "method": "ttp-binary-bayes",
     "n": 193,
     "n_in_kg": 193,
     "n_out_of_kg": 0,
@@ -6246,7 +6246,7 @@
     "exact": false,
     "p_holm": 0.0
    },
-   "ttp-bayes": {
+   "ttp-binary-bayes": {
     "diff": 0.19948186528497408,
     "ci": [
      0.14507772020725387,
@@ -6572,7 +6572,7 @@
    "baselines_ece": {
     "ttp-jaccard": 0.02680378347353017,
     "ttp-cosine": 0.05299314775226193,
-    "ttp-bayes": 0.04530691788444019,
+    "ttp-binary-bayes": 0.04530691788444019,
     "ioc-correlation": 0.04488873928409397,
     "code-only": 0.057765967115250866
    }
@@ -6670,7 +6670,7 @@
     "sd": 0.4544848444439056,
     "top1": 0.17272727272727273
    },
-   "ttp-bayes": {
+   "ttp-binary-bayes": {
     "mean_rank": 9.842424242424242,
     "sd": 0.7816243593430655,
     "top1": 0.11212121212121212
@@ -8162,7 +8162,7 @@
     "withheld": 0.0
    },
    {
-    "method": "ttp-bayes",
+    "method": "ttp-binary-bayes",
     "n": 25,
     "decoy_top1": 0.0,
     "confident_decoy": 0.0,
@@ -8231,7 +8231,7 @@
     "withheld": 0.0
    },
    {
-    "method": "ttp-bayes",
+    "method": "ttp-binary-bayes",
     "n": 25,
     "decoy_top1": 0.0,
     "confident_decoy": 0.0,
@@ -8287,7 +8287,7 @@
     "min": 0.0,
     "max": 0.0
    },
-   "ttp-bayes": {
+   "ttp-binary-bayes": {
     "mean": 0.008,
     "min": 0.0,
     "max": 0.04
@@ -8331,7 +8331,7 @@
     "min": 0.0,
     "max": 0.0
    },
-   "ttp-bayes": {
+   "ttp-binary-bayes": {
     "mean": 0.008,
     "min": 0.0,
     "max": 0.04

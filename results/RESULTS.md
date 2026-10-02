@@ -15,7 +15,7 @@ Before each campaign is attributed, every group 'uses' edge whose citations are 
 | dragnet | 25 | 0.400 | 0.400 | 0.800 | 0.080 | 0.000 | 0.000 |
 | ttp-jaccard | 25 | 0.120 | 0.960 | 0.125 | 0.840 | 0.840 | 0.840 |
 | ttp-cosine | 25 | 0.080 | 0.960 | 0.083 | 0.880 | 0.880 | 0.880 |
-| ttp-bayes | 25 | 0.000 | 0.760 | 0.000 | 0.760 | 0.760 | 0.960 |
+| ttp-binary-bayes | 25 | 0.000 | 0.760 | 0.000 | 0.760 | 0.760 | 0.960 |
 | ioc-correlation | 25 | 0.354 | 0.320 | 1.000 | 0.000 | 0.000 | 0.326 |
 | code-only | 25 | 0.341 | 0.360 | 0.889 | 0.040 | 0.040 | 0.099 |
 
@@ -26,7 +26,7 @@ Before each campaign is attributed, every group 'uses' edge whose citations are 
 | dragnet | 0.400 [0.200, 0.600] | 0.400 [0.211, 0.613] | 0.800 [0.444, 0.975] | 0.080 [0.010, 0.260] | 0.000 [0.000, 0.137] |
 | ttp-jaccard | 0.120 [0.000, 0.280] | 0.960 [0.796, 0.999] | 0.125 [0.027, 0.324] | 0.840 [0.639, 0.955] | 0.840 [0.639, 0.955] |
 | ttp-cosine | 0.080 [0.000, 0.200] | 0.960 [0.796, 0.999] | 0.083 [0.010, 0.270] | 0.880 [0.688, 0.975] | 0.880 [0.688, 0.975] |
-| ttp-bayes | 0.000 [0.000, 0.000] | 0.760 [0.549, 0.906] | 0.000 [0.000, 0.176] | 0.760 [0.549, 0.906] | 0.760 [0.549, 0.906] |
+| ttp-binary-bayes | 0.000 [0.000, 0.000] | 0.760 [0.549, 0.906] | 0.000 [0.000, 0.176] | 0.760 [0.549, 0.906] | 0.760 [0.549, 0.906] |
 | ioc-correlation | 0.354 [0.180, 0.540] | 0.320 [0.149, 0.535] | 1.000 [0.631, 1.000] | 0.000 [0.000, 0.137] | 0.000 [0.000, 0.137] |
 | code-only | 0.341 [0.161, 0.523] | 0.360 [0.180, 0.575] | 0.889 [0.518, 0.997] | 0.040 [0.001, 0.204] | 0.040 [0.001, 0.204] |
 
@@ -36,7 +36,7 @@ Paired top-1 difference, DRAGNET minus method (A1-LF): bootstrap 95% CI, exact s
 |---|---|---|---|---|---|
 | ttp-jaccard | 0.280 | [0.120, 0.480] | 7 | 0.008 | 0.047 |
 | ttp-cosine | 0.320 | [0.160, 0.520] | 8 | 0.004 | 0.027 |
-| ttp-bayes | 0.400 | [0.200, 0.600] | 10 | 0.001 | 0.008 |
+| ttp-binary-bayes | 0.400 | [0.200, 0.600] | 10 | 0.001 | 0.008 |
 | ioc-correlation | 0.046 | [-0.027, 0.147] | 4 | 0.250 | 1.000 |
 | code-only | 0.059 | [-0.003, 0.159] | 3 | 0.250 | 1.000 |
 | dragnet-no-spec | 0.040 | [0.000, 0.120] | 1 | 0.500 | 1.000 |
@@ -58,7 +58,7 @@ Selective risk (error rate among the most confident cases) at fixed coverage, A1
 | dragnet | 0.000 | 0.200 | 0.333 | 0.600 | 0.281 |
 | ttp-jaccard | 1.000 | 0.900 | 0.933 | 0.880 | 0.925 |
 | ttp-cosine | 0.800 | 0.800 | 0.867 | 0.920 | 0.793 |
-| ttp-bayes | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 |
+| ttp-binary-bayes | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 |
 | ioc-correlation | 0.200 | 0.300 | 0.411 | 0.646 | 0.367 |
 | code-only | 0.200 | 0.150 | 0.431 | 0.659 | 0.367 |
 
@@ -78,7 +78,7 @@ Ranking and calibration (A1-LF):
 | dragnet | 25 | 0.400 | 0.400 | 0.424 | 0.116 | 0.168 | 0.981 |
 | ttp-jaccard | 25 | 0.160 | 0.160 | 0.172 | 0.116 | 0.102 | 0.990 |
 | ttp-cosine | 25 | 0.200 | 0.240 | 0.184 | 0.076 | 0.061 | 0.987 |
-| ttp-bayes | 25 | 0.000 | 0.000 | 0.018 | 0.001 | 0.030 | 0.999 |
+| ttp-binary-bayes | 25 | 0.000 | 0.000 | 0.018 | 0.001 | 0.030 | 0.999 |
 | ioc-correlation | 25 | 0.402 | 0.404 | 0.378 | 0.154 | 0.205 | 0.853 |
 | code-only | 25 | 0.364 | 0.367 | 0.355 | 0.115 | 0.149 | 0.791 |
 
@@ -91,7 +91,7 @@ In 18 of 25 campaigns the true group's profile already lists at least one of the
 | dragnet | 25 | 0.680 | 0.600 | 0.933 | 0.040 | 0.000 | 0.000 |
 | ttp-jaccard | 25 | 0.120 | 0.960 | 0.125 | 0.840 | 0.840 | 0.840 |
 | ttp-cosine | 25 | 0.080 | 0.960 | 0.083 | 0.880 | 0.880 | 0.880 |
-| ttp-bayes | 25 | 0.000 | 0.760 | 0.000 | 0.760 | 0.760 | 0.960 |
+| ttp-binary-bayes | 25 | 0.000 | 0.760 | 0.000 | 0.760 | 0.760 | 0.960 |
 | ioc-correlation | 25 | 0.560 | 0.520 | 1.000 | 0.000 | 0.000 | 0.280 |
 | code-only | 25 | 0.540 | 0.560 | 0.929 | 0.040 | 0.040 | 0.060 |
 
@@ -102,7 +102,7 @@ In 18 of 25 campaigns the true group's profile already lists at least one of the
 | dragnet | 0.680 [0.480, 0.840] | 0.600 [0.387, 0.789] | 0.933 [0.681, 0.998] | 0.040 [0.001, 0.204] | 0.000 [0.000, 0.137] |
 | ttp-jaccard | 0.120 [0.000, 0.280] | 0.960 [0.796, 0.999] | 0.125 [0.027, 0.324] | 0.840 [0.639, 0.955] | 0.840 [0.639, 0.955] |
 | ttp-cosine | 0.080 [0.000, 0.200] | 0.960 [0.796, 0.999] | 0.083 [0.010, 0.270] | 0.880 [0.688, 0.975] | 0.880 [0.688, 0.975] |
-| ttp-bayes | 0.000 [0.000, 0.000] | 0.760 [0.549, 0.906] | 0.000 [0.000, 0.176] | 0.760 [0.549, 0.906] | 0.760 [0.549, 0.906] |
+| ttp-binary-bayes | 0.000 [0.000, 0.000] | 0.760 [0.549, 0.906] | 0.000 [0.000, 0.176] | 0.760 [0.549, 0.906] | 0.760 [0.549, 0.906] |
 | ioc-correlation | 0.560 [0.381, 0.733] | 0.520 [0.313, 0.722] | 1.000 [0.753, 1.000] | 0.000 [0.000, 0.137] | 0.000 [0.000, 0.137] |
 | code-only | 0.540 [0.360, 0.720] | 0.560 [0.349, 0.756] | 0.929 [0.661, 0.998] | 0.040 [0.001, 0.204] | 0.040 [0.001, 0.204] |
 
@@ -112,7 +112,7 @@ Paired top-1 difference, DRAGNET minus method (A1): bootstrap 95% CI, exact sign
 |---|---|---|---|---|---|
 | ttp-jaccard | 0.560 | [0.360, 0.760] | 14 | 0.000 | 0.000 |
 | ttp-cosine | 0.600 | [0.400, 0.760] | 15 | 0.000 | 0.000 |
-| ttp-bayes | 0.680 | [0.480, 0.840] | 17 | 0.000 | 0.000 |
+| ttp-binary-bayes | 0.680 | [0.480, 0.840] | 17 | 0.000 | 0.000 |
 | ioc-correlation | 0.120 | [0.019, 0.248] | 6 | 0.062 | 0.312 |
 | code-only | 0.140 | [0.020, 0.280] | 4 | 0.062 | 0.312 |
 | dragnet-no-spec | 0.080 | [0.000, 0.200] | 2 | 0.250 | 0.750 |
@@ -143,7 +143,7 @@ Ranking and calibration (A1):
 | dragnet | 25 | 0.680 | 0.680 | 0.688 | 0.162 | 0.276 | 0.892 |
 | ttp-jaccard | 25 | 0.160 | 0.160 | 0.169 | 0.116 | 0.102 | 0.990 |
 | ttp-cosine | 25 | 0.160 | 0.200 | 0.166 | 0.076 | 0.061 | 0.987 |
-| ttp-bayes | 25 | 0.000 | 0.000 | 0.018 | 0.001 | 0.030 | 0.999 |
+| ttp-binary-bayes | 25 | 0.000 | 0.000 | 0.018 | 0.001 | 0.030 | 0.999 |
 | ioc-correlation | 25 | 0.620 | 0.633 | 0.595 | 0.173 | 0.216 | 0.643 |
 | code-only | 25 | 0.560 | 0.560 | 0.550 | 0.145 | 0.184 | 0.623 |
 
@@ -156,7 +156,7 @@ ATT&CK v10.1 has no campaign objects, so this is not a temporal hold-out of camp
 | dragnet | 25 | 0.412 | 0.529 | 0.778 | 0.160 | 0.000 | 0.000 | 0.750 |
 | ttp-jaccard | 25 | 0.235 | 0.941 | 0.250 | 0.800 | 0.800 | 0.800 | 0.000 |
 | ttp-cosine | 25 | 0.235 | 0.941 | 0.250 | 0.800 | 0.800 | 0.800 | 0.000 |
-| ttp-bayes | 25 | 0.000 | 0.706 | 0.000 | 0.760 | 0.760 | 0.960 | 0.125 |
+| ttp-binary-bayes | 25 | 0.000 | 0.706 | 0.000 | 0.760 | 0.760 | 0.960 | 0.125 |
 | ioc-correlation | 25 | 0.405 | 0.471 | 0.750 | 0.080 | 0.080 | 0.365 | 1.000 |
 | code-only | 25 | 0.360 | 0.412 | 0.857 | 0.080 | 0.080 | 0.155 | 0.875 |
 
@@ -167,7 +167,7 @@ ATT&CK v10.1 has no campaign objects, so this is not a temporal hold-out of camp
 | dragnet | 0.412 [0.176, 0.647] | 0.529 [0.278, 0.770] | 0.778 [0.400, 0.972] | 0.160 [0.045, 0.361] | 0.000 [0.000, 0.137] |
 | ttp-jaccard | 0.235 [0.059, 0.471] | 0.941 [0.713, 0.999] | 0.250 [0.073, 0.524] | 0.800 [0.593, 0.932] | 0.800 [0.593, 0.932] |
 | ttp-cosine | 0.235 [0.059, 0.471] | 0.941 [0.713, 0.999] | 0.250 [0.073, 0.524] | 0.800 [0.593, 0.932] | 0.800 [0.593, 0.932] |
-| ttp-bayes | 0.000 [0.000, 0.000] | 0.706 [0.440, 0.897] | 0.000 [0.000, 0.265] | 0.760 [0.549, 0.906] | 0.760 [0.549, 0.906] |
+| ttp-binary-bayes | 0.000 [0.000, 0.000] | 0.706 [0.440, 0.897] | 0.000 [0.000, 0.265] | 0.760 [0.549, 0.906] | 0.760 [0.549, 0.906] |
 | ioc-correlation | 0.405 [0.188, 0.631] | 0.471 [0.230, 0.722] | 0.750 [0.349, 0.968] | 0.080 [0.010, 0.260] | 0.080 [0.010, 0.260] |
 | code-only | 0.360 [0.129, 0.596] | 0.412 [0.184, 0.671] | 0.857 [0.421, 0.996] | 0.080 [0.010, 0.260] | 0.080 [0.010, 0.260] |
 
@@ -186,7 +186,7 @@ DRAGNET verdicts by stated grade (A2), exact 95% CI:
 | dragnet | 12 | 0.143 | 0.143 | 1.000 | 0.000 | 0.000 | 0.000 | 1.000 |
 | ttp-jaccard | 12 | 0.143 | 1.000 | 0.143 | 0.917 | 0.917 | 0.917 | 0.000 |
 | ttp-cosine | 12 | 0.143 | 1.000 | 0.143 | 0.917 | 0.917 | 0.917 | 0.000 |
-| ttp-bayes | 12 | 0.000 | 0.714 | 0.000 | 0.750 | 0.750 | 1.000 | 0.200 |
+| ttp-binary-bayes | 12 | 0.000 | 0.714 | 0.000 | 0.750 | 0.750 | 1.000 | 0.200 |
 | ioc-correlation | 12 | 0.214 | 0.286 | 0.500 | 0.083 | 0.083 | 0.292 | 1.000 |
 | code-only | 12 | 0.152 | 0.286 | 0.500 | 0.083 | 0.083 | 0.161 | 1.000 |
 
@@ -197,7 +197,7 @@ DRAGNET verdicts by stated grade (A2), exact 95% CI:
 | dragnet | 0.143 [0.000, 0.429] | 0.143 [0.004, 0.579] | 1.000 [0.025, 1.000] | 0.000 [0.000, 0.265] | 0.000 [0.000, 0.265] |
 | ttp-jaccard | 0.143 [0.000, 0.429] | 1.000 [0.590, 1.000] | 0.143 [0.004, 0.579] | 0.917 [0.615, 0.998] | 0.917 [0.615, 0.998] |
 | ttp-cosine | 0.143 [0.000, 0.429] | 1.000 [0.590, 1.000] | 0.143 [0.004, 0.579] | 0.917 [0.615, 0.998] | 0.917 [0.615, 0.998] |
-| ttp-bayes | 0.000 [0.000, 0.000] | 0.714 [0.290, 0.963] | 0.000 [0.000, 0.522] | 0.750 [0.428, 0.945] | 0.750 [0.428, 0.945] |
+| ttp-binary-bayes | 0.000 [0.000, 0.000] | 0.714 [0.290, 0.963] | 0.000 [0.000, 0.522] | 0.750 [0.428, 0.945] | 0.750 [0.428, 0.945] |
 | ioc-correlation | 0.214 [0.000, 0.500] | 0.286 [0.037, 0.710] | 0.500 [0.013, 0.987] | 0.083 [0.002, 0.385] | 0.083 [0.002, 0.385] |
 | code-only | 0.152 [0.000, 0.438] | 0.286 [0.037, 0.710] | 0.500 [0.013, 0.987] | 0.083 [0.002, 0.385] | 0.083 [0.002, 0.385] |
 
@@ -209,7 +209,7 @@ DRAGNET verdicts by stated grade (A2), exact 95% CI:
 | dragnet | 411 | 0.063 | 0.024 | 0.000 | 0.024 | 0.000 | 0.000 |
 | ttp-jaccard | 411 | 0.029 | 0.951 | 0.031 | 0.922 | 0.922 | 0.971 |
 | ttp-cosine | 411 | 0.063 | 1.000 | 0.063 | 0.937 | 0.937 | 0.937 |
-| ttp-bayes | 411 | 0.000 | 0.842 | 0.000 | 0.842 | 0.842 | 1.000 |
+| ttp-binary-bayes | 411 | 0.000 | 0.842 | 0.000 | 0.842 | 0.842 | 1.000 |
 
 95% intervals (A3, top-1 clustered by group): top-1 by cluster bootstrap; proportions exact Clopper-Pearson.
 
@@ -218,7 +218,7 @@ DRAGNET verdicts by stated grade (A2), exact 95% CI:
 | dragnet | 0.063 [0.036, 0.095] | 0.024 [0.012, 0.044] | 0.000 [0.000, 0.308] | 0.024 [0.012, 0.044] | 0.000 [0.000, 0.009] |
 | ttp-jaccard | 0.029 [0.011, 0.051] | 0.951 [0.926, 0.970] | 0.031 [0.016, 0.053] | 0.922 [0.892, 0.946] | 0.922 [0.892, 0.946] |
 | ttp-cosine | 0.063 [0.036, 0.095] | 1.000 [0.991, 1.000] | 0.063 [0.042, 0.091] | 0.937 [0.909, 0.958] | 0.937 [0.909, 0.958] |
-| ttp-bayes | 0.000 [0.000, 0.000] | 0.842 [0.803, 0.876] | 0.000 [0.000, 0.011] | 0.842 [0.803, 0.876] | 0.842 [0.803, 0.876] |
+| ttp-binary-bayes | 0.000 [0.000, 0.000] | 0.842 [0.803, 0.876] | 0.000 [0.000, 0.011] | 0.842 [0.803, 0.876] | 0.842 [0.803, 0.876] |
 
 DRAGNET verdicts by stated grade (A3), exact 95% CI:
 
@@ -240,7 +240,7 @@ DRAGNET verdicts by stated grade (A3), exact 95% CI:
 | dragnet | 637 | 0.454 | 0.429 | 0.853 | 0.063 | 0.006 | 0.006 |
 | ttp-jaccard | 637 | 0.126 | 0.936 | 0.133 | 0.812 | 0.812 | 0.874 |
 | ttp-cosine | 637 | 0.218 | 0.983 | 0.222 | 0.765 | 0.765 | 0.782 |
-| ttp-bayes | 637 | 0.018 | 0.702 | 0.022 | 0.686 | 0.686 | 0.982 |
+| ttp-binary-bayes | 637 | 0.018 | 0.702 | 0.022 | 0.686 | 0.686 | 0.982 |
 | ioc-correlation | 637 | 0.301 | 0.349 | 0.788 | 0.074 | 0.074 | 0.313 |
 | code-only | 637 | 0.310 | 0.323 | 0.913 | 0.028 | 0.028 | 0.144 |
 | dragnet-ttp-only | 637 | 0.218 | 0.096 | 0.525 | 0.046 | 0.000 | 0.000 |
@@ -254,7 +254,7 @@ DRAGNET verdicts by stated grade (A3), exact 95% CI:
 | dragnet | 0.454 [0.401, 0.507] | 0.429 [0.390, 0.468] | 0.853 [0.806, 0.893] | 0.063 [0.045, 0.085] | 0.006 [0.002, 0.016] |
 | ttp-jaccard | 0.126 [0.084, 0.180] | 0.936 [0.914, 0.953] | 0.133 [0.106, 0.162] | 0.812 [0.779, 0.841] | 0.812 [0.779, 0.841] |
 | ttp-cosine | 0.218 [0.160, 0.285] | 0.983 [0.969, 0.991] | 0.222 [0.190, 0.257] | 0.765 [0.730, 0.797] | 0.765 [0.730, 0.797] |
-| ttp-bayes | 0.018 [0.008, 0.032] | 0.702 [0.665, 0.737] | 0.022 [0.011, 0.041] | 0.686 [0.648, 0.722] | 0.686 [0.648, 0.722] |
+| ttp-binary-bayes | 0.018 [0.008, 0.032] | 0.702 [0.665, 0.737] | 0.022 [0.011, 0.041] | 0.686 [0.648, 0.722] | 0.686 [0.648, 0.722] |
 | ioc-correlation | 0.301 [0.245, 0.356] | 0.349 [0.311, 0.387] | 0.788 [0.729, 0.840] | 0.074 [0.055, 0.097] | 0.074 [0.055, 0.097] |
 | code-only | 0.310 [0.251, 0.366] | 0.323 [0.287, 0.361] | 0.913 [0.865, 0.947] | 0.028 [0.017, 0.044] | 0.028 [0.017, 0.044] |
 | dragnet-ttp-only | 0.218 [0.160, 0.285] | 0.096 [0.074, 0.121] | 0.525 [0.393, 0.654] | 0.046 [0.031, 0.065] | 0.000 [0.000, 0.006] |
@@ -267,7 +267,7 @@ Paired top-1 difference, DRAGNET minus method (R-kfold): bootstrap 95% CI, exact
 |---|---|---|---|---|---|
 | ttp-jaccard | 0.327 | [0.291, 0.367] | 218 | 0.000 (MC) | 0.000 |
 | ttp-cosine | 0.235 | [0.201, 0.270] | 158 | 0.000 (MC) | 0.000 |
-| ttp-bayes | 0.436 | [0.396, 0.477] | 284 | 0.000 (MC) | 0.000 |
+| ttp-binary-bayes | 0.436 | [0.396, 0.477] | 284 | 0.000 (MC) | 0.000 |
 | ioc-correlation | 0.153 | [0.125, 0.182] | 152 | 0.000 (MC) | 0.000 |
 | code-only | 0.144 | [0.116, 0.172] | 130 | 0.000 (MC) | 0.000 |
 | dragnet-ttp-only | 0.235 | [0.201, 0.270] | 158 | 0.000 (MC) | 0.000 |
@@ -289,7 +289,7 @@ Selective risk (error rate among the most confident cases) at fixed coverage, R-
 | dragnet | 0.031 | 0.129 | 0.343 | 0.546 | 0.247 |
 | ttp-jaccard | 0.827 | 0.833 | 0.849 | 0.874 | 0.824 |
 | ttp-cosine | 0.677 | 0.722 | 0.743 | 0.782 | 0.708 |
-| ttp-bayes | 0.953 | 0.971 | 0.974 | 0.982 | 0.950 |
+| ttp-binary-bayes | 0.953 | 0.971 | 0.974 | 0.982 | 0.950 |
 | ioc-correlation | 0.109 | 0.370 | 0.499 | 0.699 | 0.402 |
 | code-only | 0.048 | 0.238 | 0.483 | 0.690 | 0.353 |
 | dragnet-ttp-only | 0.701 | 0.729 | 0.741 | 0.782 | 0.727 |
@@ -303,7 +303,7 @@ Selective risk (error rate among the most confident cases) at fixed coverage, R-
 | dragnet | 193 | 0.207 | 0.269 | 0.538 | 0.124 | 0.000 | 0.000 |
 | ttp-jaccard | 193 | 0.052 | 0.938 | 0.050 | 0.891 | 0.891 | 0.948 |
 | ttp-cosine | 193 | 0.083 | 1.000 | 0.083 | 0.917 | 0.917 | 0.917 |
-| ttp-bayes | 193 | 0.008 | 0.798 | 0.006 | 0.793 | 0.793 | 0.992 |
+| ttp-binary-bayes | 193 | 0.008 | 0.798 | 0.006 | 0.793 | 0.793 | 0.992 |
 | ioc-correlation | 193 | 0.112 | 0.202 | 0.487 | 0.104 | 0.104 | 0.349 |
 | code-only | 193 | 0.124 | 0.166 | 0.688 | 0.052 | 0.052 | 0.136 |
 | dragnet-ttp-only | 193 | 0.083 | 0.067 | 0.154 | 0.057 | 0.000 | 0.000 |
@@ -317,7 +317,7 @@ Selective risk (error rate among the most confident cases) at fixed coverage, R-
 | dragnet | 0.207 [0.108, 0.318] | 0.269 [0.208, 0.338] | 0.538 [0.395, 0.678] | 0.124 [0.081, 0.179] | 0.000 [0.000, 0.019] |
 | ttp-jaccard | 0.052 [0.019, 0.095] | 0.938 [0.894, 0.967] | 0.050 [0.023, 0.092] | 0.891 [0.838, 0.931] | 0.891 [0.838, 0.931] |
 | ttp-cosine | 0.083 [0.035, 0.142] | 1.000 [0.981, 1.000] | 0.083 [0.048, 0.131] | 0.917 [0.869, 0.952] | 0.917 [0.869, 0.952] |
-| ttp-bayes | 0.008 [0.000, 0.025] | 0.798 [0.734, 0.852] | 0.006 [0.000, 0.036] | 0.793 [0.729, 0.848] | 0.793 [0.729, 0.848] |
+| ttp-binary-bayes | 0.008 [0.000, 0.025] | 0.798 [0.734, 0.852] | 0.006 [0.000, 0.036] | 0.793 [0.729, 0.848] | 0.793 [0.729, 0.848] |
 | ioc-correlation | 0.112 [0.041, 0.202] | 0.202 [0.148, 0.266] | 0.487 [0.324, 0.652] | 0.104 [0.064, 0.156] | 0.104 [0.064, 0.156] |
 | code-only | 0.124 [0.049, 0.214] | 0.166 [0.116, 0.226] | 0.688 [0.500, 0.839] | 0.052 [0.025, 0.093] | 0.052 [0.025, 0.093] |
 | dragnet-ttp-only | 0.083 [0.035, 0.142] | 0.067 [0.036, 0.112] | 0.154 [0.019, 0.454] | 0.057 [0.029, 0.100] | 0.000 [0.000, 0.019] |
@@ -330,7 +330,7 @@ Paired top-1 difference, DRAGNET minus method (R-temporal): bootstrap 95% CI, ex
 |---|---|---|---|---|---|
 | ttp-jaccard | 0.155 | [0.106, 0.210] | 32 | 0.000 (MC) | 0.000 |
 | ttp-cosine | 0.124 | [0.078, 0.171] | 24 | 0.000 (MC) | 0.000 |
-| ttp-bayes | 0.199 | [0.145, 0.256] | 39 | 0.000 (MC) | 0.000 |
+| ttp-binary-bayes | 0.199 | [0.145, 0.256] | 39 | 0.000 (MC) | 0.000 |
 | ioc-correlation | 0.095 | [0.055, 0.141] | 25 | 0.000 (MC) | 0.000 |
 | code-only | 0.084 | [0.044, 0.126] | 21 | 0.000 (MC) | 0.000 |
 | dragnet-ttp-only | 0.124 | [0.078, 0.171] | 24 | 0.000 (MC) | 0.000 |
@@ -352,7 +352,7 @@ Selective risk (error rate among the most confident cases) at fixed coverage, R-
 | dragnet | 0.385 | 0.584 | 0.698 | 0.793 | 0.558 |
 | ttp-jaccard | 0.885 | 0.903 | 0.922 | 0.948 | 0.914 |
 | ttp-cosine | 0.846 | 0.857 | 0.879 | 0.917 | 0.876 |
-| ttp-bayes | 0.974 | 0.987 | 0.987 | 0.992 | 0.986 |
+| ttp-binary-bayes | 0.974 | 0.987 | 0.987 | 0.992 | 0.986 |
 | ioc-correlation | 0.538 | 0.720 | 0.814 | 0.888 | 0.689 |
 | code-only | 0.439 | 0.690 | 0.795 | 0.876 | 0.666 |
 | dragnet-ttp-only | 0.872 | 0.896 | 0.922 | 0.917 | 0.884 |
@@ -369,7 +369,7 @@ Isotonic map fitted on 357 k-fold cases dated before 2022, evaluated on the 193 
 | DRAGNET isotonic | 0.051 [0.033, 0.118] | 0.114 [0.078, 0.158] |
 | ttp-jaccard (normalised share, raw) | 0.027 | - |
 | ttp-cosine (normalised share, raw) | 0.053 | - |
-| ttp-bayes (normalised share, raw) | 0.045 | - |
+| ttp-binary-bayes (normalised share, raw) | 0.045 | - |
 | ioc-correlation (normalised share, raw) | 0.045 | - |
 | code-only (normalised share, raw) | 0.058 | - |
 
@@ -387,7 +387,7 @@ Guru et al. (arXiv:2505.11547) attribute threat reports to 29 actors by scoring 
 | paper artefact: released single test run | 12.67 | - |
 | ours: their scorer, uniform prior (ATT&CK technique lists) | 8.718 +/- 0.549 | 0.200 |
 | ours: their scorer, prior = training-report share (expert-prior proxy) | 9.709 +/- 0.454 | 0.173 |
-| ours: ttp-bayes (binary profiles) | 9.842 +/- 0.782 | 0.112 |
+| ours: ttp-binary-bayes (simplified) | 9.842 +/- 0.782 | 0.112 |
 | ours: ttp-jaccard | 8.891 +/- 0.888 | 0.161 |
 | ours: DRAGNET | 5.382 +/- 0.791 | 0.533 |
 
@@ -491,7 +491,7 @@ False-flag indicators on clean A1 cases (false-alarm rate): 0.160
 | dragnet | 25 | 0.440 | 0.000 | 0.520 | 1.000 | 1.000 |
 | ttp-jaccard | 25 | 0.000 | 0.000 | 0.120 | 0.000 | 0.000 |
 | ttp-cosine | 25 | 0.000 | 0.000 | 0.080 | 0.000 | 0.000 |
-| ttp-bayes | 25 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
+| ttp-binary-bayes | 25 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
 | ioc-correlation | 25 | 0.541 | 0.440 | 0.267 | 0.000 | 0.000 |
 | code-only | 25 | 0.000 | 0.000 | 0.540 | 0.000 | 0.000 |
 | dragnet-no-ff | 25 | 0.440 | 0.000 | 0.520 | 0.000 | 0.800 |
@@ -503,7 +503,7 @@ Over 10 decoy seeds (same cases, different decoys): mean and range (min-max, not
 - dragnet: mean 0.000, range 0.000-0.000
 - ttp-jaccard: mean 0.000, range 0.000-0.000
 - ttp-cosine: mean 0.000, range 0.000-0.000
-- ttp-bayes: mean 0.008, range 0.000-0.040
+- ttp-binary-bayes: mean 0.008, range 0.000-0.040
 - ioc-correlation: mean 0.476, range 0.440-0.560
 - code-only: mean 0.000, range 0.000-0.000
 - dragnet-no-ff: mean 0.000, range 0.000-0.000
@@ -517,7 +517,7 @@ Effect of the false-flag rules (no-ff minus full engine, confident decoy rate, a
 | dragnet | 25 | 0.760 | 0.240 | 0.240 | 0.760 | 0.760 |
 | ttp-jaccard | 25 | 0.000 | 0.000 | 0.120 | 0.000 | 0.000 |
 | ttp-cosine | 25 | 0.000 | 0.000 | 0.080 | 0.000 | 0.000 |
-| ttp-bayes | 25 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
+| ttp-binary-bayes | 25 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
 | ioc-correlation | 25 | 0.780 | 0.760 | 0.180 | 0.000 | 0.000 |
 | code-only | 25 | 0.520 | 0.400 | 0.440 | 0.000 | 0.000 |
 | dragnet-no-ff | 25 | 0.760 | 0.400 | 0.240 | 0.000 | 0.600 |
@@ -529,7 +529,7 @@ Over 10 decoy seeds (same cases, different decoys): mean and range (min-max, not
 - dragnet: mean 0.172, range 0.120-0.240
 - ttp-jaccard: mean 0.000, range 0.000-0.000
 - ttp-cosine: mean 0.000, range 0.000-0.000
-- ttp-bayes: mean 0.008, range 0.000-0.040
+- ttp-binary-bayes: mean 0.008, range 0.000-0.040
 - ioc-correlation: mean 0.772, range 0.760-0.800
 - code-only: mean 0.400, range 0.400-0.400
 - dragnet-no-ff: mean 0.400, range 0.400-0.400
@@ -566,7 +566,7 @@ Share of collision-filtered MEDIUM+ verdicts that are WannaCry: 0.853.
 
 ## E3 - MalwareBazaar TLSH genetics (train < cutoff, test >= cutoff)
 
-Pre-cutoff TLSH digests of actor-specific families become fuzzy graph signals (collision filter: a digest whose radius-tau neighbourhood in a 100000-digest pre-cutoff sample spans more than 2 families is dropped). tau was chosen on a validation window ['2023-07-01', '2024-01-01'] (n=3000) by maximising correct minus twice wrong verdicts: chosen tau = 100 (tau 30: cov 0.004, acc 1.000, tau 50: cov 0.010, acc 0.800, tau 70: cov 0.013, acc 0.850, tau 100: cov 0.022, acc 0.848). Graph digests: 14376; test samples: 30641. Searches are exact (numpy); the stdlib banded index recovers 0.969 of the 1615 true neighbour pairs of 300 test queries.
+Pre-cutoff TLSH digests of actor-specific families become fuzzy graph signals (collision filter: a digest whose radius-tau neighbourhood in a 100000-digest pre-cutoff sample spans more than 2 families is dropped). tau was chosen on a validation window ['2023-07-01', '2024-01-01'] (n=3000) by maximising correct minus twice wrong verdicts: chosen tau = 100 (tau 30: cov 0.004, acc 1.000, tau 50: cov 0.010, acc 0.800, tau 70: cov 0.013, acc 0.850, tau 100: cov 0.022, acc 0.848). Graph digests: 14376; test samples: 30641. Searches are exact (numpy); the stdlib banded index recovers 0.969 of the 1615 true neighbour pairs (within the chosen radius tau = 100) of 300 test queries. The runtime default TLSH_TAU = 50 is more conservative than the evaluated tau = 100; at distance < 100 the Trend Micro TLSH paper reports about a 6.43% file-pair false-positive rate.
 
 | method | coverage | selective acc. [family-cluster 95% CI] | macro acc. over families | families covered | clusters |
 |---|---|---|---|---|---|

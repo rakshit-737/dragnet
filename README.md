@@ -18,7 +18,7 @@ specificity weighting and forgeability-aware false-flag rules into an ACH that a
 misattributes, and it is evaluated leakage-controlled and time-split on public data.
 
 > Headline (leakage-controlled, per-report ATT&CK cases, n = 637, 161 groups): DRAGNET ranks the true
-> group first in **45%** [40, 51] vs 30-31% for IOC-correlation and code-only matchers and 13-22% for
+> group first in **45%** [40, 51] vs 30-31% for IOC-correlation and code-only matchers and 2-22% for
 > TTP-similarity baselines; when it commits at MEDIUM it is right **95%** of the time (79/83). On the
 > 25 ATT&CK campaigns with the campaign's own reports removed from the profiles, top-1 is **0.40**
 > (0.68 without that control - read 0.68 as a leaky upper bound) and its edge over IOC correlation
@@ -128,7 +128,9 @@ exact commands and expected values: [Reproduce](docs/reproduce.md).
 
 **Methods.** `dragnet` (full engine); `ttp-jaccard` and `ttp-cosine` (nearest actor by technique
 overlap; a generic nearest-profile baseline with no single canonical reference);
-`ttp-bayes` (P(technique | actor) scoring after Guru, Moss & Kochenderfer, arXiv:2505.11547);
+`ttp-binary-bayes` (a simplified binary-profile form of the P(technique | actor) scoring in Guru, Moss &
+Kochenderfer, arXiv:2505.11547; it is *not* the paper's count-based scorer, which is evaluated separately
+in the Guru comparison in RESULTS.md and reaches far higher top-1);
 `ioc-correlation` (MISP-style count of shared families/tools/IOCs); `code-only` (shared family/imphash
 count, a Malpedia/Intezer-style single-signal matcher).
 
@@ -152,7 +154,7 @@ profiles use only reports dated before 2022 and the 193 cases dated 2022+ are at
 | ioc-correlation | 0.301 | 0.349 | 0.788 | 0.074 | 0.112 |
 | ttp-cosine | 0.218 | 0.983 | 0.222 | 0.765 | 0.083 |
 | ttp-jaccard | 0.126 | 0.936 | 0.133 | 0.812 | 0.052 |
-| ttp-bayes | 0.018 | 0.702 | 0.022 | 0.686 | 0.008 |
+| ttp-binary-bayes | 0.018 | 0.702 | 0.022 | 0.686 | 0.008 |
 
 DRAGNET's top-1 lead over every baseline is significant in both protocols (Holm p < 0.001). Per
 grade (k-fold): MEDIUM 79/83 correct (0.95), LOW 154/190 (0.81). Under the temporal split the
@@ -161,7 +163,9 @@ higher selective accuracy (0.913 vs 0.853) at lower coverage; at equal coverage 
 risk is lower (risk at 20% coverage 0.031 vs 0.048; area under the risk-coverage curve 0.247 vs 0.353).
 
 **Signal-family ablation (same engine).** TTP-only DRAGNET reaches 0.218 top-1 at 9.6% coverage,
-software-only 0.358; fusing both gives 0.454 (+0.095 over software-only, p < 0.001).
+software-only 0.358; fusing both gives 0.454 (+0.095 over software-only, p < 0.001). TTP-only DRAGNET
+ranks exactly like `ttp-cosine` (same IDF-cosine term), so it adds no separate evidence; the fusion gain
+is the gain over software-only.
 
 ![signal contribution](docs/figures/signal_contribution.png)
  Replacing the
@@ -260,7 +264,9 @@ campaigns (grade capped at LOW).
   0.998 at 6.4% - the filter, not the fusion, does the work. 85% of MEDIUM+ verdicts are WannaCry;
   without WannaCry, coverage is 2.4% at 0.73.
 - **E3 TLSH (MalwareBazaar, metadata only).** Pre-cutoff digests of actor-specific families become
-  fuzzy signals; the radius tau = 100 was chosen on a 2023-H2 validation window. On 30,641 post-cutoff
+  fuzzy signals; the radius tau = 100 was chosen (the shipped runtime default `TLSH_TAU = 50` is
+  more conservative; at distance < 100 the Trend Micro TLSH paper reports about a 6.43% file-pair
+  false-positive rate) on a 2023-H2 validation window. On 30,641 post-cutoff
   samples DRAGNET covers 3.9% at 0.844 [0.46, 0.96] (macro over 37 families 0.59) vs a TLSH
   nearest-neighbour lookup at 5.2% / 0.808; no TLSH-only verdict reaches MEDIUM. False alarms on
   families with no actor mapping: 0.7% named, 0% at MEDIUM+. The stdlib banded index recovers 0.969

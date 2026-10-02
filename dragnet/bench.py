@@ -161,9 +161,11 @@ def ttp_cosine(signals, kg: KnowledgeGraph) -> Prediction:
 
 
 def ttp_bayes(signals, kg: KnowledgeGraph) -> Prediction:
-    """Guru, Moss & Kochenderfer (2025) attribution scorer: p_attr = y_bar^T Y~ with Y~ the
-    row-normalised actor x technique matrix (P(technique | actor)) and y_bar the normalised
-    technique counts of the document (here: uniform over the case's techniques)."""
+    """Simplified binary-profile variant of the Guru, Moss & Kochenderfer (2025) scorer.
+
+    Profiles are binary technique sets, so P(technique | actor) = 1/|profile|; this favours
+    actors with small profiles and is NOT the paper's count-based estimator (see the Guru
+    comparison section of RESULTS.md, ``guru-uniform`` / ``guru-report-prior``)."""
     q = ttp_expand(s.value for s in signals if s.kind == SignalKind.TTP)
     scores = {}
     if q:
@@ -211,7 +213,7 @@ METHODS: dict[str, Callable[[list[Signal], KnowledgeGraph], Prediction]] = {
     "dragnet-no-ff": dragnet_method(EngineConfig(false_flag=False)),
     "ttp-jaccard": ttp_jaccard,
     "ttp-cosine": ttp_cosine,
-    "ttp-bayes": ttp_bayes,
+    "ttp-binary-bayes": ttp_bayes,
     "ioc-correlation": _count_baseline(None),
     "code-only": _count_baseline(CODE_KINDS),
     **{f"dragnet-{f}-only": only_kinds(k) for f, k in FAMILY_KINDS.items()},
