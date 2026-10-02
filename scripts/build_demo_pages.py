@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Render the bundled synthetic scenarios as static report pages for the docs site (docs/demo/).
 
 Deterministic: custody timestamps are fixed so re-running produces identical pages.

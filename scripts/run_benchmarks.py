@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Run every DRAGNET benchmark on the downloaded real data and write results/.
 
   A1  ATT&CK v19.2 campaigns -> v19.2 group profiles        (retrospective)
