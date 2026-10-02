@@ -26,6 +26,10 @@ def _id(kind: str, *parts: str) -> str:
 
 
 def to_stix(a: Assessment, created: str | None = None) -> dict:
+    """Convert an assessment into a STIX 2.1 bundle (campaign, intrusion-set, attributed-to, note).
+
+    :param created: fixed timestamp for reproducible output; defaults to now (UTC).
+    """
     ts = created or datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z")
     ident = _id("identity", "dragnet")
     common = {"spec_version": "2.1", "created": ts, "modified": ts, "created_by_ref": ident}
@@ -79,4 +83,5 @@ def to_stix(a: Assessment, created: str | None = None) -> dict:
 
 
 def to_stix_json(a: Assessment, created: str | None = None) -> str:
+    """:func:`to_stix` serialised as indented JSON."""
     return json.dumps(to_stix(a, created), indent=2)

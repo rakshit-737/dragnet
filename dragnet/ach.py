@@ -152,6 +152,16 @@ def assess(case_id: str, signals: list[Signal], kg: KnowledgeGraph,
            weights: dict[SignalKind, float] | None = None,
            custody: CustodyLog | None = None,
            config: EngineConfig = DEFAULT_CONFIG) -> Assessment:
+    """Score every actor hypothesis for one case and grade the result.
+
+    :param case_id: identifier echoed into the report.
+    :param signals: typed signals from :func:`dragnet.ingest.build_case`.
+    :param kg: knowledge graph to match against.
+    :param weights: per-kind weight overrides (merged over the defaults).
+    :param custody: optional custody log attached to the report.
+    :param config: thresholds for the confidence ladder.
+    :returns: an :class:`Assessment` with the ACH matrix, flags, grade and guidance.
+    """
     w = dict(DEFAULT_WEIGHTS)
     if weights:
         w.update(weights)

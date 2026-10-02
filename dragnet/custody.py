@@ -12,6 +12,8 @@ def canonical_hash(obj) -> str:
 
 
 class CustodyLog:
+    """Append-only, hash-chained log of evidence items; ``verify()`` detects any change."""
+
     GENESIS = "0" * 64
 
     def __init__(self) -> None:
@@ -69,6 +71,10 @@ def generate_keypair() -> tuple[bytes, bytes]:
 
 
 def sign_entries(entries: list[dict], private_pem: bytes) -> dict:
+    """Sign the head hash of a custody chain with an Ed25519 PEM key (needs the ``sign`` extra).
+
+    :returns: a dict with the algorithm, public key, head hash and signature.
+    """
     ser, _, _ = _crypto()
     key = ser.load_pem_private_key(private_pem, password=None)
     head = entries[-1]["entry_hash"] if entries else CustodyLog.GENESIS
