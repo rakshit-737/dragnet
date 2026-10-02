@@ -77,7 +77,7 @@ flowchart LR
   KG --> ACH[ACH engine<br/>specificity x kind weight<br/>+ IDF-cosine TTP profile]
   ACH --> FF[false-flag reasoner<br/>rules R1-R4]
   FF --> GR[confidence ladder<br/>HIGH / MEDIUM / LOW / INSUFFICIENT]
-  GR --> REP[Markdown / JSON report<br/>ACH matrix, links, guidance]
+  GR --> REP["Markdown / JSON / STIX 2.1 report<br/>ACH matrix, links, guidance"]
   CUS --> REP
   APN -.reporting depth.-> REP
   KG --> NEO[Neo4j Cypher export]
@@ -115,6 +115,9 @@ is named.
 | `dragnet/cases.py` | curated real cases (time-of-incident vs retrospective knowledge) |
 | `dragnet/bench.py`, `scripts/run_benchmarks.py` | baselines, ablations, metrics, false-flag stress test |
 | `dragnet/report.py`, `cli.py`, `api.py`, `neo4j_export.py` | reports, CLI, optional FastAPI, Neo4j Cypher export |
+| `dragnet/stix.py` | STIX 2.1 bundle export |
+| `dragnet/adapters.py` | REVENANT / VITRINE JSON exports to case files |
+| `dragnet/tlsh.py`, `casesets.py` | TLSH distance and banded index; enlarged case sets |
 
 ## Results on real data
 
