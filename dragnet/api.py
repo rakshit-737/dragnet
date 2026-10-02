@@ -5,9 +5,14 @@ POST /assess   body = DRAGNET case JSON  -> assessment JSON (same as `assess --f
 GET  /actors   -> actors in the loaded knowledge graph with sponsor state
 GET  /health
 The API is meant for a lab / analyst workstation: bind to localhost (the default).
+
+Limits: request bodies over ``MAX_BODY_BYTES`` get 413; cases over the ingest limits
+(:mod:`dragnet.ingest`) get 422. Requests whose ``Host`` header is not in ``allowed_hosts``
+get 400 (DNS-rebinding protection for the unauthenticated localhost API).
 """
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 from . import __version__
@@ -17,16 +22,71 @@ from .ingest import IngestError, build_case
 from .report import to_dict
 from .stix import to_stix
 
+MAX_BODY_BYTES = 1 << 20
+DEFAULT_HOSTS = ("127.0.0.1", "localhost", "::1", "[::1]", "testserver")
 
-def create_app(kg_path: str | Path):
+
+class BodyLimit:
+    """ASGI middleware: 413 when Content-Length or the streamed body exceeds ``max_bytes``."""
+
+    def __init__(self, app, max_bytes: int = MAX_BODY_BYTES):
+        self.app, self.max_bytes = app, max_bytes
+
+    async def _reject(self, send) -> None:
+        body = json.dumps({"detail": f"request body larger than {self.max_bytes} bytes"}).encode()
+        await send({"type": "http.response.start", "status": 413,
+                    "headers": [(b"content-type", b"application/json"),
+                                (b"content-length", str(len(body)).encode())]})
+        await send({"type": "http.response.body", "body": body})
+
+    async def __call__(self, scope, receive, send):
+        if scope["type"] != "http":
+            return await self.app(scope, receive, send)
+        for k, v in scope.get("headers", []):
+            if k == b"content-length" and (not v.isdigit() or int(v) > self.max_bytes):
+                return await self._reject(send)
+        seen = 0
+        started = False
+
+        async def guarded_receive():
+            nonlocal seen
+            msg = await receive()
+            if msg["type"] == "http.request":
+                seen += len(msg.get("body", b""))
+                if seen > self.max_bytes:
+                    raise _TooLarge
+            return msg
+
+        async def tracking_send(msg):
+            nonlocal started
+            started = started or msg["type"] == "http.response.start"
+            await send(msg)
+
+        try:
+            await self.app(scope, guarded_receive, tracking_send)
+        except _TooLarge:
+            if not started:
+                await self._reject(send)
+
+
+class _TooLarge(Exception):
+    pass
+
+
+def create_app(kg_path: str | Path, allowed_hosts: tuple[str, ...] | list[str] | None = None):
+    """Build the FastAPI app around the knowledge graph at ``kg_path``."""
     try:
         from fastapi import FastAPI, HTTPException
+        from starlette.middleware.trustedhost import TrustedHostMiddleware
     except ImportError as e:  # pragma: no cover - optional dependency
-        raise SystemExit("FastAPI is not installed: pip install -e .[api]") from e
+        raise SystemExit('FastAPI is not installed: pip install -e ".[api]"') from e
 
     kg = KnowledgeGraph.load(kg_path)
     app = FastAPI(title="DRAGNET", version=__version__,
                   description="Evidence-to-actor attribution with ACH and false-flag reasoning")
+    app.add_middleware(TrustedHostMiddleware, allowed_hosts=list(allowed_hosts or DEFAULT_HOSTS))
+
+    app.add_middleware(BodyLimit, max_bytes=MAX_BODY_BYTES)
 
     @app.get("/health")
     def health():

@@ -1,6 +1,7 @@
 """Assessment rendering: markdown + JSON."""
 from __future__ import annotations
 
+import html
 import json
 
 from .models import Assessment
@@ -50,8 +51,25 @@ def to_json(a: Assessment) -> str:
     return json.dumps(to_dict(a), indent=2)
 
 
+def _t(v: object) -> str:
+    """Escape case-controlled text for Markdown/HTML (table cells, headings, lists)."""
+    s = html.escape(str(v), quote=True)
+    for ch, ent in (("|", "&#124;"), ("`", "&#96;"), ("*", "&#42;"), ("[", "&#91;"),
+                    ("\n", " "), ("\r", " ")):
+        s = s.replace(ch, ent)
+    return s
+
+
+def _c(v: object) -> str:
+    """Inline code for case-controlled text: <code> with HTML escaping (no backtick break-out)."""
+    return f"<code>{_t(v)}</code>"
+
+
 def to_markdown(a: Assessment) -> str:
-    L = [f"# DRAGNET attribution assessment: {a.case_id}", ""]
+    """Analyst-facing Markdown report. Every case-controlled string (case id, evidence ids,
+    signal values, custody item ids) is HTML-escaped, so a hostile mutex or file name cannot
+    inject markup when the report is rendered."""
+    L = [f"# DRAGNET attribution assessment: {_t(a.case_id)}", ""]
     verdict = (f"**{a.leading}** with **{a.confidence.value}** confidence" if a.leading
                else f"**Insufficient for attribution** ({a.confidence.value})")
     L += [f"Assessment: {verdict}", ""]
@@ -59,25 +77,25 @@ def to_markdown(a: Assessment) -> str:
           "| Hypothesis | Support | TTP sim | Contradiction | Score | P (normalised) |",
           "|---|---|---|---|---|---|"]
     for h in _shown(a):
-        L.append(f"| {h.hypothesis} | {h.support:.2f} | {h.ttp_similarity:.2f} | "
+        L.append(f"| {_t(h.hypothesis)} | {h.support:.2f} | {h.ttp_similarity:.2f} | "
                  f"{h.contradiction:.2f} | {h.score:.2f} | {a.posterior.get(h.hypothesis, 0):.2f} |")
     hyps = list(next(iter(a.matrix.values())).keys()) if a.matrix else []
     L += ["", "## ACH matrix (C=consistent, I=inconsistent, N=neutral)", "",
-          "| Signal | " + " | ".join(hyps) + " |", "|---" * (len(hyps) + 1) + "|"]
+          "| Signal | " + " | ".join(_t(h) for h in hyps) + " |", "|---" * (len(hyps) + 1) + "|"]
     for sig, row in a.matrix.items():
-        L.append(f"| `{sig}` | " + " | ".join(row[h] for h in hyps) + " |")
+        L.append(f"| {_c(sig)} | " + " | ".join(row[h] for h in hyps) + " |")
     L += ["", "## Evidence-to-campaign links", ""]
-    L += [f"- `{ev}` -> `{sig}` -> {cid}" for ev, sig, cid in a.links] or ["- none"]
+    L += [f"- {_c(ev)} -> {_c(sig)} -> {_t(cid)}" for ev, sig, cid in a.links] or ["- none"]
     L += ["", "## False-flag indicators", ""]
-    L += [f"- {f}" for f in a.false_flag_indicators] or ["- none detected"]
+    L += [f"- {_t(f)}" for f in a.false_flag_indicators] or ["- none detected"]
     if a.notes:
-        L += ["", "## Analyst notes", ""] + [f"- {n}" for n in a.notes]
+        L += ["", "## Analyst notes", ""] + [f"- {_t(n)}" for n in a.notes]
     L += ["", "## What would raise confidence", ""] + [f"- {x}" for x in a.raise_confidence]
     L += ["", "## What would lower confidence", ""] + [f"- {x}" for x in a.lower_confidence]
     L += ["", "## Chain of custody", "", "| seq | action | item | sha256 | entry_hash |",
           "|---|---|---|---|---|"]
     for e in a.custody:
-        L.append(f"| {e['seq']} | {e['action']} | {e['item_id']} | "
+        L.append(f"| {e['seq']} | {_t(e['action'])} | {_t(e['item_id'])} | "
                  f"{e['item_hash'][:16]}... | {e['entry_hash'][:16]}... |")
     L += ["", ETHICS, ""]
     return "\n".join(L)

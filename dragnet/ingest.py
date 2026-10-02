@@ -41,14 +41,31 @@ class IngestError(ValueError):
     pass
 
 
+# Input limits (also enforced by the HTTP API): a case is an analyst's evidence abstraction,
+# not a bulk feed. Larger inputs are rejected rather than silently truncated.
+MAX_EVIDENCE_ITEMS = 500
+MAX_VALUES_PER_FIELD = 1000
+MAX_VALUE_LENGTH = 512
+MAX_SIGNALS = 5000
+MAX_ID_LENGTH = 128
+
+
 def _as_list(v) -> list[str]:
     if v is None:
         return []
     if isinstance(v, (str, int, float)):
-        return [str(v)]
-    if isinstance(v, list):
-        return [str(x) for x in v if x not in (None, "")]
-    raise IngestError(f"unsupported field type: {type(v).__name__}")
+        vals = [str(v)]
+    elif isinstance(v, list):
+        if len(v) > MAX_VALUES_PER_FIELD:
+            raise IngestError(f"field has {len(v)} values (max {MAX_VALUES_PER_FIELD})")
+        if any(isinstance(x, (dict, list)) for x in v):
+            raise IngestError("field values must be strings or numbers")
+        vals = [str(x) for x in v if x not in (None, "")]
+    else:
+        raise IngestError(f"unsupported field type: {type(v).__name__}")
+    if any(len(x) > MAX_VALUE_LENGTH for x in vals):
+        raise IngestError(f"value longer than {MAX_VALUE_LENGTH} characters")
+    return vals
 
 
 def extract_signals(item: EvidenceItem) -> list[Signal]:
@@ -73,16 +90,30 @@ def load_case(path: str | Path, custody: CustodyLog | None = None):
 
 
 def build_case(data: dict, custody: CustodyLog | None = None):
+    """Validate a case document and turn it into (case_id, items, signals, custody).
+
+    Raises :class:`IngestError` on malformed input or when a size limit is exceeded."""
     custody = custody if custody is not None else CustodyLog()
-    if "case_id" not in data or not isinstance(data.get("evidence"), list):
+    if not isinstance(data, dict) or "case_id" not in data or not isinstance(data.get("evidence"), list):
         raise IngestError("case needs 'case_id' and 'evidence' list")
+    if not isinstance(data["case_id"], str) or not 0 < len(data["case_id"]) <= MAX_ID_LENGTH:
+        raise IngestError(f"case_id must be a non-empty string of at most {MAX_ID_LENGTH} characters")
+    if len(data["evidence"]) > MAX_EVIDENCE_ITEMS:
+        raise IngestError(f"case has {len(data['evidence'])} evidence items (max {MAX_EVIDENCE_ITEMS})")
     items, signals = [], []
     for raw in data["evidence"]:
         if not isinstance(raw, dict) or "id" not in raw or "kind" not in raw:
             raise IngestError("evidence item needs 'id' and 'kind'")
-        item = EvidenceItem(raw["id"], raw["kind"], raw.get("content", {}))
+        if not isinstance(raw["id"], str) or not 0 < len(raw["id"]) <= MAX_ID_LENGTH:
+            raise IngestError(f"evidence id must be a string of at most {MAX_ID_LENGTH} characters")
+        content = raw.get("content", {})
+        if not isinstance(content, dict):
+            raise IngestError("evidence 'content' must be an object")
+        item = EvidenceItem(raw["id"], raw["kind"], content)
         item.sha256 = canonical_hash(item.content)
         custody.record("ingest", item.id, item.sha256)
         items.append(item)
         signals.extend(extract_signals(item))
+        if len(signals) > MAX_SIGNALS:
+            raise IngestError(f"case yields more than {MAX_SIGNALS} signals")
     return data["case_id"], items, signals, custody
