@@ -11,4 +11,4 @@ public issue. Include reproduction steps, and expect an acknowledgement within 7
 
 ## Safe use
 - Do not add real samples or real victim data to this repository.
-- Treat outputs as analytic judgments that need human review, not as proof. See the README ethics section.
+- Treat outputs as analytic judgments that need human review, not as proof. See [Safety and ethics](https://github.com/rakshit-737/dragnet#safety-and-ethics).

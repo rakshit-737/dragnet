@@ -7,7 +7,7 @@
 
 On the synthetic graph every signal belonged to one actor. On ATT&CK, a technique like T1059 or a
 tool like Mimikatz links to dozens of groups. The MVP's per-signal noisy-OR then lets the best
-documented actors (APT28, Lazarus, APT29 with 100+ techniques) win almost every case simply by
+documented actors (APT28 and Lazarus, each with 93 technique IDs in v19.2) win almost every case simply by
 having more edges, and every case produced dozens of "contradicting" signals.
 
 ## Decision
