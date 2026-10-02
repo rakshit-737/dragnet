@@ -42,6 +42,11 @@ class AttackData:
     attributed: dict[str, str]               # campaign stix id -> group stix id
     revoked_by: dict[str, str] = field(default_factory=dict)   # revoked stix id -> successor
     domains: list[str] = field(default_factory=list)            # e.g. enterprise-attack, ics-attack
+    # citations (external_references source_name, 'mitre-*' excluded) of each 'uses' edge and of
+    # each object; used for leave-report-out protocols and per-report cases
+    uses_refs: dict[tuple[str, str], frozenset[str]] = field(default_factory=dict)
+    obj_refs: dict[str, frozenset[str]] = field(default_factory=dict)
+    attributed_refs: dict[str, frozenset[str]] = field(default_factory=dict)
 
     def resolve_group(self, gid: str) -> str | None:
         """Follow revoked-by links (groups merged in later versions) to a live group id."""
@@ -77,6 +82,12 @@ def _ext_id(obj: dict) -> str:
     return ""
 
 
+def _refs(obj: dict) -> frozenset[str]:
+    return frozenset(r["source_name"] for r in obj.get("external_references", [])
+                     if r.get("source_name") and not r["source_name"].startswith("mitre-")
+                     and r["source_name"] != "capec")
+
+
 def _live(obj: dict) -> bool:
     return not obj.get("revoked") and not obj.get("x_mitre_deprecated")
 
@@ -96,6 +107,7 @@ def load_attack(path: str | Path | list, *extra: str | Path) -> AttackData:
     version, released = coll.get("x_mitre_version", ""), coll.get("modified", "")
     domains = [c.get("name", "") for c in colls]
     groups, software, techniques, campaigns = {}, {}, {}, {}
+    obj_refs: dict[str, frozenset[str]] = {}
     for o in objs:
         t = o.get("type")
         if t not in ("intrusion-set", "malware", "tool", "attack-pattern", "campaign") or not _live(o):
@@ -106,9 +118,12 @@ def load_attack(path: str | Path | list, *extra: str | Path) -> AttackData:
                           list(o.get("x_mitre_domains") or []))
         {"intrusion-set": groups, "malware": software, "tool": software,
          "attack-pattern": techniques, "campaign": campaigns}[t][o["id"]] = ao
+        obj_refs[o["id"]] = _refs(o)
 
     uses: dict[str, set[str]] = defaultdict(set)
     attributed: dict[str, str] = {}
+    uses_refs: dict[tuple[str, str], frozenset[str]] = {}
+    attributed_refs: dict[str, frozenset[str]] = {}
     revoked_by: dict[str, str] = {}
     for o in objs:
         if o.get("type") == "relationship" and o.get("relationship_type") == "revoked-by":
@@ -122,7 +137,9 @@ def load_attack(path: str | Path | list, *extra: str | Path) -> AttackData:
             continue
         if rt == "uses":
             uses[src].add(dst)
+            uses_refs[(src, dst)] = uses_refs.get((src, dst), frozenset()) | _refs(o)
         elif rt == "attributed-to" and src in campaigns and dst in groups:
             attributed[src] = dst
+            attributed_refs[src] = _refs(o)
     return AttackData(version, released, groups, software, techniques, campaigns, dict(uses), attributed,
-                      revoked_by, domains)
+                      revoked_by, domains, uses_refs, obj_refs, attributed_refs)

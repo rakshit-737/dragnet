@@ -13,8 +13,12 @@ Methods compared on identical evidence and identical knowledge graphs:
   ioc-correlation    baseline: MISP-style shared-indicator count (families/tools/IOCs)
   code-only          baseline: shared family/imphash/code-reuse count only
 
-Ties in a baseline ranking are scored in expectation (random tie-breaking), so no
-method benefits from alphabetical luck.
+Ties: ranking metrics (top-k, MRR) score ties in expectation (random tie-breaking). A baseline
+*commits* to an actor only when that actor is the unique top score; a tie at the top is an
+abstention (``_commit``). Earlier versions broke ties alphabetically, which inflated baseline
+committed errors (e.g. 'menuPass' won every tie it took part in). The alternative convention -
+commit anyway and score the error in expectation over a random tie-break - is reported too
+(``confident_error_expect``).
 """
 from __future__ import annotations
 
@@ -123,7 +127,21 @@ def _normalise(scores: dict[str, float]) -> dict[str, float]:
 
 
 def _top(scores: dict[str, float]) -> str | None:
+    """Deterministic leader (ties broken by name) - for reliability bins only, never a verdict."""
     return max(scores, key=lambda a: (scores[a], a)) if scores else None
+
+
+def _tied_top(scores: dict[str, float]) -> set[str]:
+    if not scores:
+        return set()
+    m = max(scores.values())
+    return {a for a, v in scores.items() if v == m}
+
+
+def _commit(scores: dict[str, float]) -> str | None:
+    """Baseline verdict: the unique top-scoring actor, or None (abstain) on a tie at the top."""
+    t = _tied_top(scores)
+    return next(iter(t)) if len(t) == 1 else None
 
 
 def ttp_jaccard(signals, kg: KnowledgeGraph) -> Prediction:
@@ -133,13 +151,13 @@ def ttp_jaccard(signals, kg: KnowledgeGraph) -> Prediction:
         inter = len(q & prof)
         if inter:
             scores[a] = inter / len(q | prof)
-    return Prediction(scores, _normalise(scores), _top(scores))
+    return Prediction(scores, _normalise(scores), _commit(scores))
 
 
 def ttp_cosine(signals, kg: KnowledgeGraph) -> Prediction:
     """Stronger TTP baseline: the same IDF-cosine DRAGNET uses, with nothing else."""
     scores = kg.ttp_similarity(s.value for s in signals if s.kind == SignalKind.TTP)
-    return Prediction(scores, _normalise(scores), _top(scores))
+    return Prediction(scores, _normalise(scores), _commit(scores))
 
 
 def ttp_bayes(signals, kg: KnowledgeGraph) -> Prediction:
@@ -153,7 +171,7 @@ def ttp_bayes(signals, kg: KnowledgeGraph) -> Prediction:
             inter = len(q & prof)
             if inter:
                 scores[a] = inter / (len(q) * len(prof))
-    return Prediction(scores, _normalise(scores), _top(scores))
+    return Prediction(scores, _normalise(scores), _commit(scores))
 
 
 def _count_baseline(kinds: set[SignalKind] | None):
@@ -164,7 +182,25 @@ def _count_baseline(kinds: set[SignalKind] | None):
             for a in kg.actors_for(s):
                 counts[a] += 1
         scores = {a: float(c) for a, c in counts.items()}
-        return Prediction(scores, _normalise(scores), _top(scores))
+        return Prediction(scores, _normalise(scores), _commit(scores))
+    return run
+
+
+# Signal families for the same-engine contribution analysis
+FAMILY_KINDS: dict[str, set[SignalKind]] = {
+    "ttp": {SignalKind.TTP},
+    "software": {SignalKind.FAMILY, SignalKind.TOOL},
+    "genetics": {SignalKind.IMPHASH, SignalKind.TLSH, SignalKind.CODE_REUSE, SignalKind.RICH_HEADER},
+    "infra": {SignalKind.IP, SignalKind.DOMAIN, SignalKind.FILE_HASH},
+}
+
+
+def only_kinds(kinds: set[SignalKind], cfg: EngineConfig | None = None):
+    """DRAGNET restricted to some signal kinds (same engine, same graph)."""
+    inner = dragnet_method(cfg)
+
+    def run(signals, kg):
+        return inner([s for s in signals if s.kind in kinds], kg)
     return run
 
 
@@ -178,6 +214,7 @@ METHODS: dict[str, Callable[[list[Signal], KnowledgeGraph], Prediction]] = {
     "ttp-bayes": ttp_bayes,
     "ioc-correlation": _count_baseline(None),
     "code-only": _count_baseline(CODE_KINDS),
+    **{f"dragnet-{f}-only": only_kinds(k) for f, k in FAMILY_KINDS.items()},
 }
 
 
@@ -278,11 +315,20 @@ def evaluate(method: str, cases: list[Case], kg: KnowledgeGraph,
             # ACH score for that actor; baselines only have their normalised share.
             "p_leader": (p.scores.get(_top(p.scores), 0.0) if p.hyp_scores is not None
                          else _normalise(p.scores).get(_top(p.scores), 0.0)) if p.scores else 0.0,
-            "leader_ok": _top(p.scores) in c.truth if p.scores else False,
+            # expected correctness of the top-ranked actor under a random tie-break
+            "leader_ok": (len(_tied_top(p.scores) & c.truth) / len(_tied_top(p.scores))) if p.scores else 0.0,
             "p_truth": max((p.probs.get(t, 0.0) for t in c.truth), default=p.probs.get(UNKNOWN, 0.0)),
             "leader": _top(p.scores),
+            # committed-error under the "always commit, random tie-break" convention
+            "p_wrong_expect": (_p_wrong_expect(p.scores, c.truth) if p.grade is None
+                               else float(p.grade in ("HIGH", "MEDIUM") and not named_ok)),
         })
     return summarise(label or method, rows)
+
+
+def _p_wrong_expect(scores: dict[str, float], truth: set[str]) -> float:
+    t = _tied_top(scores)
+    return 1.0 - len(t & truth) / len(t) if t else 0.0
 
 
 def summarise(method: str, rows: list[dict]) -> dict:
@@ -310,6 +356,13 @@ def summarise(method: str, rows: list[dict]) -> dict:
         "confident_error_rate": sum(1 for r in confident if not r["named_ok"]) / len(rows)
         if rows else float("nan"),
         "out_of_kg_abstain": mean([r["named"] is None for r in ook]),
+        # wrong actor named at ANY grade (for baselines identical to confident_error_rate)
+        "wrong_any_grade": sum(1 for r in rows if r["named"] and not r["named_ok"]) / len(rows)
+        if rows else float("nan"),
+        "confident_error_expect": mean([r.get("p_wrong_expect", 0.0) for r in rows]),
+        "counts": {"named": len(named), "named_ok": sum(r["named_ok"] for r in named),
+                   "confident_wrong": sum(1 for r in confident if not r["named_ok"]),
+                   "wrong_any": sum(1 for r in rows if r["named"] and not r["named_ok"])},
         "brier": mean([(p - float(ok)) ** 2 for p, ok in pairs]), "ece": ece(pairs),
         "brier_dist": mean([r["brier"] for r in rows]),
         "reliability": reliability(pairs), "grades": grades, "rows": rows,
@@ -367,9 +420,9 @@ def evaluate_false_flag(method: str, cases: list[Case], kg: KnowledgeGraph) -> d
         p = fn(c.signals, kg)
         decoy = c.meta["decoy"]
         n += 1
-        leader = _top(p.scores)
-        decoy_top += leader == decoy
-        truth_top += leader in c.truth
+        tied = _tied_top(p.scores)
+        decoy_top += (decoy in tied) / len(tied) if tied else 0.0
+        truth_top += len(tied & c.truth) / len(tied) if tied else 0.0
         committed = p.named if p.grade is None else (p.named if p.grade in ("HIGH", "MEDIUM") else None)
         decoy_conf += committed == decoy
         flagged += p.flags > 0

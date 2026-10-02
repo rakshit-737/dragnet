@@ -107,3 +107,15 @@ def test_imphash_and_tlsh_of_one_sample_are_not_two_anchors():
     assert assess("x", one_sample, kg).confidence != Confidence.HIGH
     two_items = [*one_sample, Signal(SignalKind.IP, "10.0.0.1", "netflow")]
     assert assess("y", two_items, kg).confidence == Confidence.HIGH
+
+
+def test_numpy_index_matches_reference_distance():
+    np = pytest.importorskip("numpy")
+    from dragnet.tlsh_np import NumpyTlshIndex
+    d = _digests(FIX / "digests.tsv")
+    idx = NumpyTlshIndex()
+    idx.extend((h, n) for n, h in d.items())
+    for n, h in d.items():
+        got = idx.distances(h)
+        assert np.array_equal(got, [T.diff(h, o) for o in d.values()]), n
+        assert idx.nearest(h, k=1)[0] == (0, n, T.Tlsh(h).digest)
