@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 
 from dragnet.ach import FALSE_FLAG, UNKNOWN, assess, noisy_or
-from dragnet.cli import main, parse_weights, run
+from dragnet.cli import CliError, main, parse_weights, run
 from dragnet.custody import CustodyLog, canonical_hash
 from dragnet.graph import KnowledgeGraph
 from dragnet.ingest import IngestError, build_case, extract_signals
@@ -12,8 +12,8 @@ from dragnet.models import Confidence, EvidenceItem, Signal, SignalKind
 from dragnet.report import to_json, to_markdown
 
 ROOT = Path(__file__).resolve().parent.parent
-KG = ROOT / "fixtures" / "campaigns.json"
-CASES = ROOT / "fixtures" / "cases"
+KG = ROOT / "dragnet" / "data" / "campaigns.json"
+CASES = ROOT / "dragnet" / "data" / "cases"
 
 
 @pytest.fixture
@@ -168,7 +168,7 @@ def test_cli_demo(capsys):
 
 
 def test_parse_weights_rejects_bad():
-    with pytest.raises(SystemExit):
+    with pytest.raises(CliError):
         parse_weights(["imphash=2"])
-    with pytest.raises(SystemExit):
+    with pytest.raises(CliError):
         parse_weights(["nope=0.1"])

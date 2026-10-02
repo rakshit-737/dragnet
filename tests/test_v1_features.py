@@ -10,8 +10,8 @@ from dragnet.cli import main, run
 from dragnet.stix import GRADE_TO_STIX, to_stix
 
 ROOT = Path(__file__).resolve().parent.parent
-KG = ROOT / "fixtures" / "campaigns.json"
-CASES = ROOT / "fixtures" / "cases"
+KG = ROOT / "dragnet" / "data" / "campaigns.json"
+CASES = ROOT / "dragnet" / "data" / "cases"
 ADAPT = ROOT / "fixtures" / "adapters"
 
 
@@ -76,6 +76,9 @@ def test_cli_keygen_sign_verify(tmp_path, capsys):
                  "-o", str(rep)]) == 0
     assert "custody_signature" in json.loads(rep.read_text())
     assert main(["verify", str(rep), "--pub", pre + ".pub"]) == 0
+    assert main(["verify", str(rep)]) == 3                     # valid but signer not pinned
+    assert main(["verify", str(rep), "--allow-unpinned"]) == 0
+    assert main(["keygen", pre]) == 2                          # refuses to overwrite
     d = json.loads(rep.read_text())
     d["custody"][0]["action"] = "forged"
     rep.write_text(json.dumps(d))
@@ -145,3 +148,17 @@ def test_paired_bootstrap_diff():
     a, b = _rows([1] * 10), _rows([0] * 10)
     d = bench.paired_bootstrap_diff(a, b, n_boot=200)
     assert d["diff"] == 1.0 and d["ci"] == [1.0, 1.0] and d["p_le_0"] == 0
+
+
+def test_markdown_report_escapes_hostile_strings():
+    from dragnet.graph import KnowledgeGraph
+    from dragnet.ingest import build_case
+    from dragnet.report import to_markdown
+    case = {"case_id": "demo<script>alert(1)</script>", "evidence": [
+        {"id": "EV1<b>x</b>", "kind": "forensic",
+         "content": {"mutexes": ["GlobalMtx` <img src=x onerror=alert(document.domain)> `"]}}]}
+    cid, _i, sigs, custody = build_case(case)
+    from dragnet.ach import assess
+    md = to_markdown(assess(cid, sigs, KnowledgeGraph.load(KG), custody=custody))
+    assert "<script>" not in md and "<img" not in md and "<b>x</b>" not in md
+    assert "&lt;img" in md

@@ -1,18 +1,19 @@
 [build-system]
-requires = ["setuptools>=68"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "dragnet"
-version = "1.0.0"
-description = "Evidence-to-actor attribution with ACH, false-flag reasoning and calibrated confidence on real ATT&CK/MISP/abuse.ch data"
+name = "dragnet-attribution"
+dynamic = ["version"]
+description = "Evidence-to-actor attribution with ACH, false-flag reasoning and conservative, abstention-aware confidence grades on real ATT&CK/MISP/abuse.ch data"
 requires-python = ">=3.10"
 readme = "README.md"
-license = { text = "MIT" }
+license = "MIT"
+license-files = ["LICENSE"]
 dependencies = []
 
 [project.optional-dependencies]
-dev = ["pytest>=7", "ruff>=0.5"]
+dev = ["pytest>=7", "ruff==0.16.10", "build>=1.2"]
 api = ["fastapi>=0.110", "uvicorn>=0.29", "httpx>=0.27"]
 bench = ["matplotlib>=3.8"]
 sign = ["cryptography>=42"]
@@ -21,8 +22,18 @@ docs = ["mkdocs-material>=9.5", "mkdocstrings[python]>=0.25"]
 [project.scripts]
 dragnet = "dragnet.cli:main"
 
+[project.urls]
+Homepage = "https://github.com/rakshit-737/dragnet"
+Documentation = "https://rakshit-737.github.io/dragnet/"
+
 [tool.setuptools]
-packages = ["dragnet", "dragnet.sources"]
+packages = ["dragnet", "dragnet.sources", "dragnet.data"]
+
+[tool.setuptools.dynamic]
+version = { attr = "dragnet.__version__" }
+
+[tool.setuptools.package-data]
+"dragnet.data" = ["*.json", "cases/*.json", "real_cases/*.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -32,3 +43,8 @@ markers = ["realdata: needs the downloaded public datasets (skipped when absent)
 [tool.ruff]
 line-length = 110
 target-version = "py310"
+
+[tool.ruff.lint]
+# Explicit rule list so results do not drift with ruff's defaults (ruff is pinned in [dev]).
+select = ["E4", "E7", "E9", "F", "W", "I", "UP", "B", "RUF", "ISC", "C4", "PIE", "EXE"]
+ignore = ["E402", "E731", "RUF005", "B905"]   # sys.path-first scripts; style-only rules

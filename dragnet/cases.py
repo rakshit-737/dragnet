@@ -1,6 +1,6 @@
 """Curated real-world case studies with published attribution as ground truth.
 
-A case file (fixtures/real_cases/*.json) contains:
+A case file (dragnet/data/real_cases/*.json) contains:
   ground_truth              ATT&CK group ids accepted as correct (e.g. ["G0034"])
   false_flag                true if the incident carried documented deception
   expected                  "attribute" | "withhold" (flag / <=LOW) | "abstain"

@@ -10,8 +10,8 @@ from dragnet.neo4j_export import to_cypher
 from dragnet.paths import data_dir
 
 ROOT = Path(__file__).resolve().parent.parent
-KG = ROOT / "fixtures" / "campaigns.json"
-CASES = ROOT / "fixtures" / "cases"
+KG = ROOT / "dragnet" / "data" / "campaigns.json"
+CASES = ROOT / "dragnet" / "data" / "cases"
 MINI = ROOT / "fixtures" / "mini"
 
 
@@ -43,9 +43,45 @@ def test_build_kg_from_mini(tmp_path):
     assert "Red Group" in kg.actors and "C9001" in kg.campaigns
 
 
-def test_build_kg_missing_data(tmp_path):
-    with pytest.raises(SystemExit):
-        main(["build-kg", "--data", str(tmp_path)])
+def test_build_kg_missing_data(tmp_path, capsys):
+    assert main(["build-kg", "--data", str(tmp_path)]) == 2
+    assert "not found" in capsys.readouterr().err
+
+
+def test_cli_errors_are_one_line(tmp_path, capsys):
+    assert main(["assess", str(tmp_path / "nope.json")]) == 2
+    assert main(["assess", str(CASES / "wannacry_like.json"), "--kg", str(tmp_path / "kg.json")]) == 2
+    bad = tmp_path / "bad.json"
+    bad.write_text("{not json")
+    assert main(["assess", str(bad)]) == 2
+    bad.write_text('{"case_id": 5, "evidence": []}')
+    assert main(["assess", str(bad)]) == 2
+    err = capsys.readouterr().err
+    assert "Traceback" not in err and err.count("dragnet:") == 4
+
+
+def test_cli_version(capsys):
+    with pytest.raises(SystemExit) as e:
+        main(["--version"])
+    assert e.value.code == 0 and "dragnet" in capsys.readouterr().out
+
+
+def test_api_limits():
+    pytest.importorskip("fastapi")
+    pytest.importorskip("httpx")
+    from fastapi.testclient import TestClient
+
+    from dragnet.api import MAX_BODY_BYTES, create_app
+    client = TestClient(create_app(KG))
+    big = {"case_id": "x", "evidence": [{"id": "e", "kind": "forensic", "content": {"ips": ["1" * 400] * 3000}}]}
+    assert client.post("/assess", json=big).status_code == 413
+    many = {"case_id": "x", "evidence": [{"id": f"e{i}", "kind": "forensic", "content": {}} for i in range(600)]}
+    assert len(json.dumps(many)) < MAX_BODY_BYTES
+    assert client.post("/assess", json=many).status_code == 422
+    assert client.post("/assess", json={"case_id": "x", "evidence": [
+        {"id": "e", "kind": "forensic", "content": ["a"]}]}).status_code == 422
+    assert client.post("/assess?format=stix", json={"case_id": 123, "evidence": []}).status_code == 422
+    assert client.get("/health", headers={"host": "rebind.attacker.example"}).status_code == 400
 
 
 def test_api_assess():

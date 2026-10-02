@@ -29,9 +29,9 @@ class FixedClockLog(CustodyLog):
 def main() -> int:
     out = REPO / "docs" / "demo"
     out.mkdir(parents=True, exist_ok=True)
-    kg = KnowledgeGraph.load(REPO / "fixtures" / "campaigns.json")
+    kg = KnowledgeGraph.load(REPO / "dragnet" / "data" / "campaigns.json")
     rows = []
-    for path in sorted((REPO / "fixtures" / "cases").glob("*.json")):
+    for path in sorted((REPO / "dragnet" / "data" / "cases").glob("*.json")):
         data = json.loads(path.read_text(encoding="utf-8"))
         case_id, _items, signals, custody = build_case(data, FixedClockLog())
         a = assess(case_id, signals, kg, None, custody)
@@ -40,8 +40,8 @@ def main() -> int:
                                                    encoding="utf-8")
         rows.append((path.stem, a.leading or "withheld", a.confidence.value, len(a.false_flag_indicators)))
     L = ["# Demo reports", "",
-         "Static reports for the synthetic spec scenarios in `fixtures/cases/`, assessed against the",
-         "synthetic knowledge graph `fixtures/campaigns.json` (no downloads needed). Regenerate with",
+         "Static reports for the synthetic spec scenarios in `dragnet/data/cases/`, assessed against the",
+         "synthetic knowledge graph `dragnet/data/campaigns.json` (no downloads needed). Regenerate with",
          "`python scripts/build_demo_pages.py`. Each report also has a STIX 2.1 bundle.", "",
          "| scenario | verdict | confidence | false-flag indicators | STIX |", "|---|---|---|---|---|"]
     L += [f"| [{s}]({s}.md) | {lead} | {conf} | {ff} | [bundle]({s}.stix.json) |" for s, lead, conf, ff in rows]

@@ -241,7 +241,7 @@ def test_false_flag_planting(attack, kg):
 # --- curated cases ------------------------------------------------------------
 
 def test_real_case_fixtures_are_well_formed():
-    cases = load_real_cases(ROOT / "fixtures" / "real_cases")
+    cases = load_real_cases(ROOT / "dragnet" / "data" / "real_cases")
     assert len(cases) >= 6
     ids = {c.case_id for c in cases}
     assert {"olympic_destroyer_2018", "wannacry_2017", "turla_oilrig_2019"} <= ids
@@ -255,7 +255,7 @@ def test_real_case_fixtures_are_well_formed():
 
 
 def test_addition_campaigns_resolve_actor(attack):
-    cases = load_real_cases(ROOT / "fixtures" / "real_cases")
+    cases = load_real_cases(ROOT / "dragnet" / "data" / "real_cases")
     wc = next(c for c in cases if c.case_id == "wannacry_2017")
     camps = addition_campaigns(wc, attack)
     assert camps and camps[0].actor == "G0032"  # unresolved in mini bundle -> id kept

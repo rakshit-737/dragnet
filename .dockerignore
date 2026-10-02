@@ -9,3 +9,10 @@ docs
 tests
 data/raw
 *.egg-info
+.venv
+venv
+dist
+build
+.env
+*.key
+*.pem

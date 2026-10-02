@@ -44,7 +44,7 @@ class CustodyLog:
 
 
 # ---------------------------------------------------------------- Ed25519 signing
-# Optional: needs the ``cryptography`` package (``pip install dragnet[sign]``). The signature
+# Optional: needs the ``cryptography`` package (the ``sign`` extra). The signature
 # covers the head of the hash chain, so it commits to every entry before it.
 
 def _crypto():
@@ -55,7 +55,7 @@ def _crypto():
             Ed25519PublicKey,
         )
     except ImportError as e:  # pragma: no cover - exercised only without the extra
-        raise RuntimeError("signing needs the optional 'cryptography' package: pip install dragnet[sign]") from e
+        raise RuntimeError("signing needs the optional 'cryptography' package: pip install \"dragnet-attribution[sign]\" or, in a checkout, pip install -e \".[sign]\"") from e
     return serialization, Ed25519PrivateKey, Ed25519PublicKey
 
 
