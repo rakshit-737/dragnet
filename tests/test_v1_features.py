@@ -7,6 +7,7 @@ import pytest
 from dragnet import bench
 from dragnet.adapters import build_case_doc, from_revenant, from_vitrine
 from dragnet.cli import main, run
+from dragnet.report import to_dict
 from dragnet.stix import GRADE_TO_STIX, to_stix
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -83,6 +84,56 @@ def test_cli_keygen_sign_verify(tmp_path, capsys):
     d["custody"][0]["action"] = "forged"
     rep.write_text(json.dumps(d))
     assert main(["verify", str(rep), "--pub", pre + ".pub"]) == 1
+
+
+def test_signature_covers_the_verdict(tmp_path):
+    """Editing the verdict, confidence, flags, scores or weights of a signed report must fail
+    verification, not only edits to the custody entries."""
+    pytest.importorskip("cryptography")
+    pre = str(tmp_path / "k")
+    assert main(["keygen", pre]) == 0
+    rep = tmp_path / "r.json"
+    assert main(["assess", str(CASES / "olympic_destroyer_like.json"), "--kg", str(KG), "--sign-key", pre + ".key",
+                 "-o", str(rep)]) == 0
+    orig = json.loads(rep.read_text())
+    assert orig["custody_signature"]["version"] == 2
+    edits = [lambda d: d.__setitem__("leading", "SANDWORM_SIM"),
+             lambda d: d.__setitem__("confidence", "HIGH"),
+             lambda d: d.__setitem__("false_flag_indicators", []),
+             lambda d: d["hypotheses"][0].__setitem__("score", 0.99),
+             lambda d: d["weights"].__setitem__("imphash", 0.99)]
+    for edit in edits:
+        d = json.loads(json.dumps(orig))
+        edit(d)
+        rep.write_text(json.dumps(d))
+        assert main(["verify", str(rep), "--pub", pre + ".pub"]) == 1
+    rep.write_text(json.dumps(orig, indent=4))                 # re-serialising is not tampering
+    assert main(["verify", str(rep), "--pub", pre + ".pub"]) == 0
+
+
+def test_legacy_chain_only_signature_is_flagged(tmp_path):
+    pytest.importorskip("cryptography")
+    from dragnet.custody import generate_keypair, sign_entries
+    priv, pub = generate_keypair()
+    a = run(CASES / "wannacry_like.json", KG)
+    d = to_dict(a)
+    d["custody_signature"] = sign_entries(a.custody, priv)          # v1: chain head only
+    rep, pk = tmp_path / "r.json", tmp_path / "k.pub"
+    rep.write_text(json.dumps(d))
+    pk.write_bytes(pub)
+    assert main(["verify", str(rep), "--pub", str(pk)]) == 3
+
+
+def test_cli_stix_refuses_sign_key(tmp_path, capsys):
+    assert main(["assess", str(CASES / "wannacry_like.json"), "--kg", str(KG), "--format", "stix",
+                 "--sign-key", str(tmp_path / "missing.key"), "-o", str(tmp_path / "s.json")]) == 2
+    assert "--sign-key" in capsys.readouterr().err
+    assert not (tmp_path / "s.json").exists()
+
+
+def test_cli_missing_sign_key_is_an_error(tmp_path):
+    assert main(["assess", str(CASES / "wannacry_like.json"), "--kg", str(KG),
+                 "--sign-key", str(tmp_path / "missing.key")]) == 2
 
 
 def test_cli_verify_unsigned(tmp_path):

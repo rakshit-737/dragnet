@@ -114,7 +114,8 @@ def _parser() -> argparse.ArgumentParser:
     a.add_argument("--kg", default=str(DEFAULT_KG), help="knowledge-graph JSON (see build-kg)")
     a.add_argument("--weight", action="append", help="override a kind weight, e.g. imphash=0.2")
     a.add_argument("--format", choices=["md", "json", "stix"], default="md", help="report format")
-    a.add_argument("--sign-key", help="Ed25519 private key PEM: sign the custody chain (json output)")
+    a.add_argument("--sign-key", help="Ed25519 private key PEM: sign the report body and custody chain "
+                   "(writes the JSON report; not with --format stix)")
     a.add_argument("-o", "--out", help="write the report here instead of stdout")
 
     k = add("keygen", "create an Ed25519 key pair for signed custody")
@@ -168,16 +169,18 @@ def _main(argv: list[str] | None = None) -> int:
     args = _parser().parse_args(argv)
 
     if args.cmd == "assess":
+        if args.sign_key and args.format == "stix":
+            raise CliError("--sign-key signs the JSON report only; use --format json (STIX bundles are not signed)")
+        key = _need(args.sign_key, "signing key").read_bytes() if args.sign_key else None
         res = run(args.case, args.kg, parse_weights(args.weight))
         if args.format == "stix":
             from .stix import to_stix_json
             _emit(to_stix_json(res) + "\n", args.out)
-        elif args.format == "json" or args.sign_key:
+        elif args.format == "json" or key is not None:      # signing implies the JSON report
             d = to_dict(res)
-            if args.sign_key:
+            if key is not None:
                 from .custody import sign_entries
-                key = _need(args.sign_key, "signing key").read_bytes()
-                d["custody_signature"] = sign_entries(res.custody, key)
+                d["custody_signature"] = sign_entries(res.custody, key, report=d)
             _emit(json.dumps(d, indent=2) + "\n", args.out)
         else:
             _emit(to_markdown(res), args.out)
@@ -204,8 +207,15 @@ def _main(argv: list[str] | None = None) -> int:
         entries = d.get("custody", [])
         if "custody_signature" in d:
             pub = _need(args.pub, "public key").read_bytes() if args.pub else None
-            ok = verify_signed(entries, d["custody_signature"], pub)
-            what = "chain + Ed25519 signature" + (" (pinned key)" if pub else " (embedded key)")
+            sig = d["custody_signature"]
+            ok = verify_signed(entries, sig, pub, report=d)
+            legacy = sig.get("version", 1) < 2
+            what = ("chain + Ed25519 signature" if legacy else "report body + chain + Ed25519 signature") \
+                + (" (pinned key)" if pub else " (embedded key)")
+            if ok and legacy:
+                print(f"LEGACY: {what} valid, but this v1 signature covers only the custody chain - the "
+                      "verdict, scores and weights are NOT protected; re-sign the report to get a v2 signature")
+                return 3
             if ok and pub is None:
                 raw = bytes.fromhex(d["custody_signature"]["public_key"])
                 print(f"signer key fingerprint (sha256): {hashlib.sha256(raw).hexdigest()[:16]}")
