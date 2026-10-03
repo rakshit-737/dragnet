@@ -113,19 +113,58 @@ def grade_table(s: dict) -> dict:
     return out
 
 
-def paired(summ: dict[str, dict], ref: str = "dragnet") -> dict:
-    """Top-1 differences ref minus each method: bootstrap CI, exact sign-flip p, Holm."""
+def paired(summ: dict[str, dict], ref: str = "dragnet", cluster=None) -> dict:
+    """Top-1 differences ref minus each method, with Holm adjustment across methods.
+
+    Without ``cluster``: case bootstrap CI and a case-level sign-flip test (exact up to 20
+    discordant cases, else Monte Carlo with p = (k+1)/(B+1)). With ``cluster`` (a row ->
+    cluster-id function, e.g. the true group): a cluster bootstrap CI and a sign-flip test over
+    per-cluster summed differences, matching the cluster-bootstrapped marginal CIs; the
+    case-level result is kept under ``case_level`` for reference."""
     out = {}
     for m, s in summ.items():
         if m == ref:
             continue
-        diffs = [a["top1"] - b["top1"] for a, b in zip(summ[ref]["rows"], s["rows"]) if a["in_kg"]]
+        keep = [(a, b) for a, b in zip(summ[ref]["rows"], s["rows"]) if a["in_kg"]]
+        diffs = [a["top1"] - b["top1"] for a, b in keep]
         bs = bench.paired_bootstrap_diff(summ[ref]["rows"], s["rows"])
         sf = P.sign_flip_test(diffs)
-        out[m] = {"diff": bs["diff"], "ci": bs["ci"], **sf}
+        if cluster is None:
+            out[m] = {"diff": bs["diff"], "ci": bs["ci"], "ci_kind": "case bootstrap", **sf}
+            continue
+        cl = [cluster(a) for a, _ in keep]
+        ci = P.cluster_bootstrap([{"d": d, "g": g} for d, g in zip(diffs, cl)], lambda r: r["g"],
+                                 lambda rs: sum(r["d"] for r in rs) / len(rs))
+        out[m] = {"diff": bs["diff"], "ci": list(ci), "ci_kind": "cluster bootstrap",
+                  **P.cluster_sign_flip_test(diffs, cl),
+                  "case_level": {"ci": bs["ci"], **sf}}
     adj = P.holm({m: v["p_one_sided"] for m, v in out.items()})
     for m in out:
         out[m]["p_holm"] = adj[m]
+    if cluster is not None:
+        adj_c = P.holm({m: v["case_level"]["p_one_sided"] for m, v in out.items()})
+        for m in out:
+            out[m]["case_level"]["p_holm"] = adj_c[m]
+    return out
+
+
+def rc_diffs(summ: dict[str, dict], cluster, ref: str = "dragnet", n_boot: int = 1000) -> dict:
+    """Paired differences in selective risk at 20% coverage and in AURC (ref minus method),
+    with cluster-bootstrap 95% CIs (negative = ref has the lower risk)."""
+    def risk(pairs):
+        rc = P.risk_coverage(pairs)
+        return rc["risk_at"].get("0.2", float("nan")), rc["aurc"]
+    out = {}
+    ra = summ[ref]["rows"]
+    for m, s in summ.items():
+        if m == ref:
+            continue
+        rows = [{"a": (x["p_leader"], x["leader_ok"]), "b": (y["p_leader"], y["leader_ok"]), "g": cluster(x)}
+                for x, y in zip(ra, s["rows"])]
+        r20 = lambda rs: risk([r["a"] for r in rs])[0] - risk([r["b"] for r in rs])[0]
+        au = lambda rs: risk([r["a"] for r in rs])[1] - risk([r["b"] for r in rs])[1]
+        out[m] = {"risk20_diff": r20(rows), "risk20_ci": P.cluster_bootstrap(rows, lambda r: r["g"], r20, n_boot=n_boot),
+                  "aurc_diff": au(rows), "aurc_ci": P.cluster_bootstrap(rows, lambda r: r["g"], au, n_boot=n_boot)}
     return out
 
 
@@ -205,12 +244,17 @@ def sec_A3(cx: Ctx) -> dict:
 
 # ======================================================================== R: per-report cases
 R_METHODS = ["dragnet", "ttp-jaccard", "ttp-cosine", "ttp-binary-bayes", "ioc-correlation", "code-only",
-             "dragnet-ttp-only", "dragnet-software-only", "dragnet-no-ttpsim"]
+             "dragnet-ttp-only", "dragnet-software-only", "dragnet-no-ttpsim", "dragnet-no-spec", "dragnet-no-ff"]
+R_BASELINES = ["ttp-jaccard", "ttp-cosine", "ttp-binary-bayes", "ioc-correlation", "code-only"]
+
+
+def _by_group(r: dict) -> str:
+    return r["truth"][0] if r["truth"] else r["case"]
 
 
 def sec_R(cx: Ctx, k: int = 5, cutoff_year: int = 2022) -> dict:
     cases = P.report_cases(cx.attack)
-    by_group = lambda r: r["truth"][0] if r["truth"] else r["case"]
+    by_group = _by_group
     # k-fold leave-report-out
     folds: dict[int, list] = defaultdict(list)
     for c in cases:
@@ -224,13 +268,29 @@ def sec_R(cx: Ctx, k: int = 5, cutoff_year: int = 2022) -> dict:
             for m in R_METHODS:
                 preds[m].append(METHODS[m](c.signals, kg))
     kf = {m: add_intervals(bench.evaluate(m, order, cx.kg, preds[m]), cluster=by_group) for m in R_METHODS}
-    # temporal: profiles from reports published before cutoff_year only
+    # temporal: profiles from reports published before cutoff_year only. Citations are dated
+    # from their external_reference description (falling back to a year in the citation key).
     test = [c for c in cases if c.meta["year"] and c.meta["year"] >= cutoff_year]
-    later_refs = {r for refs in cx.attack.uses_refs.values() for r in refs
-                  if (y := P.ref_year(r)) and y >= cutoff_year}
-    kg_t = cx.build(P.drop_cited(cx.attack, later_refs))
+    later = P.later_refs(cx.attack, cutoff_year)
+    kg_t = cx.build(P.drop_cited(cx.attack, later))
     tp = {m: [METHODS[m](c.signals, kg_t) for c in test] for m in R_METHODS}
     tmp = {m: add_intervals(bench.evaluate(m, test, kg_t, tp[m]), cluster=by_group) for m in R_METHODS}
+    # sensitivity: citations with no recoverable date ('n.d.', no year in the key) also held out
+    later_nd = P.later_refs(cx.attack, cutoff_year, undated_as_later=True)
+    kg_nd = cx.build(P.drop_cited(cx.attack, later_nd))
+    tnd = {m: add_intervals(bench.evaluate(m, test, kg_nd, [METHODS[m](c.signals, kg_nd) for c in test]),
+                            cluster=by_group) for m in R_METHODS}
+    cited = {r for refs in cx.attack.uses_refs.values() for r in refs}
+    dating = {"citations_on_uses_edges": len(cited),
+              "dated_by_description": sum(1 for r in cited if cx.attack.ref_years.get(r) is not None),
+              "dated_by_key_only": sum(1 for r in cited if cx.attack.ref_years.get(r) is None
+                                       and P.ref_year(r) is not None),
+              "undated": sum(1 for r in cited if P.ref_year(r, cx.attack) is None),
+              "key_without_year_dated_later": sum(1 for r in later if P.ref_year(r) is None),
+              "held_out_later": len(later), "held_out_with_undated": len(later_nd),
+              "key_year_disagrees": sum(1 for r in cited if P.ref_year(r) is not None
+                                        and cx.attack.ref_years.get(r) is not None
+                                        and P.ref_year(r) != cx.attack.ref_years[r])}
     # isotonic calibration: fit on k-fold cases from before the cutoff, test on the temporal split
     cal_rows = [r for r, c in zip(kf["dragnet"]["rows"], order) if c.meta["year"] and c.meta["year"] < cutoff_year]
     iso = P.Isotonic().fit([r["p_leader"] for r in cal_rows], [float(r["leader_ok"]) for r in cal_rows])
@@ -239,23 +299,32 @@ def sec_R(cx: Ctx, k: int = 5, cutoff_year: int = 2022) -> dict:
     cal = [(iso(r["p_leader"]), r["leader_ok"]) for r in trows]
     brier = lambda ps: sum((p - float(o)) ** 2 for p, o in ps) / len(ps)
 
-    def ci(ps, f):
-        return P.cluster_bootstrap([{"p": p, "o": o, "g": by_group(r)} for (p, o), r in zip(ps, trows)],
+    def ci(ps, f, rows=trows):
+        return P.cluster_bootstrap([{"p": p, "o": o, "g": by_group(r)} for (p, o), r in zip(ps, rows)],
                                    lambda x: x["g"], lambda xs: f([(x["p"], x["o"]) for x in xs]), n_boot=1000)
+
+    def base_pairs(m):
+        return [(min(1.0, r["p_leader"]), r["leader_ok"]) for r in tmp[m]["rows"]]
     calib = {"n_fit": len(cal_rows), "n_test": len(trows),
              "raw": {"ece": bench.ece(raw), "brier": brier(raw), "ece_ci": ci(raw, bench.ece),
                      "brier_ci": ci(raw, brier), "reliability": bench.reliability(raw)},
              "isotonic": {"ece": bench.ece(cal), "brier": brier(cal), "ece_ci": ci(cal, bench.ece),
                           "brier_ci": ci(cal, brier), "reliability": bench.reliability(cal)},
              "map": {"x": iso.x, "y": iso.y},
-             "baselines_ece": {m: tmp[m]["ece"] for m in ("ttp-jaccard", "ttp-cosine", "ttp-binary-bayes",
-                                                          "ioc-correlation", "code-only")}}
+             "baselines_ece": {m: tmp[m]["ece"] for m in R_BASELINES},
+             "baselines_ece_ci": {m: ci(base_pairs(m), bench.ece, tmp[m]["rows"]) for m in R_BASELINES}}
     return {"n_cases": len(cases), "n_groups": len({c.meta["group"] for c in cases}), "k": k,
-            "cutoff_year": cutoff_year, "n_temporal": len(test),
-            "kfold": [strip_rows(kf[m]) for m in R_METHODS], "kfold_paired": paired(kf),
+            "cutoff_year": cutoff_year, "n_temporal": len(test), "dating": dating,
+            "kfold": [strip_rows(kf[m]) for m in R_METHODS], "kfold_paired": paired(kf, cluster=by_group),
             "kfold_grades": grade_table(kf["dragnet"]),
-            "temporal": [strip_rows(tmp[m]) for m in R_METHODS], "temporal_paired": paired(tmp),
-            "temporal_grades": grade_table(tmp["dragnet"]), "calibration": calib}
+            "kfold_rc_diff": rc_diffs({m: kf[m] for m in ["dragnet", *R_BASELINES]}, by_group),
+            "temporal": [strip_rows(tmp[m]) for m in R_METHODS], "temporal_paired": paired(tmp, cluster=by_group),
+            "temporal_grades": grade_table(tmp["dragnet"]),
+            "temporal_rc_diff": rc_diffs({m: tmp[m] for m in ["dragnet", *R_BASELINES]}, by_group),
+            "temporal_undated_later": [strip_rows(tnd[m]) for m in R_METHODS],
+            "temporal_undated_later_paired": paired(tnd, cluster=by_group),
+            "temporal_undated_later_grades": grade_table(tnd["dragnet"]),
+            "calibration": calib}
 
 
 # ======================================================================== G: Guru et al. 2025
@@ -275,6 +344,10 @@ def _rank(scores: dict[str, float], truth: str, actors: list[str]) -> float:
     return above + (ties + 1) / 2
 
 
+G_METHODS = ["guru-uniform", "guru-report-prior", "ttp-binary-bayes", "ttp-jaccard", "dragnet-ttp-only",
+             "dragnet-software-only", "dragnet"]
+
+
 def sec_G(cx: Ctx, seeds: int = 10) -> dict:
     names = {g.name for g in cx.attack.groups.values()}
     actors = [a for a in GURU_ACTORS if a in names]
@@ -282,9 +355,10 @@ def sec_G(cx: Ctx, seeds: int = 10) -> dict:
     by_actor: dict[str, list] = defaultdict(list)
     for c in cases:
         by_actor[next(iter(c.truth))].append(c)
-    methods = ["guru-uniform", "guru-report-prior", "ttp-binary-bayes", "ttp-jaccard", "dragnet"]
+    methods = G_METHODS
     per_seed = {m: [] for m in methods}
     top1 = {m: [] for m in methods}
+    pooled: list[dict] = []          # one row per (seed, test case): rank under every method
     for seed in range(seeds):
         rng = random.Random(seed)
         train, test = [], []
@@ -312,18 +386,41 @@ def sec_G(cx: Ctx, seeds: int = 10) -> dict:
             doc = {s.value for s in c.signals if s.kind == SignalKind.TTP}
             sc = {a: sum(ptech.get(a, {}).get(t, 0.0) for t in doc) for a in actors}
             res = {"guru-uniform": sc, "guru-report-prior": {a: sc[a] * prior[a] for a in actors}}
-            for m in ("ttp-binary-bayes", "ttp-jaccard", "dragnet"):
+            for m in methods[2:]:
                 res[m] = METHODS[m](c.signals, kg).scores
+            row = {"seed": seed, "case": c.case_id, "actor": truth}
             for m in methods:
-                ranks[m].append(_rank(res[m], truth, actors))
+                row[m] = _rank(res[m], truth, actors)
+                ranks[m].append(row[m])
+            pooled.append(row)
         for m in methods:
             per_seed[m].append(statistics.mean(ranks[m]))
             top1[m].append(sum(r == 1 for r in ranks[m]) / len(ranks[m]))
     out = {"actors": actors, "n_reports": len(cases), "seeds": seeds,
-           "reports_per_actor": {a: len(v) for a, v in by_actor.items()}, "paper": GURU_PAPER, "ours": {}}
+           "reports_per_actor": {a: len(v) for a, v in by_actor.items()}, "paper": GURU_PAPER, "ours": {},
+           "n_pooled": len(pooled)}
+    by_actor_row = lambda r: r["actor"]
     for m in methods:
         out["ours"][m] = {"mean_rank": statistics.mean(per_seed[m]), "sd": statistics.pstdev(per_seed[m]),
-                          "top1": statistics.mean(top1[m])}
+                          "top1": statistics.mean(top1[m]),
+                          # pooled over the 10 splits; resampling whole actors
+                          "ci95_actor_cluster": P.cluster_bootstrap(
+                              pooled, by_actor_row, lambda rs, m=m: sum(r[m] for r in rs) / len(rs))}
+    # paired: rank of the comparison method minus DRAGNET's rank (positive = DRAGNET ranks the true
+    # actor higher), per-actor sign-flip over the pooled cases
+    out["paired_vs_dragnet"] = {}
+    for m in methods:
+        if m == "dragnet":
+            continue
+        d = [r[m] - r["dragnet"] for r in pooled]
+        ci = P.cluster_bootstrap([{"d": x, "g": r["actor"]} for x, r in zip(d, pooled)], lambda r: r["g"],
+                                 lambda rs: sum(r["d"] for r in rs) / len(rs))
+        out["paired_vs_dragnet"][m] = {"rank_diff": statistics.mean(d), "ci": list(ci),
+                                       **P.cluster_sign_flip_test(d, [r["actor"] for r in pooled]),
+                                       "splits_dragnet_better": sum(a < b for a, b in zip(per_seed["dragnet"], per_seed[m]))}
+    adj = P.holm({m: v["p_one_sided"] for m, v in out["paired_vs_dragnet"].items()})
+    for m, v in out["paired_vs_dragnet"].items():
+        v["p_holm"] = adj[m]
     return out
 
 
@@ -357,7 +454,8 @@ def sec_B(cx: Ctx) -> dict:
         kg = cx.build(P.drop_cited(a_all, P.campaign_refs(a_all, inv[c.case_id])))
         for m in lf:
             lf[m].append(METHODS[m](c.signals, kg))
-    b1 = [strip_rows(add_intervals(bench.evaluate(m, cases, kg_all, lf[m]))) for m in lf]
+    b1s = {m: add_intervals(bench.evaluate(m, cases, kg_all, lf[m])) for m in lf}
+    b1 = [strip_rows(v) for v in b1s.values()]
 
     # rolling origin: newest release published before the campaign object was created
     class _R:
@@ -377,11 +475,11 @@ def sec_B(cx: Ctx) -> dict:
         mapping[r.version] += 1
         for m in ro_rows:
             ro_rows[m].append(METHODS[m](c.signals, kg))
-    b2 = [strip_rows(add_intervals(bench.evaluate(m, ro_cases, kg_all, ro_rows[m]))) for m in ro_rows] \
-        if ro_cases else []
+    b2s = {m: add_intervals(bench.evaluate(m, ro_cases, kg_all, ro_rows[m])) for m in ro_rows} if ro_cases else {}
+    b2 = [strip_rows(v) for v in b2s.values()]
     out = {"attributed_per_release": per_release_attr, "union_campaigns": len(union),
-           "B1_cases": len(cases), "B1_new_case_ids": new_ids, "B1": b1,
-           "B2_release_used": dict(mapping), "B2": b2}
+           "B1_cases": len(cases), "B1_new_case_ids": new_ids, "B1": b1, "B1_paired": paired(b1s),
+           "B2_release_used": dict(mapping), "B2": b2, "B2_paired": paired(b2s) if b2s else {}}
     b3 = cx.d / "malpedia-families.json"
     if b3.exists() and (cx.d / "threatfox-full.json.zip").exists() and (cx.d / "bazaar-full.csv.zip").exists():
         out["B3"] = sec_B3(cx)
@@ -482,7 +580,10 @@ def sec_D(cx: Ctx) -> dict:
     kg, cases = cx.kg, cx.cases
     kg_rh = bench.reference_rich_headers(kg)
     meth = MAIN + ["dragnet-no-ff"]
-    res = {"false_alarm_rate_clean": bench.false_alarm_rate(cases, kg_rh), "seeds": list(range(10))}
+    fa = bench.false_alarm_rate(cases, kg_rh)
+    n_clean = sum(1 for c in cases if c.truth)
+    res = {"false_alarm_rate_clean": fa, "false_alarm_n": n_clean,
+           "false_alarm_ci": P.clopper_pearson(round(fa * n_clean), n_clean), "seeds": list(range(10))}
     for level in (1, 2):
         planted = bench.plant_false_flags(cases, kg, level)
         res[f"level{level}"] = [bench.evaluate_false_flag(m, planted, kg_rh) for m in meth]
@@ -839,12 +940,43 @@ def ci_lines(summaries: list[dict], label: str) -> list[str]:
     return out + [""]
 
 
+def fmt_p(p) -> str:
+    """p-values: three decimals down to 0.001, then two significant figures (5.0e-06); never 0.000."""
+    if p is None or (isinstance(p, float) and math.isnan(p)):
+        return "n/a"
+    return f"{p:.3f}" if p >= 0.001 else f"{p:.1e}"
+
+
+def _p_label(v: dict) -> str:
+    return "exact" if v.get("exact", True) else f"MC, B = {v.get('n_mc') or P.N_MC:,}"
+
+
+P_CAPTION = (f"Sign-flip test (one-sided, DRAGNET better): exact when at most 20 discordant units, otherwise "
+             f"Monte Carlo with B = {P.N_MC:,} sign flips, p = (k+1)/(B+1); Holm-adjusted across methods.")
+
+
 def paired_lines(pd: dict, label: str) -> list[str]:
-    out = [(f"Paired top-1 difference, DRAGNET minus method ({label}): bootstrap 95% CI, exact sign-flip "
-           "test over discordant cases (one-sided), Holm-adjusted across methods."), "",
-           "| method | diff | 95% CI | discordant cases | p (one-sided) | p (Holm) |", "|---|---|---|---|---|---|"]
-    out += [f"| {m} | {fmt(v['diff'])} | [{fmt(v['ci'][0])}, {fmt(v['ci'][1])}] | {v['n_discordant']} | "
-            f"{fmt(v['p_one_sided'])}{'' if v['exact'] else ' (MC)'} | {fmt(v['p_holm'])} |" for m, v in pd.items()]
+    clustered = any("n_clusters" in v for v in pd.values())
+    if not clustered:
+        out = [f"Paired top-1 difference, DRAGNET minus method ({label}): case bootstrap 95% CI. {P_CAPTION}", "",
+               "| method | diff | 95% CI | discordant cases | p (one-sided) | p (Holm) | p (two-sided) |",
+               "|---|---|---|---|---|---|---|"]
+        out += [f"| {m} | {fmt(v['diff'])} | [{fmt(v['ci'][0])}, {fmt(v['ci'][1])}] | {v['n_discordant']} | "
+                f"{fmt_p(v['p_one_sided'])} ({_p_label(v)}) | {fmt_p(v['p_holm'])} | {fmt_p(v['p_two_sided'])} |"
+                for m, v in pd.items()]
+        return out + [""]
+    out = [(f"Paired top-1 difference, DRAGNET minus method ({label}), clustered by threat group like the marginal "
+            f"CIs: group-cluster bootstrap 95% CI; the sign-flip test flips whole groups (per-group summed "
+            f"differences). {P_CAPTION} The last column is the case-level test (cases treated as independent), "
+            "kept for reference."), "",
+           ("| method | diff | 95% CI (group cluster) | discordant cases / groups | p (one-sided) | p (Holm) | "
+            "p (two-sided) | case-level p (Holm) |"),
+           "|---|---|---|---|---|---|---|---|"]
+    for m, v in pd.items():
+        cl = v["case_level"]
+        out.append(f"| {m} | {fmt(v['diff'])} | [{fmt(v['ci'][0])}, {fmt(v['ci'][1])}] | {v['n_discordant']} / "
+                   f"{v['n_discordant_clusters']} | {fmt_p(v['p_one_sided'])} ({_p_label(v)}) | {fmt_p(v['p_holm'])} | "
+                   f"{fmt_p(v['p_two_sided'])} | {fmt_p(cl['p_one_sided'])} ({fmt_p(cl['p_holm'])}) |")
     return out + [""]
 
 
@@ -936,29 +1068,61 @@ def md_A3(r):
             + grade_lines(r["grades"], "A3"))
 
 
+def rcdiff_lines(d: dict, label: str) -> list[str]:
+    out = [(f"Selective-risk differences, DRAGNET minus method ({label}); group-cluster bootstrap 95% CIs "
+            "(1,000 resamples). Negative = DRAGNET has the lower risk."), "",
+           "| method | risk @20% diff [95% CI] | AURC diff [95% CI] |", "|---|---|---|"]
+    out += [f"| {m} | {fmt(v['risk20_diff'])} [{fmt(v['risk20_ci'][0])}, {fmt(v['risk20_ci'][1])}] | "
+            f"{fmt(v['aurc_diff'])} [{fmt(v['aurc_ci'][0])}, {fmt(v['aurc_ci'][1])}] |" for m, v in d.items()]
+    return out + [""]
+
+
 def md_R(r):
+    dt = r.get("dating", {})
     L = ["## R - per-report ATT&CK cases (group x cited report)", "",
          (f"{r['n_cases']} cases over {r['n_groups']} groups: the techniques and software one cited report "
           f"documents for one group (at least 3 techniques). Labels are ATT&CK's own attribution. "
           f"**k-fold**: {r['k']} folds by report; each fold's reports are removed from the profiles before "
-          f"its cases are attributed. **Temporal**: profiles from reports dated before {r['cutoff_year']} "
-          f"only; {r['n_temporal']} cases dated {r['cutoff_year']} or later. Top-1 CIs are clustered by group."), "",
-         f"### R-kfold (n={r['n_cases']})", ""]
+          f"its cases are attributed. **Temporal**: every citation dated {r['cutoff_year']} or later is removed "
+          f"from the profiles, and the {r['n_temporal']} cases from reports dated {r['cutoff_year']} or later are "
+          "attributed. Top-1 CIs are clustered by group."), ""]
+    if dt:
+        L += [(f"Citation dating: of {dt['citations_on_uses_edges']} citations on 'uses' edges, "
+               f"{dt['dated_by_description']} are dated from their reference description '(YYYY, Month DD)', "
+               f"{dt['dated_by_key_only']} only from a year in the citation key, and {dt['undated']} have no "
+               f"recoverable date ('n.d.'). {dt['key_without_year_dated_later']} citations whose key has no year are "
+               f"dated {r['cutoff_year']}+ by their description and held out (an earlier version dated by key only and "
+               f"kept them in the profiles); {dt['key_year_disagrees']} keys carry a year that differs from the "
+               f"description. Held out: {dt['held_out_later']} citations ({dt['held_out_with_undated']} when undated "
+               "citations are also held out, the sensitivity rows below)."), ""]
+    L += [f"### R-kfold (n={r['n_cases']})", ""]
     L += table(r["kfold"], HEAD_COLS) + [""] + ci_lines(r["kfold"], "R-kfold") + paired_lines(r["kfold_paired"], "R-kfold")
     L += grade_lines(r["kfold_grades"], "R-kfold") + rc_lines(r["kfold"], "R-kfold")
+    if "kfold_rc_diff" in r:
+        L += rcdiff_lines(r["kfold_rc_diff"], "R-kfold")
     L += [f"### R-temporal (n={r['n_temporal']})", ""] + table(r["temporal"], HEAD_COLS) + [""]
     L += ci_lines(r["temporal"], "R-temporal") + paired_lines(r["temporal_paired"], "R-temporal")
     L += grade_lines(r["temporal_grades"], "R-temporal") + rc_lines(r["temporal"], "R-temporal")
+    if "temporal_rc_diff" in r:
+        L += rcdiff_lines(r["temporal_rc_diff"], "R-temporal")
+    if "temporal_undated_later" in r:
+        L += [f"### R-temporal sensitivity: undated citations also held out (n={r['n_temporal']})", ""]
+        L += table(r["temporal_undated_later"], HEAD_COLS) + [""]
+        L += ci_lines(r["temporal_undated_later"], "R-temporal, undated held out")
+        L += paired_lines(r["temporal_undated_later_paired"], "R-temporal, undated held out")
+        L += grade_lines(r["temporal_undated_later_grades"], "R-temporal, undated held out")
     c = r["calibration"]
+    bci = c.get("baselines_ece_ci", {})
     L += ["### Calibration of the top-hypothesis probability", "",
           (f"Isotonic map fitted on {c['n_fit']} k-fold cases dated before {r['cutoff_year']}, evaluated on the "
-           f"{c['n_test']} temporal test cases (CIs: group-cluster bootstrap)."), "",
+           f"{c['n_test']} temporal test cases (CIs: group-cluster bootstrap, 1,000 resamples)."), "",
           "| forecast | ECE [95% CI] | Brier [95% CI] |", "|---|---|---|",
           (f"| DRAGNET raw ACH score | {fmt(c['raw']['ece'])} [{fmt(c['raw']['ece_ci'][0])}, {fmt(c['raw']['ece_ci'][1])}] | "
           f"{fmt(c['raw']['brier'])} [{fmt(c['raw']['brier_ci'][0])}, {fmt(c['raw']['brier_ci'][1])}] |"),
           (f"| DRAGNET isotonic | {fmt(c['isotonic']['ece'])} [{fmt(c['isotonic']['ece_ci'][0])}, {fmt(c['isotonic']['ece_ci'][1])}] | "
           f"{fmt(c['isotonic']['brier'])} [{fmt(c['isotonic']['brier_ci'][0])}, {fmt(c['isotonic']['brier_ci'][1])}] |")]
-    L += [f"| {m} (normalised share, raw) | {fmt(v)} | - |" for m, v in c["baselines_ece"].items()]
+    L += [f"| {m} (normalised share, raw) | {fmt(v)}" + (f" [{fmt(bci[m][0])}, {fmt(bci[m][1])}]" if m in bci else "")
+          + " | - |" for m, v in c["baselines_ece"].items()]
     return L + [""]
 
 
@@ -969,25 +1133,45 @@ def md_G(r):
          ("Guru et al. (arXiv:2505.11547) attribute threat reports to 29 actors by scoring "
           "P(technique | actor), estimated from technique counts in training reports, against the techniques "
           "extracted from a test report (machine extraction with text-embedding-3-large over 727 reports); the "
-          "metric is the mean rank of the true actor among the 29 (random = 15). Their report corpus and "
+          "metric is the mean rank of the true actor among the 29 (random = 15). Paper protocol: 70/20/10 "
+          "split per actor; 10 weight matrices are trained, the best is selected on the validation split and "
+          "its test mean rank is reported; the paper does not define its +/-. Their report corpus and "
           "extracted technique counts are not public in reusable form, so the paper's numbers cannot be "
-          "reproduced exactly. Our adaptation keeps their scorer, actor set, 70/20/10 split per actor and 10 "
-          f"repetitions, but uses ATT&CK's human-curated per-report technique lists ({r['n_reports']} reports). "
-          "Human technique lists are cleaner than machine extraction, so the adaptation is an optimistic "
-          "upper bound for their pipeline. DRAGNET and the other methods use graphs from which every "
-          "validation/test report has been removed."), "",
-          "| setting | mean rank of true actor (of 29) | top-1 |", "|---|---|---|",
-          f"| paper: random | {p['random']} | - |",
-          f"| paper: uniform prior | {p['uniform prior'][0]} +/- {p['uniform prior'][1]} | - |",
-          f"| paper: expert prior | {p['expert prior'][0]} +/- {p['expert prior'][1]} | - |",
-          f"| paper: HyDE + expert prior | {p['HyDE + expert prior'][0]} +/- {p['HyDE + expert prior'][1]} | - |",
-          f"| paper artefact: released single test run | {p['released single test (143 docs)']} | - |"]
+          "reproduced exactly. Our adaptation keeps their scorer, actor set and 70/20/10 split per actor, but "
+          "evaluates every one of 10 random splits on its test part (the 20% validation part is unused) and "
+          f"uses ATT&CK's human-curated per-report technique lists ({r['n_reports']} reports). Human technique "
+          "lists are cleaner than machine extraction, so the adaptation is an optimistic upper bound for their "
+          "pipeline. DRAGNET and the other methods use graphs from which every validation/test report has been "
+          "removed."), "",
+          "| setting | mean rank of true actor (of 29) | 95% CI (pooled, actor cluster) | top-1 |", "|---|---|---|---|",
+          f"| paper: random | {p['random']} | - | - |",
+          f"| paper: uniform prior | {p['uniform prior'][0]} +/- {p['uniform prior'][1]} | - | - |",
+          f"| paper: expert prior | {p['expert prior'][0]} +/- {p['expert prior'][1]} | - | - |",
+          f"| paper: HyDE + expert prior (best) | {p['HyDE + expert prior'][0]} +/- {p['HyDE + expert prior'][1]} | - | - |",
+          f"| paper artefact: released single test run | {p['released single test (143 docs)']} | - | - |"]
     label = {"guru-uniform": "ours: their scorer, uniform prior (ATT&CK technique lists)",
              "guru-report-prior": "ours: their scorer, prior = training-report share (expert-prior proxy)",
              "ttp-binary-bayes": "ours: ttp-binary-bayes (simplified)", "ttp-jaccard": "ours: ttp-jaccard",
-             "dragnet": "ours: DRAGNET"}
-    L += [f"| {label[m]} | {fmt(v['mean_rank'])} +/- {fmt(v['sd'])} | {fmt(v['top1'])} |" for m, v in o.items()]
-    return L + ["", "+/- is the standard deviation over the 10 random splits.", ""]
+             "dragnet-ttp-only": "ours: DRAGNET, techniques only (= ttp-cosine ranking)",
+             "dragnet-software-only": "ours: DRAGNET, software only",
+             "dragnet": "ours: DRAGNET (techniques + software)"}
+    for m, v in o.items():
+        ci = v.get("ci95_actor_cluster")
+        L.append(f"| {label.get(m, m)} | {fmt(v['mean_rank'])} +/- {fmt(v['sd'])} | "
+                 + (f"[{fmt(ci[0])}, {fmt(ci[1])}]" if ci else "-") + f" | {fmt(v['top1'])} |")
+    L += ["", (f"Ours: mean +/- SD over the {r['seeds']} random splits. The 95% CI pools the {r.get('n_pooled', '')} "
+               "(split, test report) rows and resamples whole actors, so it reflects actor-level variation; the "
+               "splits reuse the same reports and are not independent samples."), ""]
+    pv = r.get("paired_vs_dragnet")
+    if pv:
+        L += [(f"Paired rank difference, method minus DRAGNET (positive = DRAGNET ranks the true actor higher), pooled "
+               f"rows, actor-cluster bootstrap CI; sign-flip over per-actor summed differences. {P_CAPTION}"), "",
+              "| method | rank diff | 95% CI | splits where DRAGNET is lower | p (one-sided) | p (Holm) |",
+              "|---|---|---|---|---|---|"]
+        L += [f"| {m} | {fmt(v['rank_diff'])} | [{fmt(v['ci'][0])}, {fmt(v['ci'][1])}] | "
+              f"{v['splits_dragnet_better']}/{r['seeds']} | {fmt_p(v['p_one_sided'])} ({_p_label(v)}) | {fmt_p(v['p_holm'])} |"
+              for m, v in pv.items()] + [""]
+    return L
 
 
 def md_B(r):
@@ -998,10 +1182,17 @@ def md_B(r):
           f"attributed campaigns, {r['B1_cases']} with evidence; new relative to A1: {', '.join(r['B1_new_case_ids']) or 'none'}. "
           "Campaigns are rarely removed from ATT&CK, so the union barely enlarges the set; the per-report cases "
           "(section R) are the real enlargement."), "", "Leave-report-out, Enterprise+ICS+Mobile v19.2 graph:", ""]
-    L += table(r["B1"], HEAD_COLS) + [""]
+    L += table(r["B1"], HEAD_COLS) + [""] + ci_lines(r["B1"], "B1")
+    if r.get("B1_paired"):
+        L += paired_lines(r["B1_paired"], "B1")
     L += ["### B2 - rolling origin: each campaign vs the newest release published before it was added", "",
           "Release used: " + ", ".join(f"v{k}: {v}" for k, v in sorted(r["B2_release_used"].items())) + ".", ""]
-    L += table(r["B2"], HEAD_COLS + [("out-of-KG abstain", "out_of_kg_abstain")]) + [""] if r["B2"] else ["(no case)"]
+    if r["B2"]:
+        L += table(r["B2"], HEAD_COLS + [("out-of-KG abstain", "out_of_kg_abstain")]) + [""] + ci_lines(r["B2"], "B2")
+        if r.get("B2_paired"):
+            L += paired_lines(r["B2_paired"], "B2")
+    else:
+        L += ["(no case)"]
     if "B3" in r:
         b = r["B3"]
         L += ["### B3 - Malpedia-labelled abuse.ch cases", "",
@@ -1017,6 +1208,15 @@ def md_B(r):
             L += [f"| {m} | {fmt(x['top1'])} | {fmt(x['coverage'])} | {fmt(x['selective_accuracy'])} | "
                   f"{fmt(x['wrong_any_grade'])} | {fmt(x['confident_error_rate'])} | {fmt(x['out_of_kg_abstain'])} |"
                   for m, x in v["per_method"].items()] + [""]
+            ci0 = v.get("seed0_ci", {})
+            if ci0:
+                keys = [("top-1", "top1"), ("coverage", "coverage"), ("selective acc.", "selective_accuracy"),
+                        ("wrong (any grade)", "wrong_any_grade")]
+                L += [(f"95% CIs for the seed-0 sample of this variant ({variant}): top-1 by case bootstrap, "
+                       "proportions exact Clopper-Pearson (the table above shows the 5-seed means)."), "",
+                      "| method | " + " | ".join(h for h, _ in keys) + " |", "|---" * (len(keys) + 1) + "|"]
+                L += [f"| {m} | " + " | ".join(f"[{fmt(c[k][0])}, {fmt(c[k][1])}]" if k in c else "-" for _, k in keys)
+                      + " |" for m, c in ci0.items()] + [""]
     return L
 
 
@@ -1041,7 +1241,9 @@ def md_D(r):
          ("Decoys are drawn only from other sponsor states (the condition rules R3/R4 check), and the planted "
           "Rich header matches exactly one actor's simulated reference sample, so rule R1 fires by construction "
           "at level 1. Level 2 (a stolen exclusive decoy family) is the informative test."), "",
-         f"False-flag indicators on clean A1 cases (false-alarm rate): {fmt(r['false_alarm_rate_clean'])}", ""]
+         (f"False-flag indicators on clean A1 cases (false-alarm rate): {fmt(r['false_alarm_rate_clean'])}"
+          + (f" ({round(r['false_alarm_rate_clean'] * r['false_alarm_n'])}/{r['false_alarm_n']}, exact 95% CI "
+             f"[{fmt(r['false_alarm_ci'][0])}, {fmt(r['false_alarm_ci'][1])}])" if "false_alarm_ci" in r else "")), ""]
     for lv in ("level1", "level2"):
         ci = r[f"{lv}_dragnet_ci"]
         L += [f"### {lv} (seed 7)", "", "| method | n | decoy ranked #1 | confidently attributed to decoy | truth ranked #1 | flagged | withheld (<=LOW) |",
