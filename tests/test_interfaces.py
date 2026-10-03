@@ -68,7 +68,7 @@ def test_cli_version(capsys):
 
 def test_api_limits():
     pytest.importorskip("fastapi")
-    pytest.importorskip("httpx")
+    pytest.importorskip("httpx2")
     from fastapi.testclient import TestClient
 
     from dragnet.api import MAX_BODY_BYTES, create_app
@@ -86,7 +86,7 @@ def test_api_limits():
 
 def test_api_assess():
     pytest.importorskip("fastapi")
-    pytest.importorskip("httpx")
+    pytest.importorskip("httpx2")
     from fastapi.testclient import TestClient
 
     from dragnet.api import create_app
@@ -115,7 +115,7 @@ def test_realdata_case_studies_behave(capsys):
 
 def test_api_assess_stix():
     pytest.importorskip("fastapi")
-    pytest.importorskip("httpx")
+    pytest.importorskip("httpx2")
     from fastapi.testclient import TestClient
 
     from dragnet.api import create_app

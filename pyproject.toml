@@ -14,7 +14,8 @@ dependencies = []
 
 [project.optional-dependencies]
 dev = ["pytest>=7", "ruff==0.16.10", "build>=1.2", "numpy>=1.26"]
-api = ["fastapi>=0.110", "uvicorn>=0.29", "httpx>=0.27"]
+# httpx2: starlette >= 1.7 TestClient prefers it (httpx alone triggers a deprecation warning)
+api = ["fastapi>=0.110", "uvicorn>=0.29", "httpx>=0.27", "httpx2>=2.13"]
 bench = ["matplotlib>=3.8", "numpy>=1.26"]
 sign = ["cryptography>=42"]
 docs = ["mkdocs-material>=9.5", "mkdocstrings[python]>=0.25"]
@@ -27,18 +28,23 @@ Homepage = "https://github.com/rakshit-737/dragnet"
 Documentation = "https://rakshit-737.github.io/dragnet/"
 
 [tool.setuptools]
-packages = ["dragnet", "dragnet.sources", "dragnet.data"]
+packages = ["dragnet", "dragnet.sources", "dragnet.data", "dragnet.data.cases", "dragnet.data.real_cases"]
 
 [tool.setuptools.dynamic]
 version = { attr = "dragnet.__version__" }
 
 [tool.setuptools.package-data]
-"dragnet.data" = ["*.json", "cases/*.json", "real_cases/*.json"]
+"dragnet.data" = ["*.json"]
+"dragnet.data.cases" = ["*.json"]
+"dragnet.data.real_cases" = ["*.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
 markers = ["realdata: needs the downloaded public datasets (skipped when absent)"]
+# every warning is an error, so the suite stays at zero warnings (StarletteDeprecationWarning is
+# not a DeprecationWarning subclass, hence "error" rather than "error::DeprecationWarning")
+filterwarnings = ["error"]
 
 [tool.ruff]
 line-length = 110
