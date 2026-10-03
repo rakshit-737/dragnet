@@ -4,7 +4,8 @@ Sections (``--only`` picks a subset; results are merged into results/benchmark.j
 
   A1   ATT&CK v19.2 campaigns vs v19.2 group profiles (retrospective, leaky upper bound)
   A1LF A1 with leave-report-out profiles: group edges cited only by the campaign's own
-       reports are removed before attribution (the headline protocol)
+       reports are removed before attribution (the controlled campaign-level protocol;
+       the README headline uses the per-report set R)
   A2   v19.2 campaigns vs stale ATT&CK v10.1 profiles (open-world); 'later' subset =
        campaigns whose activity began after the v10.1 release
   A3   novel malware family attributed from its documented techniques only
@@ -19,9 +20,10 @@ Sections (``--only`` picks a subset; results are merged into results/benchmark.j
   E2   MalwareBazaar imphash genetics, time split
   E3   MalwareBazaar TLSH genetics, time split, radius chosen on a validation slice
   F    accuracy vs public reporting depth (APTnotes)
+  K    APTMalware hash list vs MalwareBazaar metadata (literature check for Kida & Olukoya 2023)
 
-Usage: python scripts/run_benchmarks.py [--only A1,A1LF,...] [--no-figures]
-Heavy sections (B3, E2, E3) need the abuse.ch exports and run in the bench workflow.
+Usage: python scripts/run_benchmarks.py [--only A1,A1LF,...] [--no-figures] [--render-only]
+Heavy sections (B3, E2, E3, K) need the abuse.ch exports and run in the bench workflow.
 """
 from __future__ import annotations
 
@@ -1104,7 +1106,7 @@ def render_md(res: dict) -> str:
 
 
 def md_A1LF(r):
-    L = ["## A1-LF - ATT&CK campaigns, leave-report-out profiles (headline protocol)", "",
+    L = ["## A1-LF - ATT&CK campaigns, leave-report-out profiles (controlled campaign set)", "",
          (f"Before each campaign is attributed, every group 'uses' edge whose citations are a subset of the "
           f"campaign's own citations is removed (mean {fmt(r['edges_removed_mean'])} edges per case). This prevents profiles written from the campaign's own reports from answering the question."), ""]
     L += table(r["main"], HEAD_COLS) + [""] + ci_lines(r["main"], "A1-LF") + paired_lines(r["paired"], "A1-LF")
