@@ -100,6 +100,11 @@ class _Ctx:
                 and self.spec(s) >= self.cfg.discriminating_forgeable)
 
 
+def _names(xs) -> str:
+    """Actor/state names as plain text ('A, B'), not a Python list repr."""
+    return ", ".join(sorted(xs))
+
+
 def false_flag_indicators(ctx: _Ctx, point_support: dict[str, float]) -> tuple[list[str], list[str]]:
     """Return (false-flag indicators, informational notes)."""
     ind: list[str] = []
@@ -116,8 +121,8 @@ def false_flag_indicators(ctx: _Ctx, point_support: dict[str, float]) -> tuple[l
                    f"with no hard infra/code overlap")
     # R2: forgeable artifacts and hard evidence point to disjoint actor sets
     if forg_actors and anchor_actors and forg_actors.isdisjoint(anchor_actors):
-        ind.append(f"forgeable artifacts point to {sorted(forg_actors)} "
-                   f"while hard evidence points to {sorted(anchor_actors)}")
+        ind.append(f"forgeable artifacts point to {_names(forg_actors)} "
+                   f"while hard evidence points to {_names(anchor_actors)}")
     # R3: specific hard evidence spans several actors
     specific = {a for a in anchor_actors
                 if any(ctx.is_anchor(s) and ctx.spec(s) >= ctx.cfg.anchor_family_specificity
@@ -125,12 +130,12 @@ def false_flag_indicators(ctx: _Ctx, point_support: dict[str, float]) -> tuple[l
     if len(specific) >= 2:
         countries = {kg.country(a) for a in specific}
         if None in countries or len(countries) > 1:
-            ind.append(f"hard evidence overlaps with multiple actors: {sorted(specific)}"
-                       + (f" (sponsor states: {sorted(c for c in countries if c)})"
+            ind.append(f"hard evidence overlaps with multiple actors: {_names(specific)}"
+                       + (f" (sponsor states: {_names(c for c in countries if c)})"
                           if any(countries) else ""))
         else:
             notes.append(f"hard evidence shared by overlapping clusters of one sponsor state "
-                         f"({countries.pop()}): {sorted(specific)} - not treated as a false flag")
+                         f"({countries.pop()}): {_names(specific)} - not treated as a false flag")
     # R4: tooling/infrastructure and tradecraft disagree (tool theft / infra hijack)
     if ctx.sim and point_support:
         a_ttp = max(ctx.sim, key=lambda a: (ctx.sim[a], a))

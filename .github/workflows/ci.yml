@@ -27,6 +27,9 @@ jobs:
       - run: python -m ruff check .
       - run: python -m pytest -q
       - run: python -m dragnet demo
+      - name: Committed demo report pages are up to date
+        if: matrix.python-version == '3.12'
+        run: python scripts/build_demo_pages.py && git diff --exit-code docs/demo
 
   package:
     runs-on: ubuntu-24.04

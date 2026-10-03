@@ -14,16 +14,37 @@ Assessment: **SANDWORM_SIM** with **HIGH** confidence
 
 | Signal | SANDWORM_SIM | FALSE_FLAG | UNKNOWN |
 |---|---|---|---|
-| `ip:198.51.100.23` | C | N | N |
-| `ttp:T1485` | C | N | N |
-| `ttp:T1570` | C | N | N |
-| `file_hash:0000000000000000000000000000000000000000000000000000000000000003` | N | N | C |
-| `imphash:bb22bb22bb22bb22bb22bb22bb22bb22` | C | N | N |
+| <code>ip:198.51.100.23</code> | C | N | N |
+| <code>ttp:T1485</code> | C | N | N |
+| <code>ttp:T1570</code> | C | N | N |
+| <code>file_hash:0000000000000000000000000000000000000000000000000000000000000003</code> | N | N | C |
+| <code>imphash:bb22bb22bb22bb22bb22bb22bb22bb22</code> | C | N | N |
+
+## Weights
+
+Effective weight of a signal = kind weight x specificity (1 / number of actors it links to); `ttp_profile` scales the IDF-cosine tradecraft term. Override with `--weight kind=value`.
+
+| kind | weight | default | |
+|---|---|---|---|
+| code_reuse | 0.75 | 0.75 |  |
+| domain | 0.60 | 0.60 |  |
+| family | 0.50 | 0.50 |  |
+| file_hash | 0.90 | 0.90 |  |
+| imphash | 0.60 | 0.60 |  |
+| ip | 0.55 | 0.55 |  |
+| language | 0.15 | 0.15 |  |
+| mutex | 0.40 | 0.40 |  |
+| rich_header | 0.35 | 0.35 |  |
+| tlsh | 0.55 | 0.55 |  |
+| tool | 0.30 | 0.30 |  |
+| ttp | 0.15 | 0.15 |  |
+| ttp_profile | 0.60 | 0.60 |  |
+| victimology | 0.10 | 0.10 |  |
 
 ## Evidence-to-campaign links
 
-- `EV-F-003` -> `ip:198.51.100.23` -> C-SW-2017-WIPER
-- `EV-M-003` -> `imphash:bb22bb22bb22bb22bb22bb22bb22bb22` -> C-SW-2017-WIPER
+- <code>EV-F-003</code> -> <code>ip:198.51.100.23</code> -> C-SW-2017-WIPER
+- <code>EV-M-003</code> -> <code>imphash:bb22bb22bb22bb22bb22bb22bb22bb22</code> -> C-SW-2017-WIPER
 
 ## False-flag indicators
 

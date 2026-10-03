@@ -15,22 +15,43 @@ Assessment: **Insufficient for attribution** (INSUFFICIENT)
 
 | Signal | SANDWORM_SIM | LAZARUS_SIM | FALSE_FLAG | UNKNOWN |
 |---|---|---|---|---|
-| `ip:198.51.100.23` | C | I | N | N |
-| `ttp:T1485` | C | N | N | N |
-| `ttp:T1003` | C | C | N | N |
-| `file_hash:0000000000000000000000000000000000000000000000000000000000000002` | N | N | N | C |
-| `family:UnknownWiper` | N | N | N | C |
-| `rich_header:rh:9f8e7d6c` | I | C | C | N |
+| <code>ip:198.51.100.23</code> | C | I | N | N |
+| <code>ttp:T1485</code> | C | N | N | N |
+| <code>ttp:T1003</code> | C | C | N | N |
+| <code>file_hash:0000000000000000000000000000000000000000000000000000000000000002</code> | N | N | N | C |
+| <code>family:UnknownWiper</code> | N | N | N | C |
+| <code>rich_header:rh:9f8e7d6c</code> | I | C | C | N |
+
+## Weights
+
+Effective weight of a signal = kind weight x specificity (1 / number of actors it links to); `ttp_profile` scales the IDF-cosine tradecraft term. Override with `--weight kind=value`.
+
+| kind | weight | default | |
+|---|---|---|---|
+| code_reuse | 0.75 | 0.75 |  |
+| domain | 0.60 | 0.60 |  |
+| family | 0.50 | 0.50 |  |
+| file_hash | 0.90 | 0.90 |  |
+| imphash | 0.60 | 0.60 |  |
+| ip | 0.55 | 0.55 |  |
+| language | 0.15 | 0.15 |  |
+| mutex | 0.40 | 0.40 |  |
+| rich_header | 0.35 | 0.35 |  |
+| tlsh | 0.55 | 0.55 |  |
+| tool | 0.30 | 0.30 |  |
+| ttp | 0.15 | 0.15 |  |
+| ttp_profile | 0.60 | 0.60 |  |
+| victimology | 0.10 | 0.10 |  |
 
 ## Evidence-to-campaign links
 
-- `EV-F-002` -> `ip:198.51.100.23` -> C-SW-2017-WIPER
-- `EV-M-002` -> `rich_header:rh:9f8e7d6c` -> C-LZ-2017-RANSOM
+- <code>EV-F-002</code> -> <code>ip:198.51.100.23</code> -> C-SW-2017-WIPER
+- <code>EV-M-002</code> -> <code>rich_header:rh:9f8e7d6c</code> -> C-LZ-2017-RANSOM
 
 ## False-flag indicators
 
 - LAZARUS_SIM: supported only by forgeable/soft signals (rich_header) with no hard infra/code overlap
-- forgeable artifacts point to ['LAZARUS_SIM'] while hard evidence points to ['SANDWORM_SIM']
+- forgeable artifacts point to LAZARUS_SIM while hard evidence points to SANDWORM_SIM
 
 ## What would raise confidence
 

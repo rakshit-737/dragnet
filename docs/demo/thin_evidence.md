@@ -15,8 +15,29 @@ Assessment: **Insufficient for attribution** (INSUFFICIENT)
 
 | Signal | SANDWORM_SIM | LAZARUS_SIM | FALSE_FLAG | UNKNOWN |
 |---|---|---|---|---|
-| `ip:192.0.2.200` | N | N | N | C |
-| `ttp:T1003` | C | C | N | N |
+| <code>ip:192.0.2.200</code> | N | N | N | C |
+| <code>ttp:T1003</code> | C | C | N | N |
+
+## Weights
+
+Effective weight of a signal = kind weight x specificity (1 / number of actors it links to); `ttp_profile` scales the IDF-cosine tradecraft term. Override with `--weight kind=value`.
+
+| kind | weight | default | |
+|---|---|---|---|
+| code_reuse | 0.75 | 0.75 |  |
+| domain | 0.60 | 0.60 |  |
+| family | 0.50 | 0.50 |  |
+| file_hash | 0.90 | 0.90 |  |
+| imphash | 0.60 | 0.60 |  |
+| ip | 0.55 | 0.55 |  |
+| language | 0.15 | 0.15 |  |
+| mutex | 0.40 | 0.40 |  |
+| rich_header | 0.35 | 0.35 |  |
+| tlsh | 0.55 | 0.55 |  |
+| tool | 0.30 | 0.30 |  |
+| ttp | 0.15 | 0.15 |  |
+| ttp_profile | 0.60 | 0.60 |  |
+| victimology | 0.10 | 0.10 |  |
 
 ## Evidence-to-campaign links
 

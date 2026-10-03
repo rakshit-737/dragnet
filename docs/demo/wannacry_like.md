@@ -14,22 +14,43 @@ Assessment: **LAZARUS_SIM** with **HIGH** confidence
 
 | Signal | LAZARUS_SIM | FALSE_FLAG | UNKNOWN |
 |---|---|---|---|
-| `domain:killswitch-sim.example` | C | N | N |
-| `ttp:T1486` | C | N | N |
-| `ttp:T1210` | C | N | N |
-| `victimology:healthcare` | N | N | C |
-| `file_hash:0000000000000000000000000000000000000000000000000000000000000001` | N | N | C |
-| `imphash:aa11aa11aa11aa11aa11aa11aa11aa11` | C | N | N |
-| `code_reuse:fn:rc4_variant_0x3f` | C | N | N |
-| `family:WannaSim` | C | N | N |
+| <code>domain:killswitch-sim.example</code> | C | N | N |
+| <code>ttp:T1486</code> | C | N | N |
+| <code>ttp:T1210</code> | C | N | N |
+| <code>victimology:healthcare</code> | N | N | C |
+| <code>file_hash:0000000000000000000000000000000000000000000000000000000000000001</code> | N | N | C |
+| <code>imphash:aa11aa11aa11aa11aa11aa11aa11aa11</code> | C | N | N |
+| <code>code_reuse:fn:rc4_variant_0x3f</code> | C | N | N |
+| <code>family:WannaSim</code> | C | N | N |
+
+## Weights
+
+Effective weight of a signal = kind weight x specificity (1 / number of actors it links to); `ttp_profile` scales the IDF-cosine tradecraft term. Override with `--weight kind=value`.
+
+| kind | weight | default | |
+|---|---|---|---|
+| code_reuse | 0.75 | 0.75 |  |
+| domain | 0.60 | 0.60 |  |
+| family | 0.50 | 0.50 |  |
+| file_hash | 0.90 | 0.90 |  |
+| imphash | 0.60 | 0.60 |  |
+| ip | 0.55 | 0.55 |  |
+| language | 0.15 | 0.15 |  |
+| mutex | 0.40 | 0.40 |  |
+| rich_header | 0.35 | 0.35 |  |
+| tlsh | 0.55 | 0.55 |  |
+| tool | 0.30 | 0.30 |  |
+| ttp | 0.15 | 0.15 |  |
+| ttp_profile | 0.60 | 0.60 |  |
+| victimology | 0.10 | 0.10 |  |
 
 ## Evidence-to-campaign links
 
-- `EV-F-001` -> `domain:killswitch-sim.example` -> C-LZ-2017-RANSOM
-- `EV-M-001` -> `imphash:aa11aa11aa11aa11aa11aa11aa11aa11` -> C-LZ-2017-RANSOM
-- `EV-M-001` -> `code_reuse:fn:rc4_variant_0x3f` -> C-LZ-2016-BANK
-- `EV-M-001` -> `code_reuse:fn:rc4_variant_0x3f` -> C-LZ-2017-RANSOM
-- `EV-M-001` -> `family:WannaSim` -> C-LZ-2017-RANSOM
+- <code>EV-F-001</code> -> <code>domain:killswitch-sim.example</code> -> C-LZ-2017-RANSOM
+- <code>EV-M-001</code> -> <code>imphash:aa11aa11aa11aa11aa11aa11aa11aa11</code> -> C-LZ-2017-RANSOM
+- <code>EV-M-001</code> -> <code>code_reuse:fn:rc4_variant_0x3f</code> -> C-LZ-2016-BANK
+- <code>EV-M-001</code> -> <code>code_reuse:fn:rc4_variant_0x3f</code> -> C-LZ-2017-RANSOM
+- <code>EV-M-001</code> -> <code>family:WannaSim</code> -> C-LZ-2017-RANSOM
 
 ## False-flag indicators
 
