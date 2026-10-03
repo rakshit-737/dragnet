@@ -5,6 +5,8 @@ and the project uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.1.2] - 2026-10-03
+
 ### Changed
 - README and the Overview, Evaluation, Limitations and Reproduce pages are rendered from `templates/` by
   `scripts/render_docs.py`, which fills every value from `results/benchmark.json` and the bench run's
