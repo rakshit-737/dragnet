@@ -51,6 +51,8 @@ jobs:
           /tmp/v/bin/dragnet assess /tmp/v/lib/python3.12/site-packages/dragnet/data/cases/wannacry_like.json --format json > r.json
           set +e; /tmp/v/bin/dragnet serve; rc=$?; set -e
           test "$rc" -eq 2   # missing [api] extra: one-line error, exit 2
+          set +e; /tmp/v/bin/dragnet keygen k2 2> keygen.err; rc=$?; set -e
+          test "$rc" -eq 2 && grep -q "\[sign\] extra" keygen.err && ! grep -q Traceback keygen.err
       - name: sdist test suite runs
         run: |
           mkdir /tmp/sd && tar xzf dist/*.tar.gz -C /tmp/sd

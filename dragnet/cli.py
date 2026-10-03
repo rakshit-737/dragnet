@@ -93,14 +93,25 @@ def main(argv: list[str] | None = None) -> int:
         print(f"dragnet: invalid JSON: {e}", file=sys.stderr)
         return 2
     except ImportError as e:
-        print(f"dragnet: missing optional dependency ({e.name or e}); install the extra, e.g. "
-              'pip install "dragnet-attribution[api,sign]" (or pip install -e ".[api,sign]" in a checkout)',
-              file=sys.stderr)
+        extra = "sign" if (e.name or "").startswith("cryptography") else "api"
+        print(f"dragnet: missing optional dependency ({e.name or e}); install the [{extra}] extra: "
+              f'pip install "dragnet-attribution[{extra}] @ git+https://github.com/rakshit-737/dragnet" '
+              f'(or pip install -e ".[{extra}]" in a checkout)', file=sys.stderr)
         return 2
 
 
+class _HelpFormatter(argparse.ArgumentDefaultsHelpFormatter):
+    """Show '(default: X)' only for real defaults; help strings that already describe what
+    happens when the option is omitted are left alone."""
+
+    def _get_help_string(self, action):
+        if action.default is None or action.default == [] or action.default is False                 or "(default" in (action.help or ""):
+            return action.help
+        return super()._get_help_string(action)
+
+
 def _parser() -> argparse.ArgumentParser:
-    fmt = argparse.ArgumentDefaultsHelpFormatter
+    fmt = _HelpFormatter
     p = argparse.ArgumentParser(prog="dragnet", formatter_class=fmt,
                                 description="Evidence-to-actor attribution with ACH")
     p.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
@@ -130,8 +141,8 @@ def _parser() -> argparse.ArgumentParser:
 
     im = add("import", "build a case file from REVENANT / VITRINE JSON exports")
     im.add_argument("case_id", help="id of the new case")
-    im.add_argument("--revenant", action="append", default=[], help="REVENANT export JSON")
-    im.add_argument("--vitrine", action="append", default=[], help="VITRINE triage JSON")
+    im.add_argument("--revenant", action="append", default=[], help="REVENANT export JSON (repeatable)")
+    im.add_argument("--vitrine", action="append", default=[], help="VITRINE triage JSON (repeatable)")
     im.add_argument("-o", "--out", help="write the case here instead of stdout")
 
     d = add("demo", "run all bundled synthetic scenarios")
@@ -140,15 +151,15 @@ def _parser() -> argparse.ArgumentParser:
     b = add("build-kg", "build a knowledge graph from downloaded ATT&CK/MISP data")
     b.add_argument("--attack-version", default="19.2", help="ATT&CK Enterprise release")
     b.add_argument("--with-campaigns", action="store_true", help="also add ATT&CK campaigns")
-    b.add_argument("--data", help="dataset dir (default $DRAGNET_DATA)")
-    b.add_argument("-o", "--out", help="output JSON (default <data>/kg-attack-<ver>.json)")
+    b.add_argument("--data", help="dataset dir (default: $DRAGNET_DATA)")
+    b.add_argument("-o", "--out", help="output JSON (default: <data>/kg-attack-<ver>.json)")
 
     c = add("case-study", "run curated real cases (needs downloaded data)")
-    c.add_argument("name", nargs="?", help="case id, e.g. olympic_destroyer_2018 (default: all)")
+    c.add_argument("name", nargs="?", help="case id, e.g. olympic_destroyer_2018 (default: all cases)")
     c.add_argument("--mode", choices=["time-of-incident", "retrospective"], default="time-of-incident",
                    help="time-of-incident hides software first documented by the incident itself")
     c.add_argument("--attack-version", default="19.2", help="ATT&CK Enterprise release")
-    c.add_argument("--data", help="dataset dir (default $DRAGNET_DATA)")
+    c.add_argument("--data", help="dataset dir (default: $DRAGNET_DATA)")
     c.add_argument("--format", choices=["md", "json", "summary"], default="summary", help="output format")
 
     x = add("export-cypher", "export a knowledge graph as a Neo4j Cypher script")
