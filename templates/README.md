@@ -27,7 +27,7 @@ over plain lookups is *not* shown (sections E2, E3).
 
 Per-report ATT&CK cases (the techniques and software one cited report documents for one group;
 n = 637 over 161 groups), leave-report-out profiles. 95% CIs are bootstrapped over threat groups.
-Source: bench run [37092539472](https://github.com/rakshit-737/dragnet/actions/runs/37092539472) on commit [`2d7bacc`](https://github.com/rakshit-737/dragnet/commit/2d7bacc4a99c0e2766e62dd139baad1eb822f901); every table
+Source: bench run [@@RUN_ID@@](@@RUN_URL@@) on commit [`@@RUN_SHA7@@`](@@RUN_COMMIT_URL@@); every table
 with every interval is in [`results/RESULTS.md`](results/RESULTS.md).
 
 | method | top-1, 5-fold | top-1, temporal 2022+ (n = 219) | names an actor | right when it names one | wrong actor named |
@@ -157,8 +157,8 @@ is named.
 
 ## Results on real data
 
-All numbers come from `scripts/run_benchmarks.py` in bench run [37092539472](https://github.com/rakshit-737/dragnet/actions/runs/37092539472) (commit
-`2d7bacc`) of the [`bench` workflow](.github/workflows/bench.yml); the full tables are in
+All numbers come from `scripts/run_benchmarks.py` in bench run [@@RUN_ID@@](@@RUN_URL@@) (commit
+`@@RUN_SHA7@@`) of the [`bench` workflow](.github/workflows/bench.yml); the full tables are in
 [`results/RESULTS.md`](results/RESULTS.md), the raw values in `results/benchmark.json`, the protocol in
 [ADR 0004](docs/adr/0004-evaluation-protocol.md), and the per-section discussion on the
 [Evaluation page](https://rakshit-737.github.io/dragnet/benchmarks/).
@@ -243,13 +243,13 @@ pooled over splits, resampling actors).
 | paper: uniform prior | 10.68 +/- 0.53 | - |
 | paper: expert prior | 7.75 +/- 0.09 | - |
 | paper: HyDE + expert prior (best) | 7.55 +/- 0.21 | - |
-| ours: their scorer, uniform prior, human technique lists | 8.72 +/- 0.55 | [6.35, 11.77] |
-| ours: their scorer, report-share prior (expert-prior proxy) | 9.71 +/- 0.45 | [7.00, 13.15] |
-| ours: DRAGNET, techniques only (= `ttp-cosine` ranking) | 7.55 +/- 0.66 | [5.53, 10.09] |
-| ours: DRAGNET, software only | 8.99 +/- 0.54 | [7.18, 10.64] |
-| **ours: DRAGNET** (techniques + software, same splits) | 5.38 +/- 0.79 | [3.63, 7.56] |
+| ours: their scorer, uniform prior, human technique lists | @@G_guru-uniform@@ |
+| ours: their scorer, report-share prior (expert-prior proxy) | @@G_guru-report-prior@@ |
+| ours: DRAGNET, techniques only (= `ttp-cosine` ranking) | @@G_dragnet-ttp-only@@ |
+| ours: DRAGNET, software only | @@G_dragnet-software-only@@ |
+| **ours: DRAGNET** (techniques + software, same splits) | @@G_dragnet@@ |
 
-On the same splits DRAGNET ranks the true actor at 5.38 on average (95% CI [3.63, 7.56], top-1 0.53), lower than every other method here (closest: dragnet-ttp-only, 7.55); paired against their uniform-prior scorer the difference is 3.34 ranks [1.84, 5.49], and every paired test has Holm p <= 0.01, with DRAGNET lower in all 10 splits against each method. Their scorer on human technique lists (8.72) lands between the paper's uniform-prior (10.68) and expert-prior (7.75) results; the report-share prior does not help (9.71). The corpora differ, so the comparison with the paper's own numbers is indicative only.
+@@G_TEXT@@
 
 ### D - false-flag stress test (A1 cases with planted decoy artifacts from another sponsor state)
 
@@ -275,17 +275,17 @@ cross-state decoys are tested. False-alarm cost: indicators fire on 4 of 25 clea
   open-world profiles, not a temporal hold-out (17 of 25 campaigns have their group in v10.1: DRAGNET
   0.41 [0.18, 0.65], ioc-correlation 0.41 [0.19, 0.63], code-only 0.36 [0.13, 0.60]). B2
   attributes each campaign against the newest release published before it was added (12.1-18.1):
-  25 campaigns (12.1: 5, 13.1: 2, 14.1: 5, 15.1: 4, 16.1: 6, 17.1: 2, 18.1: 1 per release), 19 with their group in that release. DRAGNET top-1 on those is 0.47 [0.26, 0.68]; it names an actor in 8 cases, 7 correctly, with 0 wrong at MEDIUM+ and abstains on 0.67 of the 6 out-of-graph campaigns (ioc-correlation top-1 0.35 [0.16, 0.56], 1 confident error; code-only top-1 0.32 [0.11, 0.53], 2 confident errors). The paired top-1 differences are not significant at this size (Holm p ioc-correlation 0.250, code-only 0.250).
+  @@B2_TEXT@@
 - **A3 - a new family from its techniques only (n = 411).** DRAGNET names an actor in 10 cases and
   **all 10 LOW verdicts are wrong** (0/10, 95% CI [0, 0.31]): technique overlap alone does not attribute.
-- **E2 - imphash (MalwareBazaar, time split at 2024-01-01).** 13,403 test samples share 1,139 distinct imphashes and are dominated by a few commodity families (AgentTesla 8434, Amadey 1923, WannaCry 739). Collision-filtered, DRAGNET covers 0.078 of them with selective accuracy 0.918 [0.455, 0.999] (CI resamples families); MEDIUM+ verdicts are 0.998 accurate at coverage 0.064, but 0.85 of them are WannaCry. Without WannaCry, coverage falls to 0.024 and accuracy to 0.726 [0.308, 0.995]: mostly re-identification of known families, not attribution of new ones.
-- **E3 - TLSH (MalwareBazaar metadata).** tau = 100 chosen on a pre-cutoff validation window. DRAGNET covers 0.039 of 30,643 test samples at selective accuracy 0.844 [0.461, 0.957] (TLSH nearest-neighbour lookup: coverage 0.052, accuracy 0.807); without WannaCry accuracy is 0.648. Fuzzy-hash matches never reach MEDIUM+ (coverage 0.00); on 3000 samples of families with no actor an actor is named for 0.008 of them.
-- **B3 - Malpedia-labelled abuse.ch cases.** 129 post-2024-01-01 cases (80 with the actor in the graph), labels from Malpedia, a source the graph does not use (5-seed means). From artifacts alone DRAGNET's top-1 is 0.04 (coverage 0.06); adding the family name raises it to 0.27 at selective accuracy 0.86, so most of what attributes these cases is the family name, not the hashes or IOCs. Malpedia and ATT&CK agree on 203 of 217 families both attribute.
-- **E1 - ThreatFox.** 0.992 of 108,378 distinct IOC values occur in exactly one row: ThreatFox records an IOC once, so the export cannot measure IOC longevity and no longevity claim is made. Only 5 of 370 later network IOCs of actor-specific families had an earlier row.
+- **E2 - imphash (MalwareBazaar, time split at 2024-01-01).** @@E2_TEXT@@
+- **E3 - TLSH (MalwareBazaar metadata).** @@E3_TEXT@@
+- **B3 - Malpedia-labelled abuse.ch cases.** @@B3_TEXT@@
+- **E1 - ThreatFox.** @@E1_TEXT@@
 - **F - reporting depth.** With ATT&CK-only aliases, top-1 is 0.36 for A1 actors with no APTnotes report
   (n = 11), 0.89 for 1-5 reports (n = 9) and 1.00 for more (n = 5); Fisher p = 0.007. An association,
   not a cause: APTnotes is dense for 2010-2018, so "0 reports" partly means "recently named actor".
-- **K - APTMalware.** Only 12 of the 3,719 distinct APTMalware SHA-256s appear among the 1,147,952 rows of the MalwareBazaar metadata export, so the fuzzy-hash study of Kida & Olukoya (IEEE Access 2023) cannot be matched from metadata; it needs the binaries. The export changes daily, so this count drifts.
+- **K - APTMalware.** @@K_TEXT@@
 
 ## Documented case studies
 
@@ -378,7 +378,7 @@ python scripts/download_data.py                              # SHA-256 checked f
 PYTHONHASHSEED=0 python scripts/run_benchmarks.py --only A1LF,A1,G   # light sections, a few minutes
 ```
 
-The full run (all sections, 1045 s wall clock on a GitHub-hosted `ubuntu-24.04` runner, single-threaded, peak RSS 968 MiB) is the
+The full run (all sections, @@RUNTIME@@ s wall clock on a GitHub-hosted `ubuntu-24.04` runner, single-threaded, peak RSS @@RSS@@) is the
 [`bench` workflow](https://github.com/rakshit-737/dragnet/actions/workflows/bench.yml). It runs the
 real-data tests and the quickstart above, then `scripts/compare_results.py` checks every value of the
 deterministic sections (A1, A1-LF, A2, A3, R, G, B1/B2, C, D, F) against the committed
@@ -401,7 +401,7 @@ change daily, so B3, E1, E2, E3 and K drift; they are reported, not compared.
   curated cases; per-report cases (n = 637) are the larger set, but they are slices of the same reports
   ATT&CK profiles are built from (handled by leave-report-out, not eliminated).
 - **Ground truth is itself attribution.** ATT&CK, Malpedia and government statements can be wrong;
-  Malpedia and ATT&CK agree on 203 of 217 families both attribute.
+  Malpedia and ATT&CK agree on @@LABEL_AGREE@@ families both attribute.
 - **Leakage.** Plain A1 is a leaky upper bound (0.68); A1-LF (0.40) and R are the controlled numbers.
   An earlier temporal split dated citations by their key only and kept 52 post-2021 reports in the
   "pre-2022" profiles; with description dates the temporal top-1 fell from 0.207 to 0.137.

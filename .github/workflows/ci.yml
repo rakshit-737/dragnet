@@ -30,6 +30,13 @@ jobs:
       - name: Committed demo report pages are up to date
         if: matrix.python-version == '3.12'
         run: python scripts/build_demo_pages.py && git diff --exit-code docs/demo
+      - name: README/docs rendered from committed results, no @@TOKEN@@ left
+        if: matrix.python-version == '3.12'
+        run: |
+          python scripts/render_docs.py --check
+          if grep -rnE '@@[A-Za-z][A-Za-z0-9_-]*@@' README.md CHANGELOG.md docs --include='*.md'; then
+            echo "unresolved @@ placeholder(s) above" >&2; exit 1
+          fi
 
   package:
     runs-on: ubuntu-24.04

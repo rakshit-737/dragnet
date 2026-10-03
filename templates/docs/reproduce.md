@@ -4,7 +4,7 @@ Every published number comes from `scripts/run_benchmarks.py`. The full run is h
 CSV, TLSH search over ~640k digests), so the canonical run is the
 [`bench` workflow](https://github.com/rakshit-737/dragnet/actions/workflows/bench.yml) on a GitHub
 `ubuntu-24.04` runner (weekly, or on dispatch). The committed results come from bench run
-[37092539472](https://github.com/rakshit-737/dragnet/actions/runs/37092539472) on commit `2d7bacc`; `results/RESULTS.md` and `results/benchmark.json`
+[@@RUN_ID@@](@@RUN_URL@@) on commit `@@RUN_SHA7@@`; `results/RESULTS.md` and `results/benchmark.json`
 (`provenance`) name that run, and the run's artifact holds the same files plus `compare.txt`,
 `time.txt` and the dataset manifest.
 
@@ -25,7 +25,7 @@ Each bench run:
 | 1. data | `python scripts/download_data.py` | ~2-5 min, ~640 MB in `$DRAGNET_DATA` (default `data/raw`) | `[get]` / `[have]` per source; pinned sources are SHA-256 checked and listed in `data/MANIFEST.json` |
 | 2. graph | `python -m dragnet build-kg` | ~20 s | `kg-attack-19.2.json` with 176 groups, 1600 signal keys |
 | 3. light sections | `PYTHONHASHSEED=0 python scripts/run_benchmarks.py --only A1,A1LF,A2,A3,C,D,F,G` | a few minutes, < 1 GB RAM | merges into `results/benchmark.json` |
-| 4. full run | `PYTHONHASHSEED=0 python scripts/run_benchmarks.py --fresh --out fresh` | 1045 s wall clock on the runner (single-threaded), peak RSS 968 MiB (`time.txt` of run 37092539472); needs `.[bench]` (numpy, matplotlib) | a complete `fresh/RESULTS.md` |
+| 4. full run | `PYTHONHASHSEED=0 python scripts/run_benchmarks.py --fresh --out fresh` | @@RUNTIME@@ s wall clock on the runner (single-threaded), peak RSS @@RSS@@ (`time.txt` of run @@RUN_ID@@); needs `.[bench]` (numpy, matplotlib) | a complete `fresh/RESULTS.md` |
 | 5. compare | `python scripts/compare_results.py results/benchmark.json fresh/benchmark.json` | seconds | `[ok]` for every deterministic section, exit 0 |
 | 6. re-render | `python scripts/run_benchmarks.py --render-only` | seconds | `results/RESULTS.md` and `docs/figures/` from `results/benchmark.json` |
 

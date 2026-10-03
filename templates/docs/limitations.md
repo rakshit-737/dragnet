@@ -29,7 +29,7 @@
 | Victimology signals | MISP sector/country metadata exists but is not yet wired into the graph |
 | OCCAM STIX import | file-format adapter not written yet |
 | Live sample handling | by design: DRAGNET never touches binaries |
-| Matching Kida & Olukoya (2023) | needs the APTMalware binaries; section K counts how many of its 3,719 hashes MalwareBazaar metadata knows (12) |
+| Matching Kida & Olukoya (2023) | needs the APTMalware binaries; section K counts how many of its @@K_DISTINCT@@ hashes MalwareBazaar metadata knows (@@K_FOUND@@) |
 
 ## Roadmap
 
