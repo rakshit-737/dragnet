@@ -11,7 +11,7 @@ snapshot the published benchmark numbers were produced from; it is only updated 
 source) when ``--record`` is passed, so a partial or fresh download never overwrites it.
 
 Usage:
-    python scripts/download_data.py                # everything (~300 MB)
+    python scripts/download_data.py                # everything (~640 MB, see data/MANIFEST.json)
     python scripts/download_data.py --skip-bazaar  # skip the 220 MB MalwareBazaar dump
     python scripts/download_data.py --only attack_19_2 misp_threat_actor
     DRAGNET_DATA=/path/to/dir python scripts/download_data.py
@@ -48,6 +48,8 @@ MISP = f"https://raw.githubusercontent.com/MISP/misp-galaxy/{MISP_SHA}/clusters"
 TLSH_SHA = "ebdec8fde93a4ac359437f4f3796c78d3ae433bf"
 TLSH_EXP = f"https://raw.githubusercontent.com/trendmicro/tlsh/{TLSH_SHA}/Testing/exp"
 APTNOTES_SHA = "8595fbdee6747be9e9f730fd0bacd247157314df"
+# APTMalware (Kida & Olukoya 2023 benchmark): only overview.csv, the hash/label list - never the samples
+APTMALWARE_SHA = "d71ee9f29427239ba2c02de6b76807e32f769393"
 
 # name -> (url, filename, pinned?, licence); pinned sources are checked against PINNED_SHA256
 SOURCES: dict[str, tuple[str, str, bool, str]] = {
@@ -76,6 +78,8 @@ SOURCES: dict[str, tuple[str, str, bool, str]] = {
                       True, "CC BY-NC-SA 3.0 (Malpedia via MISP galaxy)"),
     "aptnotes": (f"https://raw.githubusercontent.com/aptnotes/data/{APTNOTES_SHA}/APTnotes.csv",
                  "APTnotes.csv", True, "APTnotes (public report index; reports (c) authors)"),
+    "aptmalware_overview": (f"https://raw.githubusercontent.com/cyber-research/APTMalware/{APTMALWARE_SHA}/overview.csv",
+                            "aptmalware-overview.csv", True, "ODbL 1.0 (APTMalware dataset, hash list only)"),
     "threatfox_full": ("https://threatfox.abuse.ch/export/json/full/", "threatfox-full.json.zip",
                        False, "CC0 (abuse.ch ThreatFox)"),
     "bazaar_full": ("https://bazaar.abuse.ch/export/csv/full/", "bazaar-full.csv.zip",
@@ -100,6 +104,7 @@ PINNED_SHA256 = {
     "tlsh_vectors": "a9c2605ce5399827d10b65c514b01bff20fab380c4844db17cb109f87c3c8bc2",
     "tlsh_digests": "776adcd5a139739d963c9f990cf2eea7b66d8a69dd318da78db234fa7c9766a5",
     "aptnotes": "dac4579a78ad0ad644d6f57670f31ac54f0424b3ab2619c8119d8f65e48adf0b",
+    "aptmalware_overview": "0da30478cc059fd3129e583187d238c41c5b83a0d54740be86145abda72888aa",   # 2026-10-03
 }
 
 
