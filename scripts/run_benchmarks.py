@@ -875,73 +875,111 @@ def figures(res: dict, outdir: Path) -> None:
         print("matplotlib not installed - skipping figures")
         return
     outdir.mkdir(parents=True, exist_ok=True)
-    colors = {"dragnet": "#2a78d6", "ttp-jaccard": "#eb6834", "ttp-cosine": "#1baf7a", "ttp-binary-bayes": "#7a5cc7",
-              "ioc-correlation": "#eda100", "code-only": "#e87ba4"}
-    ink, muted = "#0b0b0b", "#52514e"
+    ink, muted, surface, grid = "#0b0b0b", "#52514e", "#fcfcfb", "#e4e3df"
     plt.rcParams.update({"font.size": 10, "axes.edgecolor": muted, "axes.labelcolor": ink,
-                         "xtick.color": muted, "ytick.color": muted})
+                         "xtick.color": muted, "ytick.color": muted, "figure.facecolor": surface,
+                         "axes.facecolor": surface, "savefig.facecolor": surface, "hatch.color": surface,
+                         "hatch.linewidth": 1.2})
 
-    def bars(ax, groups, labels, methods, getter, title):
-        width = 0.8 / len(methods)
+    def bars(ax, groups, labels, methods, getter, title, err=None, err_label="95% CI"):
+        """Grouped bars; ``err(g, m)`` -> (lo, hi) draws whiskers; values are printed above them."""
+        width = 0.84 / len(methods)
         for i, m in enumerate(methods):
+            col, hatch = METHOD_STYLE.get(m, ("#888888", None))
             xs = [j + (i - (len(methods) - 1) / 2) * width for j in range(len(groups))]
             vals = [getter(g, m) for g in groups]
-            bs = ax.bar(xs, vals, width - 0.02, color=colors.get(m, "#888"), label=m)
-            for b, v in zip(bs, vals):
-                ax.text(b.get_x() + b.get_width() / 2, v + 0.01, f"{v:.2f}", ha="center", va="bottom",
-                        fontsize=6.5, color=ink)
+            ax.bar(xs, vals, width, color=col, hatch=hatch, edgecolor=surface, linewidth=1.5,
+                   label=METHOD_LABEL.get(m, m), zorder=2)
+            tops = list(vals)
+            if err:
+                lo_hi = [err(g, m) for g in groups]
+                ok = [k for k, v in enumerate(lo_hi) if v and not any(math.isnan(x) for x in v)]
+                if ok:
+                    ax.errorbar([xs[k] for k in ok], [vals[k] for k in ok],
+                                yerr=[[max(0.0, vals[k] - lo_hi[k][0]) for k in ok],
+                                      [max(0.0, lo_hi[k][1] - vals[k]) for k in ok]],
+                                fmt="none", ecolor=ink, elinewidth=0.9, capsize=2, zorder=3)
+                    for k in ok:
+                        tops[k] = max(vals[k], lo_hi[k][1])
+            for x, v, t in zip(xs, vals, tops):
+                ax.text(x, t + 0.015, f"{v:.2f}", ha="center", va="bottom", fontsize=6.5, color=ink)
         ax.set_xticks(range(len(groups)), labels)
-        ax.set_ylim(0, 1.08)
-        ax.set_title(title, fontsize=9.5, color=ink, loc="left")
+        ax.set_ylim(0, 1.12)
+        ax.set_title(title, fontsize=9.5, color=ink, loc="left", pad=30)
         ax.spines[["top", "right"]].set_visible(False)
-        ax.grid(axis="y", color="#e4e3df", linewidth=0.6)
+        ax.grid(axis="y", color=grid, linewidth=0.6, zorder=0)
         ax.set_axisbelow(True)
-        ax.legend(frameon=False, fontsize=7.5, ncol=len(methods), loc="upper center", bbox_to_anchor=(0.5, -0.1))
+        ax.legend(frameon=False, fontsize=7.5, ncol=min(len(methods), 4), loc="lower left",
+                  bbox_to_anchor=(0, 1.0), borderaxespad=0.2, handlelength=1.6)
+        if err:
+            ax.annotate(f"whiskers: {err_label}", xy=(1.0, 0), xycoords="axes fraction", xytext=(0, -34),
+                        textcoords="offset points", ha="right", va="top", fontsize=7, color=muted)
 
     if "A1LF" in res:
         a = {s["method"]: s for s in res["A1LF"]["main"]}
-        ms = [m for m in ("dragnet", "ttp-jaccard", "ttp-binary-bayes", "ioc-correlation", "code-only") if m in a]
+        ms = [m for m in ("dragnet", "ioc-correlation", "code-only", "ttp-cosine", "ttp-jaccard") if m in a]
         metrics = [("top1", "top-1"), ("coverage", "coverage"), ("wrong_any_grade", "wrong actor named\n(any grade)"),
                    ("confident_error_rate", "wrong actor at\nMEDIUM+ / committed")]
-        fig, ax = plt.subplots(figsize=(8, 3.8))
+        fig, ax = plt.subplots(figsize=(8, 4.4))
         bars(ax, [k for k, _ in metrics], [lbl for _, lbl in metrics], ms, lambda k, m: a[m][k],
-             f"ATT&CK campaigns, leave-report-out profiles (n={a['dragnet']['n']})")
+             f"ATT&CK campaigns, leave-report-out profiles (A1-LF, n={a['dragnet']['n']})",
+             err=lambda k, m: a[m].get("ci95", {}).get(k),
+             err_label="95% CI (top-1 case bootstrap; rates exact Clopper-Pearson)")
         fig.tight_layout()
         fig.savefig(outdir / "a1_methods.png", dpi=130)
         plt.close(fig)
     if "R" in res and "calibration" in res["R"]:
         cal = res["R"]["calibration"]
-        fig, ax = plt.subplots(figsize=(4.6, 4.3))
+        fig, ax = plt.subplots(figsize=(5.2, 5.4))
         ax.plot([0, 1], [0, 1], color="#c3c2b7", linewidth=1, linestyle="--", label="perfect calibration")
-        for key, lbl, col in (("raw", "raw ACH score", "#9db7dc"), ("isotonic", "isotonic (fit on earlier years)", "#2a78d6")):
+        for key, lbl, col in (("raw", "raw ACH score", "#eb6834"),
+                              ("isotonic", "isotonic map (fit on pre-cutoff cases)", "#2a78d6")):
             rel = cal[key]["reliability"]
-            ax.plot([r["confidence"] for r in rel], [r["accuracy"] for r in rel], marker="o", markersize=4,
-                    linewidth=2, color=col, label=f"{lbl}: ECE {cal[key]['ece']:.3f}")
-        ax.set_xlabel("stated probability of top hypothesis")
+            ci = cal[key].get("ece_ci", [float("nan")] * 2)
+            xs, ys = [r["confidence"] for r in rel], [r["accuracy"] for r in rel]
+            ax.plot(xs, ys, linewidth=2, color=col, zorder=2,
+                    label=f"{lbl}: ECE {cal[key]['ece']:.3f} [{ci[0]:.3f}, {ci[1]:.3f}]")
+            ax.scatter(xs, ys, s=[14 + 2.5 * r["n"] for r in rel], color=col, edgecolor=surface, linewidth=1.5,
+                       zorder=3)
+        ax.set_xlabel("stated probability of the top hypothesis")
         ax.set_ylabel("observed accuracy")
         ax.set_xlim(0, 1)
-        ax.set_ylim(0, 1)
+        ax.set_ylim(0, 1.02)
         ax.set_title(f"Reliability, per-report temporal test (n={cal['n_test']})", fontsize=9.5, color=ink, loc="left")
         ax.spines[["top", "right"]].set_visible(False)
-        ax.legend(frameon=False, fontsize=7.5, loc="upper left")
+        ax.legend(frameon=False, fontsize=7, loc="upper left", bbox_to_anchor=(0, -0.13))
+        ax.annotate("marker area grows with the cases in the bin; ECE CIs: group-cluster bootstrap",
+                    xy=(0, 0), xycoords="axes fraction", xytext=(0, -78), textcoords="offset points",
+                    fontsize=6.5, color=muted)
         fig.tight_layout()
         fig.savefig(outdir / "reliability.png", dpi=130)
         plt.close(fig)
-    if "D" in res:
-        ms = [m for m in MAIN if any(r["method"] == m for r in res["D"]["level1"])]
-        fig, ax = plt.subplots(figsize=(8, 3.6))
-        bars(ax, ["level1", "level2"], ["L1: planted Rich header + language", "L2: L1 + stolen decoy family"], ms,
-             lambda lv, m: next(r for r in res["D"][lv] if r["method"] == m)["confident_decoy"],
-             "False-flag stress test: share confidently attributed to the decoy (lower is better)")
+    if "D" in res and "level1_seeds" in res["D"]:
+        d = res["D"]
+        ms = [m for m in ("dragnet", "dragnet-no-ff", "ioc-correlation", "code-only") if m in d["level1_seeds"]]
+        e = d.get("level2_ff_effect", {})
+        eci = e.get("ci95_case_cluster", [float("nan")] * 2)
+        fig, ax = plt.subplots(figsize=(8, 4.3))
+        bars(ax, ["level1", "level2"], ["L1: planted Rich header + language", "L2: L1 + stolen exclusive decoy family"],
+             ms, lambda lv, m: d[f"{lv}_seeds"][m]["mean"],
+             (f"False-flag stress test: share confidently attributed to the decoy (mean of {len(d['seeds'])} decoy "
+              f"seeds; lower is better)\nL2 effect of the rules (no-ff minus full engine): "
+              f"{e.get('mean_reduction', float('nan')):.2f} [{eci[0]:.2f}, {eci[1]:.2f}], bootstrap clustered by case"),
+             err=lambda lv, m: (d[f"{lv}_seeds"][m]["min"], d[f"{lv}_seeds"][m]["max"]),
+             err_label="min-max over the decoy seeds (a range, not a CI)")
         fig.tight_layout()
         fig.savefig(outdir / "false_flag.png", dpi=130)
         plt.close(fig)
     if "R" in res:
         rows = {s["method"]: s for s in res["R"]["kfold"]}
-        ms = [m for m in ("dragnet", "dragnet-ttp-only", "dragnet-software-only", "ttp-binary-bayes", "ioc-correlation") if m in rows]
-        fig, ax = plt.subplots(figsize=(8, 3.6))
+        ms = [m for m in ("dragnet", "code-only", "ttp-cosine", "dragnet-no-ttpsim", "dragnet-no-spec",
+                          "dragnet-software-only") if m in rows]
+        fig, ax = plt.subplots(figsize=(8.4, 4.4))
         bars(ax, ["top1", "coverage", "selective_accuracy"], ["top-1", "coverage", "selective accuracy"], ms,
-             lambda k, m: rows[m][k], f"Per-report ATT&CK cases, 5-fold leave-report-out (n={rows['dragnet']['n']})")
+             lambda k, m: rows[m][k],
+             f"Per-report ATT&CK cases, 5-fold leave-report-out (R-kfold, n={rows['dragnet']['n']}): ablations",
+             err=lambda k, m: rows[m].get("ci95", {}).get(k),
+             err_label="95% CI (top-1 group-cluster bootstrap; rates exact Clopper-Pearson)")
         fig.tight_layout()
         fig.savefig(outdir / "signal_contribution.png", dpi=130)
         plt.close(fig)
