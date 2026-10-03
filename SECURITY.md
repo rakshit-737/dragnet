@@ -6,8 +6,11 @@ feature record (hashes, imphash, code-reuse fingerprints). All bundled fixtures 
 `.example` domains, fabricated hashes and simulated actor labels.
 
 ## Reporting a vulnerability
-Please report vulnerabilities privately to the repository owner through GitHub Security Advisories. Do not open a
-public issue. Include reproduction steps, and expect an acknowledgement within 7 days.
+Please report vulnerabilities privately through GitHub's private vulnerability reporting:
+<https://github.com/rakshit-737/dragnet/security/advisories/new> ("Report a vulnerability" on the Security tab).
+Do not open a public issue. Include reproduction steps, and expect an acknowledgement within 7 days.
+
+The repository has Dependabot alerts and security updates, secret scanning and push protection enabled.
 
 ## Safe use
 - Do not add real samples or real victim data to this repository.
