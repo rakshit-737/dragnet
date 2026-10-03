@@ -1,6 +1,6 @@
 # ADR 0003 - Keep the false-flag reasoner rule-based
 
-- Status: accepted (v0.2.0)
+- Status: accepted (v0.2.0); consequences revised 2026-10-03 (10-seed results)
 - Date: 2026-09-26
 
 ## Context
@@ -27,9 +27,13 @@ attribution entirely.
 
 ## Consequences
 
-- Measured false-alarm rate: indicators fire on 16% of clean ATT&CK campaigns (A1). Most are R4 on
-  campaigns whose tradecraft is generic; the cost is a LOW instead of MEDIUM grade, never a wrong name.
-- Under planted decoys (analysis D) DRAGNET never confidently names the decoy when only forgeable
-  artifacts are planted, and does so in 24% of cases when an exclusive decoy family is also
-  planted (MISP-style correlation: 76%). The residual cases are campaigns whose genuine evidence
-  has no anchor at all - no rule can tell a stolen tool from a real one without independent evidence.
+- Measured false-alarm rate: indicators fire on 4 of 25 clean ATT&CK campaigns (A1; 0.16, exact 95%
+  CI [0.045, 0.36]). Most are R4 on campaigns whose tradecraft is generic; the cost is a LOW instead
+  of MEDIUM grade, never a wrong name.
+- Under planted decoys (section D, 10 decoy seeds) DRAGNET never confidently names the decoy when
+  only forgeable artifacts are planted (level 1 - but neither does the engine without the rules, so
+  level 1 does not test them). With an exclusive decoy family also planted (level 2), it confidently
+  names the decoy in 0.17 of cases (seed range 0.12-0.24) against 0.40 without the rules and 0.77 for
+  MISP-style correlation; the rules' effect is 0.23 [0.11, 0.37] (bootstrap clustered by case). The
+  residual cases are campaigns whose genuine evidence has no anchor at all - no rule can tell a
+  stolen tool from a real one without independent evidence. Only cross-state decoys are tested.
