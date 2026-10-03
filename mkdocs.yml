@@ -1,8 +1,8 @@
 site_name: DRAGNET
 site_description: Evidence-to-actor attribution with ACH, false-flag reasoning and conservative, abstention-aware confidence grades
-site_url: https://rakshit-737.github.io/dragnet/
-repo_url: https://github.com/rakshit-737/dragnet
-repo_name: rakshit-737/dragnet
+site_url: https://rakshit-737.github.io/dragnet-actor-attribution/
+repo_url: https://github.com/rakshit-737/dragnet-actor-attribution
+repo_name: rakshit-737/dragnet-actor-attribution
 edit_uri: edit/main/docs/
 copyright: MIT licence. Attribution is an analytic judgment, not proof.
 

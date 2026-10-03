@@ -5,6 +5,9 @@ and the project uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+- Repository renamed to `rakshit-737/dragnet-actor-attribution`: repo, docs-site (https://rakshit-737.github.io/dragnet-actor-attribution/) and GHCR image (`ghcr.io/rakshit-737/dragnet-actor-attribution`) links updated. Links in older entries below refer to the previous name `dragnet`.
+
 ## [1.1.2] - 2026-10-03
 
 ### Changed

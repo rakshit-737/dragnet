@@ -3,7 +3,7 @@
 services:
   api:
     build: .
-    image: ghcr.io/rakshit-737/dragnet:latest
+    image: ghcr.io/rakshit-737/dragnet-actor-attribution:latest
     # 0.0.0.0 inside the container only; the port is published on 127.0.0.1 below.
     # DRAGNET_KG defaults to the synthetic KG bundled in the package; for a built KG use /data/<file>.
     command: ["serve", "--host", "0.0.0.0", "--port", "8000", "--allowed-host", "127.0.0.1:8000",

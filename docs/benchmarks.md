@@ -2,7 +2,7 @@
 
 All numbers come from `python scripts/run_benchmarks.py`, run by the `bench` GitHub Actions workflow
 on the dataset snapshot in `data/MANIFEST.json`. **Source of every number on this page: bench run
-[37092539472](https://github.com/rakshit-737/dragnet/actions/runs/37092539472) on commit `2d7bacc`** (also printed at the top of the generated results
+[37092539472](https://github.com/rakshit-737/dragnet-actor-attribution/actions/runs/37092539472) on commit `2d7bacc`** (also printed at the top of the generated results
 below). Commands and expected values: [Reproduce](reproduce.md). Protocol details:
 [ADR 0004](adr/0004-evaluation-protocol.md).
 

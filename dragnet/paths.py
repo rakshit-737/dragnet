@@ -37,5 +37,5 @@ def download_hint() -> str:
     """How to obtain the public datasets from where we are running."""
     if IN_CHECKOUT:
         return "run: python scripts/download_data.py"
-    return ("clone https://github.com/rakshit-737/dragnet and run scripts/download_data.py, "
+    return ("clone https://github.com/rakshit-737/dragnet-actor-attribution and run scripts/download_data.py, "
             "then point $DRAGNET_DATA at the download directory")

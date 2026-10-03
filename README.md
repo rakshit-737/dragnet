@@ -1,9 +1,9 @@
 # DRAGNET
 
-[![ci](https://github.com/rakshit-737/dragnet/actions/workflows/ci.yml/badge.svg)](https://github.com/rakshit-737/dragnet/actions/workflows/ci.yml)
-[![bench](https://github.com/rakshit-737/dragnet/actions/workflows/bench.yml/badge.svg)](https://github.com/rakshit-737/dragnet/actions/workflows/bench.yml)
+[![ci](https://github.com/rakshit-737/dragnet-actor-attribution/actions/workflows/ci.yml/badge.svg)](https://github.com/rakshit-737/dragnet-actor-attribution/actions/workflows/ci.yml)
+[![bench](https://github.com/rakshit-737/dragnet-actor-attribution/actions/workflows/bench.yml/badge.svg)](https://github.com/rakshit-737/dragnet-actor-attribution/actions/workflows/bench.yml)
 ![python](https://img.shields.io/badge/python-3.10%E2%80%933.14-blue)
-[![docs](https://github.com/rakshit-737/dragnet/actions/workflows/docs.yml/badge.svg)](https://rakshit-737.github.io/dragnet/)
+[![docs](https://github.com/rakshit-737/dragnet-actor-attribution/actions/workflows/docs.yml/badge.svg)](https://rakshit-737.github.io/dragnet-actor-attribution/)
 [![license](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 ![runtime deps](https://img.shields.io/badge/runtime%20deps-stdlib%20only-lightgrey)
 
@@ -27,7 +27,7 @@ over plain lookups is *not* shown (sections E2, E3).
 
 Per-report ATT&CK cases (the techniques and software one cited report documents for one group;
 n = 637 over 161 groups), leave-report-out profiles. 95% CIs are bootstrapped over threat groups.
-Source: bench run [37092539472](https://github.com/rakshit-737/dragnet/actions/runs/37092539472) on commit [`2d7bacc`](https://github.com/rakshit-737/dragnet/commit/2d7bacc4a99c0e2766e62dd139baad1eb822f901); every table
+Source: bench run [37092539472](https://github.com/rakshit-737/dragnet-actor-attribution/actions/runs/37092539472) on commit [`2d7bacc`](https://github.com/rakshit-737/dragnet-actor-attribution/commit/2d7bacc4a99c0e2766e62dd139baad1eb822f901); every table
 with every interval is in [`results/RESULTS.md`](results/RESULTS.md).
 
 | method | top-1, 5-fold | top-1, temporal 2022+ (n = 219) | names an actor | right when it names one | wrong actor named |
@@ -65,7 +65,7 @@ names.*
 No install needed - the runtime is stdlib-only:
 
 ```bash
-git clone --depth 1 https://github.com/rakshit-737/dragnet && cd dragnet
+git clone --depth 1 https://github.com/rakshit-737/dragnet-actor-attribution && cd dragnet
 python -m dragnet demo
 python -m dragnet assess dragnet/data/cases/olympic_destroyer_like.json
 ```
@@ -78,7 +78,7 @@ Weights table marks `imphash` as overridden (0.20 instead of 0.60), and the hypo
 (the leading score drops from 0.99 to 0.98) while the verdict stays LAZARUS_SIM, HIGH, because two
 independent anchors remain.
 
-**Docs site:** <https://rakshit-737.github.io/dragnet/> (architecture, evaluation, CLI/API reference, demo reports).
+**Docs site:** <https://rakshit-737.github.io/dragnet-actor-attribution/> (architecture, evaluation, CLI/API reference, demo reports).
 
 ## Contents
 
@@ -157,11 +157,11 @@ is named.
 
 ## Results on real data
 
-All numbers come from `scripts/run_benchmarks.py` in bench run [37092539472](https://github.com/rakshit-737/dragnet/actions/runs/37092539472) (commit
+All numbers come from `scripts/run_benchmarks.py` in bench run [37092539472](https://github.com/rakshit-737/dragnet-actor-attribution/actions/runs/37092539472) (commit
 `2d7bacc`) of the [`bench` workflow](.github/workflows/bench.yml); the full tables are in
 [`results/RESULTS.md`](results/RESULTS.md), the raw values in `results/benchmark.json`, the protocol in
 [ADR 0004](docs/adr/0004-evaluation-protocol.md), and the per-section discussion on the
-[Evaluation page](https://rakshit-737.github.io/dragnet/benchmarks/).
+[Evaluation page](https://rakshit-737.github.io/dragnet-actor-attribution/benchmarks/).
 
 **Methods.** `dragnet` (full engine); `ttp-jaccard` and `ttp-cosine` (nearest actor by technique
 overlap); `ttp-binary-bayes` (a simplified binary-profile form of the P(technique | actor) scoring in
@@ -330,7 +330,7 @@ Metadata only - no sample is ever downloaded. About 640 MB in total (the byte su
 ## Quickstart
 
 ```bash
-git clone https://github.com/rakshit-737/dragnet && cd dragnet
+git clone https://github.com/rakshit-737/dragnet-actor-attribution && cd dragnet
 python -m pip install -e ".[dev,api,sign]"     # runtime is stdlib-only; extras for API and signing
 python -m pytest -q                            # ~110 tests; real-data tests skip unless the datasets are downloaded
 python -m dragnet demo                         # four synthetic scenarios
@@ -360,7 +360,7 @@ python -m dragnet assess case.json --format stix -o bundle.json       # STIX 2.1
 pip install -e ".[sign]" && python -m dragnet keygen analyst           # analyst.key / analyst.pub
 python -m dragnet assess case.json --sign-key analyst.key -o report.json  # Ed25519 over the report body + custody head
 python -m dragnet verify report.json --pub analyst.pub                 # exit 1 if verdict, scores, weights or custody changed
-docker run --rm -v "$PWD:/w" ghcr.io/rakshit-737/dragnet assess /w/case.json
+docker run --rm -v "$PWD:/w" ghcr.io/rakshit-737/dragnet-actor-attribution assess /w/case.json
 ```
 
 A case file is `{"case_id": ..., "evidence": [{"id", "kind": "forensic"|"malware", "content": {...}}]}`;
@@ -379,7 +379,7 @@ PYTHONHASHSEED=0 python scripts/run_benchmarks.py --only A1LF,A1,G   # light sec
 ```
 
 The full run (all sections, 1045 s wall clock on a GitHub-hosted `ubuntu-24.04` runner, single-threaded, peak RSS 968 MiB) is the
-[`bench` workflow](https://github.com/rakshit-737/dragnet/actions/workflows/bench.yml). It runs the
+[`bench` workflow](https://github.com/rakshit-737/dragnet-actor-attribution/actions/workflows/bench.yml). It runs the
 real-data tests and the quickstart above, then `scripts/compare_results.py` checks every value of the
 deterministic sections (A1, A1-LF, A2, A3, R, G, B1/B2, C, D, F) against the committed
 `results/benchmark.json` and fails the run on any difference. abuse.ch exports and the Malpedia API

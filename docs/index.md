@@ -25,7 +25,7 @@ The IOC, imphash and TLSH layers are supported inputs whose gain over plain look
 ## Headline results
 
 Per-report ATT&CK cases (n = 637 over 161 groups), leave-report-out profiles, 95% CIs bootstrapped over
-threat groups. Source: bench run [37092539472](https://github.com/rakshit-737/dragnet/actions/runs/37092539472) on commit `2d7bacc`.
+threat groups. Source: bench run [37092539472](https://github.com/rakshit-737/dragnet-actor-attribution/actions/runs/37092539472) on commit `2d7bacc`.
 
 | method | top-1, 5-fold | top-1, temporal 2022+ (n = 219) | names an actor | right when it names one | wrong actor named |
 |---|---|---|---|---|---|

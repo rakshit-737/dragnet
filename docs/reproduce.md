@@ -2,9 +2,9 @@
 
 Every published number comes from `scripts/run_benchmarks.py`. The full run is heavy (MalwareBazaar
 CSV, TLSH search over ~640k digests), so the canonical run is the
-[`bench` workflow](https://github.com/rakshit-737/dragnet/actions/workflows/bench.yml) on a GitHub
+[`bench` workflow](https://github.com/rakshit-737/dragnet-actor-attribution/actions/workflows/bench.yml) on a GitHub
 `ubuntu-24.04` runner (weekly, or on dispatch). The committed results come from bench run
-[37092539472](https://github.com/rakshit-737/dragnet/actions/runs/37092539472) on commit `2d7bacc`; `results/RESULTS.md` and `results/benchmark.json`
+[37092539472](https://github.com/rakshit-737/dragnet-actor-attribution/actions/runs/37092539472) on commit `2d7bacc`; `results/RESULTS.md` and `results/benchmark.json`
 (`provenance`) name that run, and the run's artifact holds the same files plus `compare.txt`,
 `time.txt` and the dataset manifest.
 

@@ -3,7 +3,7 @@
 ## Install
 
 ```bash
-git clone https://github.com/rakshit-737/dragnet && cd dragnet
+git clone https://github.com/rakshit-737/dragnet-actor-attribution && cd dragnet
 python -m pip install -e ".[dev]"          # runtime is stdlib-only
 python -m pytest -q                        # real-data tests skip without downloads
 ```
@@ -14,8 +14,8 @@ Optional extras: `api` (FastAPI server), `sign` (Ed25519 custody signatures, nee
 Or with Docker:
 
 ```bash
-docker run --rm ghcr.io/rakshit-737/dragnet demo
-docker run --rm -v "$PWD:/w" ghcr.io/rakshit-737/dragnet assess /w/case.json --format json
+docker run --rm ghcr.io/rakshit-737/dragnet-actor-attribution demo
+docker run --rm -v "$PWD:/w" ghcr.io/rakshit-737/dragnet-actor-attribution assess /w/case.json --format json
 docker compose up api                      # FastAPI on http://127.0.0.1:8000/docs
 ```
 

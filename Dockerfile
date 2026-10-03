@@ -12,7 +12,7 @@ COPY --from=build /wheels /wheels
 RUN pip install --no-cache-dir /wheels/*.whl && rm -rf /wheels
 WORKDIR /app
 USER dragnet
-LABEL org.opencontainers.image.source="https://github.com/rakshit-737/dragnet" \
+LABEL org.opencontainers.image.source="https://github.com/rakshit-737/dragnet-actor-attribution" \
       org.opencontainers.image.description="Evidence-to-actor attribution with ACH and false-flag reasoning" \
       org.opencontainers.image.licenses="MIT"
 ENTRYPOINT ["dragnet"]

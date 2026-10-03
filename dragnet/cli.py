@@ -95,7 +95,7 @@ def main(argv: list[str] | None = None) -> int:
     except ImportError as e:
         extra = "sign" if (e.name or "").startswith("cryptography") else "api"
         print(f"dragnet: missing optional dependency ({e.name or e}); install the [{extra}] extra: "
-              f'pip install "dragnet-attribution[{extra}] @ git+https://github.com/rakshit-737/dragnet" '
+              f'pip install "dragnet-attribution[{extra}] @ git+https://github.com/rakshit-737/dragnet-actor-attribution" '
               f'(or pip install -e ".[{extra}]" in a checkout)', file=sys.stderr)
         return 2
 

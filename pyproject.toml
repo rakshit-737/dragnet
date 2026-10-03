@@ -24,8 +24,8 @@ docs = ["mkdocs-material>=9.5", "mkdocstrings[python]>=0.25"]
 dragnet = "dragnet.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/rakshit-737/dragnet"
-Documentation = "https://rakshit-737.github.io/dragnet/"
+Homepage = "https://github.com/rakshit-737/dragnet-actor-attribution"
+Documentation = "https://rakshit-737.github.io/dragnet-actor-attribution/"
 
 [tool.setuptools]
 packages = ["dragnet", "dragnet.sources", "dragnet.data", "dragnet.data.cases", "dragnet.data.real_cases"]

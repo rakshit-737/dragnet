@@ -52,7 +52,7 @@ class CustodyLog:
 # covered only the custody chain head; :func:`verify_signed` reports them as legacy.
 
 SIGNATURE_KEY = "custody_signature"
-INSTALL_HINT = ('pip install "dragnet-attribution[sign] @ git+https://github.com/rakshit-737/dragnet" '
+INSTALL_HINT = ('pip install "dragnet-attribution[sign] @ git+https://github.com/rakshit-737/dragnet-actor-attribution" '
                 '(or pip install -e ".[sign]" in a checkout)')
 
 

@@ -70,10 +70,10 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/rakshit-737/dragnet:${{ github.ref_name }}
-            ghcr.io/rakshit-737/dragnet:${{ steps.ver.outputs.semver }}
-            ghcr.io/rakshit-737/dragnet:latest
-          labels: org.opencontainers.image.source=https://github.com/rakshit-737/dragnet
+            ghcr.io/rakshit-737/dragnet-actor-attribution:${{ github.ref_name }}
+            ghcr.io/rakshit-737/dragnet-actor-attribution:${{ steps.ver.outputs.semver }}
+            ghcr.io/rakshit-737/dragnet-actor-attribution:latest
+          labels: org.opencontainers.image.source=https://github.com/rakshit-737/dragnet-actor-attribution
 
   github-release:
     needs: [build, image]
