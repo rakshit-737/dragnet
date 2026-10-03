@@ -128,15 +128,21 @@ def clopper_pearson(k: int, n: int, alpha: float = 0.05) -> tuple[float, float]:
     return (lower, upper)
 
 
-def sign_flip_test(diffs: list[float], n_mc: int = 200_000, seed: int = 0) -> dict:
+N_MC = 200_000
+
+
+def sign_flip_test(diffs: list[float], n_mc: int = N_MC, seed: int = 0) -> dict:
     """Paired permutation (sign-flip) test of mean(diffs) > 0.
 
-    Exact enumeration when at most 20 differences are non-zero, Monte-Carlo otherwise.
-    Returns one- and two-sided p-values and the number of discordant pairs."""
+    Exact enumeration when at most 20 differences are non-zero. Otherwise Monte Carlo with
+    ``n_mc`` random sign vectors, reported as the valid permutation p-value (k + 1) / (B + 1),
+    where k counts sign vectors at least as extreme (so it is never 0; the smallest value is
+    1 / (B + 1)). Returns one- and two-sided p-values, the number of discordant pairs, ``exact``
+    and, for Monte Carlo, ``n_mc`` (B) and the exceedance counts."""
     nz = [d for d in diffs if d != 0]
     obs = sum(nz)
     if not nz:
-        return {"n_discordant": 0, "p_one_sided": 1.0, "p_two_sided": 1.0, "exact": True}
+        return {"n_discordant": 0, "p_one_sided": 1.0, "p_two_sided": 1.0, "exact": True, "n_mc": None}
     ge = absge = tot = 0
     if len(nz) <= 20:
         for signs in itertools.product((1, -1), repeat=len(nz)):
@@ -144,16 +150,30 @@ def sign_flip_test(diffs: list[float], n_mc: int = 200_000, seed: int = 0) -> di
             ge += s >= obs - 1e-12
             absge += abs(s) >= abs(obs) - 1e-12
             tot += 1
-        exact = True
-    else:
-        rng = random.Random(seed)
-        for _ in range(n_mc):
-            s = sum(d if rng.random() < 0.5 else -d for d in nz)
-            ge += s >= obs - 1e-12
-            absge += abs(s) >= abs(obs) - 1e-12
-            tot += 1
-        exact = False
-    return {"n_discordant": len(nz), "p_one_sided": ge / tot, "p_two_sided": absge / tot, "exact": exact}
+        return {"n_discordant": len(nz), "p_one_sided": ge / tot, "p_two_sided": absge / tot,
+                "exact": True, "n_mc": None}
+    rng = random.Random(seed)
+    for _ in range(n_mc):
+        s = sum(d if rng.random() < 0.5 else -d for d in nz)
+        ge += s >= obs - 1e-12
+        absge += abs(s) >= abs(obs) - 1e-12
+    return {"n_discordant": len(nz), "p_one_sided": (ge + 1) / (n_mc + 1),
+            "p_two_sided": (absge + 1) / (n_mc + 1), "exact": False, "n_mc": n_mc,
+            "k_one_sided": ge, "k_two_sided": absge}
+
+
+def cluster_sign_flip_test(diffs: list[float], clusters: list[str], n_mc: int = N_MC, seed: int = 0) -> dict:
+    """Sign-flip test that respects clustering: the per-case differences are summed within each
+    cluster (e.g. threat group) and whole clusters are sign-flipped, so cases of one group are
+    not treated as independent. Same p-value conventions as :func:`sign_flip_test`."""
+    sums: dict[str, float] = defaultdict(float)
+    for d, c in zip(diffs, clusters):
+        sums[c] += d
+    r = sign_flip_test([sums[c] for c in sorted(sums)], n_mc=n_mc, seed=seed)
+    r["n_clusters"] = len(sums)
+    r["n_discordant_clusters"] = r.pop("n_discordant")
+    r["n_discordant"] = sum(1 for d in diffs if d != 0)
+    return r
 
 
 def holm(pvals: dict[str, float]) -> dict[str, float]:

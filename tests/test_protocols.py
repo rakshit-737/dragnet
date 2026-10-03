@@ -94,3 +94,22 @@ def test_baseline_abstains_on_ties():
     assert p.named is None and set(p.scores) == {"aaa", "menuPass"}
     s = bench.evaluate("ioc-correlation", [bench.Case("k", "k", [Signal(SignalKind.FAMILY, "x")], {"aaa"})], kg)
     assert s["confident_error_rate"] == 0 and s["confident_error_expect"] == pytest.approx(0.5)
+
+
+def test_monte_carlo_p_value_is_never_zero():
+    """Monte Carlo permutation p-values are (k+1)/(B+1): 25 positive differences give k = 0."""
+    r = P.sign_flip_test([1.0] * 25, n_mc=2000)
+    assert not r["exact"] and r["n_mc"] == 2000 and r["k_one_sided"] == 0
+    assert r["p_one_sided"] == pytest.approx(1 / 2001) and r["p_two_sided"] == pytest.approx(1 / 2001)
+    r = P.sign_flip_test([1.0] * 25)
+    assert r["n_mc"] == P.N_MC and r["p_one_sided"] == pytest.approx(1 / (P.N_MC + 1))
+
+
+def test_cluster_sign_flip_flips_whole_groups():
+    # four cases of one group all favour the method: one cluster, so p = 1/2, not 1/16
+    r = P.cluster_sign_flip_test([1, 1, 1, 1], ["g", "g", "g", "g"])
+    assert r["n_clusters"] == 1 and r["n_discordant_clusters"] == 1 and r["n_discordant"] == 4
+    assert r["p_one_sided"] == pytest.approx(0.5)
+    r = P.cluster_sign_flip_test([1, -1, 1, 1], ["a", "a", "b", "c"])
+    assert r["n_discordant_clusters"] == 2 and r["p_one_sided"] == pytest.approx(0.25)
+
