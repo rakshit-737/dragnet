@@ -64,10 +64,31 @@ def drop_cited(attack: AttackData, held_out: Iterable[str]) -> AttackData:
 _YEAR = re.compile(r"(?<!\d)(19[89]\d|20[0-3]\d)(?!\d)")
 
 
-def ref_year(ref: str) -> int | None:
-    """Publication year from an ATT&CK citation key such as 'FireEye APT28 October 2014'."""
+def ref_year(ref: str, attack: AttackData | None = None) -> int | None:
+    """Publication year of an ATT&CK citation.
+
+    With ``attack`` the year comes from the citation's external_reference description
+    ('Vendor. (2022, May 4). Title ...'), falling back to a year in the citation key such as
+    'FireEye APT28 October 2014'. Many keys carry no year ('Mandiant UNC2165'), so dating
+    by the key alone lets post-cutoff reports into pre-cutoff profiles."""
+    if attack is not None and (y := attack.ref_years.get(ref)) is not None:
+        return y
     m = _YEAR.findall(ref)
     return int(m[-1]) if m else None
+
+
+def later_refs(attack: AttackData, cutoff_year: int, undated_as_later: bool = False) -> frozenset[str]:
+    """Citations on any 'uses' edge dated ``cutoff_year`` or later (see :func:`ref_year`).
+
+    ``undated_as_later`` also counts citations with no recoverable date ('n.d.' and no year in
+    the key) as later - the conservative sensitivity setting."""
+    out = set()
+    for refs in attack.uses_refs.values():
+        for r in refs:
+            y = ref_year(r, attack)
+            if (y is not None and y >= cutoff_year) or (y is None and undated_as_later):
+                out.add(r)
+    return frozenset(out)
 
 
 def report_cases(attack: AttackData, min_ttps: int = 3) -> list[Case]:
@@ -90,7 +111,7 @@ def report_cases(attack: AttackData, min_ttps: int = 3) -> list[Case]:
         g = attack.groups[gid]
         cid = f"{g.attack_id}:{zlib.crc32(ref.encode()):08x}"
         out.append(Case(cid, ref, sigs, {g.name},
-                        {"group": g.name, "group_id": gid, "report": ref, "year": ref_year(ref),
+                        {"group": g.name, "group_id": gid, "report": ref, "year": ref_year(ref, attack),
                          "n_ttp": len(tids), "n_software": len(sigs) - len(tids)}))
     return out
 

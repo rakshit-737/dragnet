@@ -113,3 +113,44 @@ def test_cluster_sign_flip_flips_whole_groups():
     r = P.cluster_sign_flip_test([1, -1, 1, 1], ["a", "a", "b", "c"])
     assert r["n_discordant_clusters"] == 2 and r["p_one_sided"] == pytest.approx(0.25)
 
+
+def test_description_year_parsing():
+    from dragnet.sources.attack import description_year
+    assert description_year("FireEye. (2014, October 27). APT28. Retrieved May 1, 2015.") == 2014
+    assert description_year("Mandiant (FireEye). (2022, May 2). UNC2165. Retrieved 2023.") == 2022
+    assert description_year("Temoshok, D. (July 2025). SP 800-63-4. Retrieved July 29, 2026.") == 2025
+    assert description_year("Microsoft. (n.d.). Naming. Retrieved June 1, 2023.") is None
+    assert description_year("SecureWorks 2019, August 27 LYCEUM Retrieved. 2019/11/19") == 2019
+
+
+def _dated_bundle():
+    b = _bundle()
+    b["objects"].append({"type": "relationship", "id": "relationship--9", "relationship_type": "uses",
+                         "source_ref": "intrusion-set--g", "target_ref": "attack-pattern--5",
+                         "external_references": [{"source_name": "Mandiant UNC9",       # no year in the key
+                                                  "description": "Mandiant. (2023, May 4). UNC9."},
+                                                 {"source_name": "Vendor undated",
+                                                  "description": "Vendor. (n.d.). Profile."}]})
+    return b
+
+
+def test_temporal_split_dates_citations_from_descriptions(tmp_path):
+    p = tmp_path / "a.json"
+    p.write_text(json.dumps(_dated_bundle()))
+    attack = load_attack(p)
+    assert P.ref_year("Mandiant UNC9") is None                     # the key alone hides the date
+    assert P.ref_year("Mandiant UNC9", attack) == 2023
+    assert P.ref_year("Other 2018", attack) == 2018                # falls back to the key year
+    later = P.later_refs(attack, 2022)
+    assert later == {"Mandiant UNC9"}
+    assert P.later_refs(attack, 2022, undated_as_later=True) == {"Mandiant UNC9", "Vendor undated"}
+    kept = P.drop_cited(attack, later)
+    for (src, dst), refs in kept.uses_refs.items():
+        if src in kept.groups and dst in kept.uses.get(src, ()):
+            assert not refs or any((P.ref_year(r, attack) or 0) < 2022 for r in refs)
+    # the edge cited by both a 2023 report and an undated one survives only the main split
+    assert "T1005" in kept.techniques_of("intrusion-set--g")
+    strict = P.drop_cited(attack, P.later_refs(attack, 2022, undated_as_later=True))
+    assert "T1005" not in strict.techniques_of("intrusion-set--g")
+    cases = {c.meta["report"]: c for c in P.report_cases(attack, min_ttps=1)}
+    assert cases["Mandiant UNC9"].meta["year"] == 2023

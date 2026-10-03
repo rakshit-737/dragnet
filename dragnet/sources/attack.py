@@ -12,6 +12,7 @@ Revoked and deprecated objects are dropped.
 from __future__ import annotations
 
 import json
+import re
 from collections import defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -47,6 +48,10 @@ class AttackData:
     uses_refs: dict[tuple[str, str], frozenset[str]] = field(default_factory=dict)
     obj_refs: dict[str, frozenset[str]] = field(default_factory=dict)
     attributed_refs: dict[str, frozenset[str]] = field(default_factory=dict)
+    # publication year of each citation (source_name), parsed from its external_reference
+    # description '(YYYY, Month DD)'; None when the description says 'n.d.' or has no date.
+    # The latest year wins when one source_name carries several descriptions.
+    ref_years: dict[str, int | None] = field(default_factory=dict)
 
     def resolve_group(self, gid: str) -> str | None:
         """Follow revoked-by links (groups merged in later versions) to a live group id."""
@@ -88,6 +93,40 @@ def _refs(obj: dict) -> frozenset[str]:
                      and r["source_name"] != "capec")
 
 
+_PAREN = re.compile(r"\(([^()]*)\)")
+_YEAR = re.compile(r"(?<!\d)(19[89]\d|20[0-3]\d)(?!\d)")
+_ND = re.compile(r"n\.\s?d\.?", re.I)
+_LEAD_DATE = re.compile(r"(?<!\d)(19[89]\d|20[0-3]\d),\s+[A-Z][a-z]+")
+
+
+def description_year(desc: str) -> int | None:
+    """Publication year of an ATT&CK citation description, e.g.
+    'FireEye. (2014, October 27). APT28 ... Retrieved ...' -> 2014; '(n.d.)' -> None.
+
+    The first parenthesised group holding a year or 'n.d.' decides; descriptions without one
+    fall back to an unparenthesised 'YYYY, Month' date before the title."""
+    for g in _PAREN.findall(desc or ""):
+        g = g.strip()
+        if _ND.fullmatch(g):
+            return None
+        if m := _YEAR.search(g):
+            return int(m.group(1))
+    m = _LEAD_DATE.search((desc or "").split("Retrieved")[0])
+    return int(m.group(1)) if m else None
+
+
+def _collect_years(obj: dict, out: dict[str, int | None]) -> None:
+    for r in obj.get("external_references", []):
+        sn = r.get("source_name")
+        if not sn or sn.startswith("mitre-") or sn == "capec" or "description" not in r:
+            continue
+        y = description_year(r["description"])
+        if sn not in out or out[sn] is None:
+            out[sn] = y
+        elif y is not None:
+            out[sn] = max(out[sn], y)
+
+
 def _live(obj: dict) -> bool:
     return not obj.get("revoked") and not obj.get("x_mitre_deprecated")
 
@@ -108,7 +147,9 @@ def load_attack(path: str | Path | list, *extra: str | Path) -> AttackData:
     domains = [c.get("name", "") for c in colls]
     groups, software, techniques, campaigns = {}, {}, {}, {}
     obj_refs: dict[str, frozenset[str]] = {}
+    ref_years: dict[str, int | None] = {}
     for o in objs:
+        _collect_years(o, ref_years)
         t = o.get("type")
         if t not in ("intrusion-set", "malware", "tool", "attack-pattern", "campaign") or not _live(o):
             continue
@@ -142,4 +183,4 @@ def load_attack(path: str | Path | list, *extra: str | Path) -> AttackData:
             attributed[src] = dst
             attributed_refs[src] = _refs(o)
     return AttackData(version, released, groups, software, techniques, campaigns, dict(uses), attributed,
-                      revoked_by, domains, uses_refs, obj_refs, attributed_refs)
+                      revoked_by, domains, uses_refs, obj_refs, attributed_refs, ref_years)
