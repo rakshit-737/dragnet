@@ -25,6 +25,13 @@ jobs:
           python-version: "3.12"
       - run: python -m pip install -e ".[docs]"
       - run: python -m mkdocs build --strict
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "24"
+      - name: Mermaid diagrams parse (mkdocs --strict does not check them)
+        run: |
+          npm install --no-save --no-audit --no-fund mermaid@11 jsdom@26
+          node scripts/check_mermaid.mjs README.md docs
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: site
