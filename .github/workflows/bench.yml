@@ -29,6 +29,9 @@ jobs:
     env:
       DRAGNET_DATA: ${{ github.workspace }}/../dragnet-data
       PYTHONHASHSEED: "0"   # set iteration order fixed so tie-breaks and float sums reproduce exactly
+    defaults:
+      run:
+        shell: bash   # bash -eo pipefail: a failing command before a pipe (e.g. into tee) fails the step
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -41,6 +44,25 @@ jobs:
         run: python scripts/download_data.py
       - name: Real-data tests
         run: python -m pytest -q -m realdata
+      - name: README real-data quickstart, verbatim (bundled case instead of my_case.json)
+        run: |
+          mkdir -p /tmp/qs && cd /tmp/qs
+          python -m dragnet build-kg | tee build-kg.txt
+          grep -q "actors" build-kg.txt
+          python -m dragnet case-study olympic_destroyer_2018 --format md > od.md
+          grep -q "Insufficient for attribution" od.md
+          python -m dragnet assess "$GITHUB_WORKSPACE/dragnet/data/cases/olympic_destroyer_like.json"             --kg "$DRAGNET_DATA/kg-attack-19.2.json" --format json > assess.json
+          python -c "import json; d = json.load(open('assess.json')); assert d['hypotheses'], d"
+          python -m dragnet export-cypher --kg "$DRAGNET_DATA/kg-attack-19.2.json" -o dragnet.cypher
+          test "$(wc -l < dragnet.cypher)" -gt 1000
+          python -m pip install -q -e "$GITHUB_WORKSPACE[api]"
+          python -m dragnet serve --kg "$DRAGNET_DATA/kg-attack-19.2.json" --port 8765 > serve.log 2>&1 &
+          srv=$!
+          for i in $(seq 1 60); do curl -sf http://127.0.0.1:8765/health > health.json && break; sleep 1; done
+          cat health.json
+          curl -sf -X POST http://127.0.0.1:8765/assess -H 'content-type: application/json'             --data @"$GITHUB_WORKSPACE/dragnet/data/cases/olympic_destroyer_like.json" > api.json
+          python -c "import json; d = json.load(open('api.json')); assert 'confidence' in d, d"
+          kill "$srv"
       - name: Benchmarks
         env:
           SECTIONS: ${{ github.event.inputs.sections }}
