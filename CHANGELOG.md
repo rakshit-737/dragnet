@@ -9,7 +9,7 @@ and the project uses [Semantic Versioning](https://semver.org/).
 - README and the Overview, Evaluation, Limitations and Reproduce pages are rendered from `templates/` by
   `scripts/render_docs.py`, which fills every value from `results/benchmark.json` and the bench run's
   `results/time.txt` (runtime 1045 s, peak RSS 968 MiB, run 37092539472); CI fails on a stale render or
-  any leftover `@@TOKEN@@`. The runtime is stated as single-threaded wall clock (the run used 100% of
+  any leftover `@@...@@` placeholder. The runtime is stated as single-threaded wall clock (the run used 100% of
   one CPU) instead of an unmeasured vCPU count.
 
 ## [1.1.1] - 2026-10-03
