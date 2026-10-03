@@ -5,6 +5,33 @@ and the project uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-10-03
+
+### Fixed
+- Monte Carlo sign-flip p-values are reported as `(k+1)/(B+1)` instead of 0; paired difference tests on
+  the per-report set are clustered by threat group, matching the marginal CIs.
+- The temporal split dates ATT&CK citations from their reference descriptions (fallback: key year), so
+  post-2021 reports no longer leak into the pre-2022 profiles.
+- Ed25519 signatures cover the canonical report body and the custody-chain head, so editing the verdict,
+  confidence, flags, scores or weights fails `verify`; chain-only signatures are flagged LEGACY.
+- The bench reproducibility gate can now fail and compares every deterministic value (runs under
+  `bash -eo pipefail`).
+- CLI help shows each default once; install hints point at an installable source.
+
+### Added
+- Bench results record their source run (id, URL, commit) and support `--render-only`; group-clustered
+  paired tests, a temporal sensitivity run and intervals for every reported statistic; the APTMalware
+  (section K) overlap analysis.
+- Markdown reports print every weight and list false-flag actors as plain text.
+- Figures use one colour per method with 95% CI whiskers and 10-seed false-flag means.
+- `httpx2` in the `api` extra; a zero-warning test suite; declared data subpackages.
+
+### Changed
+- The release workflow also tags the GHCR image with the bare semver.
+- The sdist ships `scripts/`; the docs workflow parses every mermaid diagram.
+- Documentation: ADRs 0002-0004, datasets, fresh-clone commands and the demo screenshot refreshed to
+  match the current protocol and results.
+
 ## [1.1.0] - 2026-10-02
 
 ### Added
